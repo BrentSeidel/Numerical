@@ -108,8 +108,10 @@ package body BBS.complex_real is
    --  effectively if value is within a circle centered on self.
    --
    function near_cir(self : in complex; value : complex; tol : f) return Boolean is
+      dr : f'Base := self.r - value.r;
+      di : f'Base := self.i - value.i;
    begin
-      return ;
+      return (dr*dr + di*dr) < tol;
    end;
    --
    --  Additional functions

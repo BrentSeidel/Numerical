@@ -17,6 +17,13 @@ for some of the operations, if that's important to you.
 ##  Differential Equations
 
 ##  Root Finding
+These are used to find roots (zero crossings) of functions.  There are a number
+of different methods with diffrent pros and cons.  It is important to understand
+the nature of the function before selecting the root finding algorithm.
+
+The implemented algorithms are:
+* Bisection
+* Secant
 
 ##  Vectors
 
