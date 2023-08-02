@@ -29,5 +29,24 @@ package BBS.roots_real is
    --  interval containing the root.  If the root is exact, the lower and upper
    --  values are equal to the returned value.
    --
+   --  This method will fail if during the process, the function values at the
+   --  upper and lower bounds are ever equal.  This will cause a divide by zero
+   --  error.
+   --
    function seacant(test : test_func; lower, upper : in out f; limit : Positive; err : out errors) return f;
+   --
+   --  The Mueller algorithm uses three points to model a quadratic curve and uses
+   --  that to find a candidate root.  This can potentially be used to find complex
+   --  roots, however this implementation does not.
+   --
+   --  This method will fail if the function value at the three points is equal.
+   --
+   --  In this implementation, the user provides two points and the third is
+   --  generated as the average of these two points.  This keeps the call the
+   --  same as the bisection and secant functions.
+   --
+   --  Note that for this algorithm, the x0 and x2 values are not necessarily
+   --  meaningful as upper and lower bounds for the root.
+   --
+   function mueller(test : test_func; x0, x2 : in out f; limit : Positive; err : out errors) return f;
 end;
