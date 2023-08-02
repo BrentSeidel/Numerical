@@ -86,11 +86,17 @@ package body BBS.roots_real is
       h : f;
       e : f;
       root : f;
+      temp : f;
    begin
       err := none;
       for i in 0 .. limit loop
          b := d2 + (h2 * d_small);
-         d_big := elem.Sqrt(b*b - (4.0*d_small*test(x2)));
+         temp := b*b - (4.0*d_small*test(x2));
+         if temp < 0.0 then
+            err := no_solution;
+            return 0.0;
+         end if;
+         d_big := elem.Sqrt(temp);
          if abs(b - d_big) < abs(b + d_big) then
             e := b + d_big;
          else
@@ -106,8 +112,9 @@ package body BBS.roots_real is
          x2 := root;
          h1 := x1 - x0;
          h2 := x2 - x1;
-         d1 := (test(x1) - test(x2))/h1;
-         d2 := (test(x2) - test(x1))/h2;
+         temp := test(x1);
+         d1 := (temp - test(x0))/h1;
+         d2 := (test(x2) - temp)/h2;
          d_small := (d2 - d1)/(h2 + h1);
       end loop;
       return root;

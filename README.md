@@ -26,8 +26,4 @@ The implemented algorithms are:
 * Secant
 * Mueller
 
-##  Vectors
-
-##  Matrices
-
 ##  Quaternions

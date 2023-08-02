@@ -46,7 +46,8 @@ package BBS.roots_real is
    --  same as the bisection and secant functions.
    --
    --  Note that for this algorithm, the x0 and x2 values are not necessarily
-   --  meaningful as upper and lower bounds for the root.
+   --  meaningful as upper and lower bounds for the root, except that they are
+   --  both set equal to the return value if the root is exact.
    --
    function mueller(test : test_func; x0, x2 : in out f; limit : Positive; err : out errors) return f;
 end;
