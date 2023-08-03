@@ -75,47 +75,48 @@ package body BBS.roots_real is
    end;
    --
    function mueller(test : test_func; x0, x2 : in out f; limit : Positive; err : out errors) return f is
-      x1 : f := (x0 + x2)/2.0;
-      h1 : f := x1 - x0;
-      h2 : f := x2 - x1;
-      d1 : f := (test(x1) - test(x0))/h1;
-      d2 : f := (test(x2) - test(x1))/h2;
-      d_small : f := (d2 - d1) / (h2 + h1);
-      d_big : f;
+      x1      : f := (x0 + x2)/2.0;
+      step1   : f := x1 - x0;
+      step2   : f := x2 - x1;
+      delta1  : f := (test(x1) - test(x0))/step1;
+      delta2  : f := (test(x2) - test(x1))/step2;
+      d_small : f := (delta2 - delta1) / (step2 + step1);
+      d_big   : f;
+      discriminant : f;
       b : f;
-      h : f;
+      value : f;
       e : f;
       root : f;
       temp : f;
    begin
       err := none;
       for i in 0 .. limit loop
-         b := d2 + (h2 * d_small);
-         temp := b*b - (4.0*d_small*test(x2));
-         if temp < 0.0 then
+         b := delta2 + (step2 * d_small);
+         discriminant := b*b - (4.0*d_small*test(x2));
+         if discriminant < 0.0 then
             err := no_solution;
             return 0.0;
          end if;
-         d_big := elem.Sqrt(temp);
+         d_big := elem.Sqrt(discriminant);
          if abs(b - d_big) < abs(b + d_big) then
             e := b + d_big;
          else
             e := b - d_big;
          end if;
-         h := -2.0*test(x2)/e;
-         root := x2 + h;
-         if h = 0.0 then
+         value := -2.0*test(x2)/e;
+         root := x2 + value;
+         if value = 0.0 then
             return root;
          end if;
          x0 := x1;
          x1 := x2;
          x2 := root;
-         h1 := x1 - x0;
-         h2 := x2 - x1;
+         step1 := x1 - x0;
+         step2 := x2 - x1;
          temp := test(x1);
-         d1 := (temp - test(x0))/h1;
-         d2 := (test(x2) - temp)/h2;
-         d_small := (d2 - d1)/(h2 + h1);
+         delta1 := (temp - test(x0))/step1;
+         delta2 := (test(x2) - temp)/step2;
+         d_small := (delta2 - delta1)/(step2 + step1);
       end loop;
       return root;
    end;

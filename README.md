@@ -11,6 +11,8 @@ is that complex numbers are a tagged record so that object notation can be used
 for some of the operations, if that's important to you.
 
 ##  Integration
+Implemented algorithms are:
+* Composite trapezoid
 
 ##  Differentiation
 

@@ -36,8 +36,10 @@ package BBS.roots_real is
    function seacant(test : test_func; lower, upper : in out f; limit : Positive; err : out errors) return f;
    --
    --  The Mueller algorithm uses three points to model a quadratic curve and uses
-   --  that to find a candidate root.  This can potentially be used to find complex
-   --  roots, however this implementation does not.
+   --  that to find a candidate root.    Unlike the bisection method, Mueller's
+   --  method does not require a root to be located within the three points.
+   --  This can potentially be used to find complex roots, however this
+   --  implementation does not.
    --
    --  This method will fail if the function value at the three points is equal.
    --
