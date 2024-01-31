@@ -1,6 +1,6 @@
 generic
   type F is digits <>;
-package BBS.roots_real is
+package BBS.Numerical.roots_real is
    type errors is (none, bad_args, no_solution);
    type test_func is access function (x : f) return f;
 

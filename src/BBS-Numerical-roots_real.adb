@@ -1,7 +1,7 @@
 --with Ada.Text_IO;
 --with Ada.Float_Text_IO;
 with Ada.Numerics.Generic_Elementary_Functions;
-package body BBS.roots_real is
+package body BBS.Numerical.roots_real is
    package elem is new Ada.Numerics.Generic_Elementary_Functions(f);
    --
    --  Bisection algorithm for finding a root.

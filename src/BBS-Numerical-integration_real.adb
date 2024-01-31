@@ -1,4 +1,4 @@
-package body BBS.integration_real is
+package body BBS.Numerical.integration_real is
    --
    function trapezoid(test : test_func; lower, upper : f; steps : Positive) return f is
       step_size   : constant f := (upper - lower)/f(steps);

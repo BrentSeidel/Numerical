@@ -1,5 +1,5 @@
 with Ada.Numerics.Generic_Elementary_Functions;
-package body BBS.complex_real is
+package body BBS.Numerical.complex_real is
    package elem is new Ada.Numerics.Generic_Elementary_Functions(f);
    --
    --  Basic manipulations
@@ -122,4 +122,4 @@ package body BBS.complex_real is
       return (r => t1 * elem.Cos(self.i), i => t1 * elem.Sin(self.i));
    end;
    --
-end BBS.complex_real;
+end BBS.Numerical.complex_real;
