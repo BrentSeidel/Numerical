@@ -1,6 +1,8 @@
 --
 --  This is a simple package that supports basic functions on quaternions.
 --
+--  i*i = j*j = k*k = i*j*k = -1
+--
 generic
   type F is digits <>;
 package BBS.Numerical.quaternion is
@@ -18,9 +20,15 @@ package BBS.Numerical.quaternion is
 
    function "*" (Left : f; Right : quaternion) return quaternion;
    function "*" (Left : quaternion; Right : f) return quaternion;
+   function "*" (Left : quaternion; Right : quaternion) return quaternion;
 
    function "/" (Left : quaternion; Right : f) return quaternion;
 
    function magnitude(self : in quaternion) return f'Base;
+   --
+   --  Scale value to have a magnitude of 1.  This is effectively a
+   --  unit vector.
+   --
+   function normalize(self : in quaternion) return quaternion;
 
 end BBS.Numerical.quaternion;
