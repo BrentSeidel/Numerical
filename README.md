@@ -30,3 +30,7 @@ The implemented algorithms are:
 * Mueller
 
 ##  Quaternions
+Some basic operations are implemented.
+
+##  Regression
+Simple linear regression is implemented.

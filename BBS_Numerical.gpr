@@ -1,6 +1,6 @@
 with "../BBS-Ada/bbs.gpr";
 
-library project Numerical is
+library project BBS_Numerical is
 
    for Languages use ("Ada");
    for Library_Name use "Numerical";
@@ -9,5 +9,5 @@ library project Numerical is
    for Library_Dir use "lib";
    for Library_Kind use "Static";
 
-end Numerical;
+end BBS_Numerical;
 
