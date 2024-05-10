@@ -11,6 +11,9 @@ package BBS.Numerical.regression is
    --
    --  Holds the return data from the simple linear regression function.
    --  It contains coefficients for the line y = a + bX.
+   --
+   --  This will be expanded as needed to hold other values returned.
+   --
    type simple_linreg_result is record
       a   : f'Base;  --  Y intercept
       b   : f'Base;  --  Slope

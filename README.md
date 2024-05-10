@@ -13,7 +13,8 @@ for some of the operations, if that's important to you.
 ##  Integration
 Implemented algorithms are:
 * Composite trapezoid
-* Composite simpson
+* Composite Simpson's
+* Adaptive Simpson's
 
 ##  Differentiation
 
