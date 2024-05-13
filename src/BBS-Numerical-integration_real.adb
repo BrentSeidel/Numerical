@@ -47,22 +47,29 @@ package body BBS.Numerical.integration_real is
    --  Integrate the provided function between the lower and upper limits using
    --  adaptive Simpson's integration.
    --
-   function adapt_simpson(test : test_func; lower, upper, tol : f'Base;
-                          levels : in out Natural) return f'Base is
-   --
-      function interval(t : test_func; lower, upper, tol : f'Base;
+   function adapt_simpson(test : test_func; lower, upper : f'Base; tol : in out f'Base;
+                          levels : Natural) return f'Base is
+      --
+      --  Function to recurse for adaptive Simpson's integration
+      --
+      function interval(t : test_func; lower, upper : f'Base; tol : in out f'Base;
                         t_l, t_m, t_u, full : f'Base; levels : Natural) return f'Base is
          mid  : constant f'Base := (upper + lower)/2.0;
          t_ml : constant f'Base := test((lower + mid)/2.0);
          t_mu : constant f'Base := test((mid + upper)/2.0);
          l    : f'Base;
          r    : f'Base;
+         tol1 : f'Base := tol/2.0;
+         tol2 : f'Base := tol/2.0;
       begin
          l := (upper - lower)*(t_l + 4.0*t_ml + t_m)/12.0;
          r := (upper - lower)*(t_m + 4.0*t_mu + t_u)/12.0;
          if (abs(l + r - full) > tol) and (levels > 0) then
-            l := interval(test, lower, mid, tol/2.0, t_l, t_ml, t_m, l, levels - 1);
-            r := interval(test, mid, upper, tol/2.0, t_m, t_mu, t_u, r, levels - 1);
+            l := interval(test, lower, mid, tol1, t_l, t_ml, t_m, l, levels - 1);
+            r := interval(test, mid, upper, tol2, t_m, t_mu, t_u, r, levels - 1);
+            tol := tol1 + tol2;
+         else
+            tol := abs(l + r - full);
          end if;
          return l + r;
       end;
@@ -76,12 +83,17 @@ package body BBS.Numerical.integration_real is
       full : constant f'Base := (upper - lower)*(t_l + 4.0*t_m + t_u)/6.0;
       l    : f'Base;
       r    : f'Base;
+      tol1 : f'Base := tol/2.0;
+      tol2 : f'Base := tol/2.0;
    begin
       l    := (upper - lower)*(t_l + 4.0*t_ml + t_m)/12.0;
       r    := (upper - lower)*(t_m + 4.0*t_mu + t_u)/12.0;
       if (abs(l + r - full) > tol) and (levels > 0) then
-         l := interval(test, lower, mid, tol/2.0, t_l, t_ml, t_m, l, levels - 1);
-         r := interval(test, mid, upper, tol/2.0, t_m, t_mu, t_u, r, levels - 1);
+         l := interval(test, lower, mid, tol1, t_l, t_ml, t_m, l, levels - 1);
+         r := interval(test, mid, upper, tol2, t_m, t_mu, t_u, r, levels - 1);
+         tol := tol1 + tol2;
+      else
+         tol := abs(l + r - full);
       end if;
       return l + r;
    end;

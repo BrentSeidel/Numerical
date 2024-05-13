@@ -19,8 +19,9 @@ package BBS.Numerical.integration_real is
    function simpson(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base;
    --
    --  Integrate the provided function between the lower and upper limits using
-   --  adaptive Simpson's integration.
+   --  adaptive Simpson's integration.  A requested tolerance is input and
+   --  returned as an estimated value.
    --
-   function adapt_simpson(test : test_func; lower, upper, tol : f'Base;
-                          levels : in out Natural) return f'Base;
+   function adapt_simpson(test : test_func; lower, upper : f'Base; tol : in out f'Base;
+                          levels : Natural) return f'Base;
 end;
