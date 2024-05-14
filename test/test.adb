@@ -9,7 +9,7 @@ with BBS.Numerical.roots_real;
 with BBS.Numerical.Statistics;
 
 procedure test is
-   subtype real is Long_Float;
+   subtype real is Float;
    package linreg is new BBS.Numerical.regression(real);
    package integ is new BBS.Numerical.integration_real(real);
    package ode is new BBS.Numerical.ode_real(real);
@@ -35,6 +35,7 @@ procedure test is
    res  : linreg.simple_linreg_result;
    y   : real;
    yr  : real;
+   yrkf : real;
    ye  : real;
    ypc : real;
    t   : real;
@@ -43,11 +44,12 @@ procedure test is
    y1  : real;
    y2  : real;
    y3  : real;
+   step : real;
 begin
    Ada.Text_IO.Put_Line("Testing some of the numerical routines.");
    res := linreg.simple_linear(data);
    Ada.Text_IO.Put_Line("Linear regression result:");
-   Ada.Text_IO.Put("a = ");
+   Ada.Text_IO.Put("  a = ");
    float_io.Put(res.a, 2, 3, 0);
    Ada.Text_IO.Put(", b = ");
    float_io.Put(res.b, 2, 3, 0);
@@ -75,22 +77,27 @@ begin
    Ada.Text_IO.New_Line;
    --
    Ada.Text_IO.Put_Line("Testing Differential Equations");
-   Ada.Text_IO.Put_Line("   Time   Euler's    Runge-Kutta  Adams-Bashforth-Moulton");
+   Ada.Text_IO.Put_Line("   Time    Euler's  4th Order RK  RKF  Adams-Bashforth-Moulton");
    yr := 1.0;
    ye := 1.0;
+   yrkf := 1.0;
    y0 := 1.0;
    t  := 0.0;
+   step := 0.05;
    Ada.Text_IO.Put("  ");
    float_io.Put(0.0, 2, 2, 0);
    Ada.Text_IO.Put("  ");
    float_io.Put(ye, 2, 6, 0);
    Ada.Text_IO.Put("  ");
    float_io.Put(yr, 2, 6, 0);
+   Ada.Text_IO.Put("  ");
+   float_io.Put(yrkf, 2, 6, 0);
    Ada.Text_IO.Put("       ----");
    Ada.Text_IO.New_Line;
-   for i in 1 .. 10 loop
-      ye := ode.euler(f2'Access, t, ye, 0.1);
-      yr := ode.rk4(f2'Access, t, yr, 0.1);
+   for i in 1 .. 20 loop
+      ye := ode.euler(f2'Access, t, ye, step);
+      yr := ode.rk4(f2'Access, t, yr, step);
+      yrkf := ode.rkf(f2'Access, t, yrkf, step, tol);
       if i = 1 then
          y1 := yr;
       elsif i = 2 then
@@ -98,7 +105,7 @@ begin
       elsif i = 3 then
          y3 := yr;
       else
-         ypc := ode.abam4(f2'Access, t, 0.1, y0, y1, y2, y3);
+         ypc := ode.abam4(f2'Access, t, step, y0, y1, y2, y3);
          y0 := y1;
          y1 := y2;
          y2 := y3;
@@ -110,6 +117,8 @@ begin
       float_io.Put(ye, 2, 6, 0);
       Ada.Text_IO.Put("  ");
       float_io.Put(yr, 2, 6, 0);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(yrkf, 2, 6, 0);
       if i > 3 then
          Ada.Text_IO.Put("    ");
          float_io.Put(ypc, 2, 6, 0);
@@ -117,6 +126,6 @@ begin
          Ada.Text_IO.Put("       ----");
       end if;
       Ada.Text_IO.New_Line;
-      t := real(i)*0.1;
+      t := real(i)*step;
    end loop;
 end test;

@@ -15,6 +15,10 @@ package BBS.Numerical.ode_real is
    --  4th order Runge-Kutta method
    --
    function rk4(tf : test_func; start, initial, step : f'Base) return f'Base;
+   --
+   --  4/5th order Runge-Kutta-Fehlberg method
+   --
+   function rkf(tf : test_func; start, initial, step : f'Base; tol : out f'Base) return f'Base;
    -- --------------------------------------------------------------------------
    --  Multistep methods
    --
