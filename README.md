@@ -19,6 +19,15 @@ Implemented algorithms are:
 ##  Differentiation
 
 ##  Differential Equations
+These are basic algorithms for finding numerical solutions to differential
+equations.
+
+the implemented algorithms are:
+* Euler's method
+* 4th order Runge-Kutta
+* 4/5th order Runge-Kutta-Fehlberg
+* 4th order Adams-Bashforth/Adams-Moulton
+* 4th order Runge-Kutta for systems of differential equations
 
 ##  Root Finding
 These are used to find roots (zero crossings) of functions.  There are a number

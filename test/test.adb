@@ -26,6 +26,19 @@ procedure test is
       return -y + t + 1.0;
    end;
 
+   type param_array is array(1 .. 2) of real;
+   type sys_func is access function (t : real; y : ode.params) return real;
+
+   function f1sys(t : real; y : ode.params) return real is
+   begin
+      return -4.0*y(1) + 3.0*y(2) + 6.0;
+   end;
+
+   function f2sys(t : real; y : ode.params) return real is
+   begin
+      return -2.4*y(1) + 1.6*y(2) + 3.6;
+   end;
+
    data : linreg.data_array :=
       ((x => 1.0, y => 1.0),
        (x => 2.0, y => 1.0),
@@ -45,6 +58,10 @@ procedure test is
    y2  : real;
    y3  : real;
    step : real;
+   tsys : ode.params(1..2);
+   ysys : ode.params(1..2);
+   rsys : ode.params(1..2);
+--   func : constant func_array := (f1sys'Access, f2sys'Access);
 begin
    Ada.Text_IO.Put_Line("Testing some of the numerical routines.");
    res := linreg.simple_linear(data);
@@ -111,6 +128,7 @@ begin
          y2 := y3;
          y3 := ypc;
       end if;
+      t := real(i)*step;
       Ada.Text_IO.Put("  ");
       float_io.Put(t, 2, 2, 0);
       Ada.Text_IO.Put("  ");
@@ -126,6 +144,31 @@ begin
          Ada.Text_IO.Put("       ----");
       end if;
       Ada.Text_IO.New_Line;
+   end loop;
+   --
+   Ada.Text_IO.Put_Line("Testing Differential Equation Systems");
+   ysys := (0.0, 0.0);
+   tsys := (0.0, 0.0);
+   step := 0.1;
+   t := 0.0;
+   Ada.Text_IO.Put("  ");
+   float_io.Put(0.0, 2, 2, 0);
+   Ada.Text_IO.Put("  ");
+   float_io.Put(ysys(1), 2, 6, 0);
+   Ada.Text_IO.Put("  ");
+   float_io.Put(ysys(2), 2, 6, 0);
+   Ada.Text_IO.New_Line;
+   for i in 1 .. 10 loop
+      rsys := ode.rk4s((1 => f1sys'Access, 2 => f2sys'Access),
+               tsys, ysys, step);
+      ysys := rsys;
       t := real(i)*step;
+      Ada.Text_IO.Put("  ");
+      float_io.Put(t, 2, 2, 0);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(ysys(1), 2, 6, 0);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(ysys(2), 2, 6, 0);
+      Ada.Text_IO.New_Line;
    end loop;
 end test;

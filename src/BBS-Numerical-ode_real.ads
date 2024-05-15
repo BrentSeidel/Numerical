@@ -5,10 +5,14 @@ package BBS.Numerical.ode_real is
    --  Define a type for the function to integrate.
    --
    type test_func is access function (t, y : f'Base) return f'Base;
+   type params is array (integer range <>) of f'Base;
+   type sys_func is access function (t : f'Base; y : params) return f'Base;
+   type functs is array (integer range <>) of sys_func;
    -- --------------------------------------------------------------------------
    --  Single step methods
    --
-   --  Euler's method
+   --  Euler's method (It is not recommended to use this.  It was included only
+   --  for illustration and debugging purposes.)
    --
    function euler(tf : test_func; start, initial, step : f'Base) return f'Base;
    --
@@ -27,4 +31,14 @@ package BBS.Numerical.ode_real is
    function ab4(tf : test_func; start, step : f'Base; i0, i1, i2, i3 : f'Base) return f'Base;
    function am4(tf : test_func; start, step : f'Base; i0, i1, i2, i3 : f'Base) return f'Base;
    function abam4(tf : test_func; start, step : f'Base; i0, i1, i2, i3 : f'Base) return f'Base;
+   -- --------------------------------------------------------------------------
+   --  Systems of differential equation methods
+   --
+   --  4th order Runge-Kutta method
+   --
+   --  Note that the arrays for tf, start, and initial must have the same bounds.
+   --
+   function rk4s(tf : functs; start, initial : params; step : f'Base) return params
+      with pre => (tf'First = start'First) and (tf'First = initial'First) and
+                  (tf'Last = start'Last) and (tf'Last = initial'Last);
 end BBS.Numerical.ode_real;
