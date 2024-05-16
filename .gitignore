@@ -5,3 +5,8 @@ lib/*
 
 # Ada Library Information
 *.ali
+
+# Test binaries
+test_ode
+test_integ
+test_stats

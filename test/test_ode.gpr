@@ -1,10 +1,10 @@
 with "../BBS_Numerical.gpr";
 
-project test is
+project test_ode is
    for languages use ("Ada");
    for Source_Dirs use (".");
    for Object_Dir use "../obj";
-   for Main use ("test.adb");
+   for Main use ("test_ode.adb");
    for Exec_Dir use ".";
    package builder is
       for switches ("Ada") use ("-s");
@@ -12,4 +12,4 @@ project test is
    package compiler is
       for switches ("Ada") use ("-g", "-gnateE", "-gnata");
    end compiler;
-end test;
+end test_ode;
