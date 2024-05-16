@@ -9,4 +9,5 @@ lib/*
 # Test binaries
 test_ode
 test_integ
+test_root
 test_stats

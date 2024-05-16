@@ -13,7 +13,7 @@ package BBS.Numerical.roots_real is
    --  The lower and upper values are updated during the iterations to provide an
    --  interval containing the root.
    --
-   function bisection(test : test_func; lower, upper : in out f; limit : Positive; err : out errors) return f;
+   function bisection(test : test_func; lower, upper : in out f'Base; limit : Positive; err : out errors) return f'Base;
    --
    --  If there is an odd number of roots between the lower and upper limits,
    --  the secant method will always converge.  Each stage of the iteration
@@ -33,7 +33,7 @@ package BBS.Numerical.roots_real is
    --  upper and lower bounds are ever equal.  This will cause a divide by zero
    --  error.
    --
-   function seacant(test : test_func; lower, upper : in out f; limit : Positive; err : out errors) return f;
+   function seacant(test : test_func; lower, upper : in out f'Base; limit : Positive; err : out errors) return f'Base;
    --
    --  The Mueller algorithm uses three points to model a quadratic curve and uses
    --  that to find a candidate root.    Unlike the bisection method, Mueller's
@@ -51,5 +51,5 @@ package BBS.Numerical.roots_real is
    --  meaningful as upper and lower bounds for the root, except that they are
    --  both set equal to the return value if the root is exact.
    --
-   function mueller(test : test_func; x0, x2 : in out f; limit : Positive; err : out errors) return f;
+   function mueller(test : test_func; x0, x2 : in out f'Base; limit : Positive; err : out errors) return f'Base;
 end;

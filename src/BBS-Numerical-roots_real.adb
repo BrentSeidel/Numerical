@@ -1,16 +1,16 @@
---with Ada.Text_IO;
---with Ada.Float_Text_IO;
 with Ada.Numerics.Generic_Elementary_Functions;
+with Ada.Text_IO;
 package body BBS.Numerical.roots_real is
    package elem is new Ada.Numerics.Generic_Elementary_Functions(f);
+   package float_io is new Ada.Text_IO.Float_IO(f'Base);
    --
    --  Bisection algorithm for finding a root.
    --
-   function bisection(test : test_func; lower, upper : in out f; limit : Positive; err : out errors) return f is
-      val_high   : f;
-      val_low    : f;
-      val_mid    : f;
-      mid_limit  : f;
+   function bisection(test : test_func; lower, upper : in out f'Base; limit : Positive; err : out errors) return f'Base is
+      val_high   : f'Base;
+      val_low    : f'Base;
+      val_mid    : f'Base;
+      mid_limit  : f'Base;
    begin
       val_high := test(upper);
       val_low  := test(lower);
@@ -34,11 +34,11 @@ package body BBS.Numerical.roots_real is
       return (lower + upper)/2.0;
    end;
    --
-   function seacant(test : test_func; lower, upper : in out f; limit : Positive; err : out errors) return f is
-      val_high   : f;
-      val_low    : f;
-      val_mid    : f;
-      mid_limit  : f;
+   function seacant(test : test_func; lower, upper : in out f'Base; limit : Positive; err : out errors) return f'Base is
+      val_high   : f'Base;
+      val_low    : f'Base;
+      val_mid    : f'Base;
+      mid_limit  : f'Base;
    begin
       val_high := test(upper);
       val_low  := test(lower);
@@ -74,20 +74,20 @@ package body BBS.Numerical.roots_real is
       return upper - val_high*(upper - lower)/(val_high - val_low);
    end;
    --
-   function mueller(test : test_func; x0, x2 : in out f; limit : Positive; err : out errors) return f is
-      x1      : f := (x0 + x2)/2.0;
-      step1   : f := x1 - x0;
-      step2   : f := x2 - x1;
-      delta1  : f := (test(x1) - test(x0))/step1;
-      delta2  : f := (test(x2) - test(x1))/step2;
-      d_small : f := (delta2 - delta1) / (step2 + step1);
-      d_big   : f;
-      discriminant : f;
-      b : f;
-      value : f;
-      e : f;
-      root : f;
-      temp : f;
+   function mueller(test : test_func; x0, x2 : in out f'Base; limit : Positive; err : out errors) return f'Base is
+      x1      : f'Base := (x0 + x2)/2.0;
+      step1   : f'Base := x1 - x0;
+      step2   : f'Base := x2 - x1;
+      delta1  : f'Base := (test(x1) - test(x0))/step1;
+      delta2  : f'Base := (test(x2) - test(x1))/step2;
+      d_small : f'Base := (delta2 - delta1) / (step2 + step1);
+      d_big   : f'Base;
+      discriminant : f'Base;
+      b       : f'Base;
+      value   : f'Base;
+      e       : f'Base;
+      root    : f'Base;
+      temp    : f'Base;
    begin
       err := none;
       for i in 0 .. limit loop
@@ -105,7 +105,7 @@ package body BBS.Numerical.roots_real is
          end if;
          value := -2.0*test(x2)/e;
          root := x2 + value;
-         if value = 0.0 then
+         if (value = 0.0) or (x0 = x1) or (root = x2) then
             return root;
          end if;
          x0 := x1;

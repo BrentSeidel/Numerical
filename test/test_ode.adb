@@ -50,7 +50,7 @@ begin
    Ada.Text_IO.Put_Line("Testing some of the numerical routines.");
    --
    Ada.Text_IO.Put_Line("Testing Differential Equations");
-   Ada.Text_IO.Put_Line("   Time    Euler's  4th Order RK  RKF  Adams-Bashforth-Moulton");
+   Ada.Text_IO.Put_Line("   Time    Euler's  4th Order RK    RKF    RKF Tol  Adams-Bashforth-Moulton");
    yr := 1.0;
    ye := 1.0;
    yrkf := 1.0;
@@ -65,6 +65,8 @@ begin
    float_io.Put(yr, 2, 6, 0);
    Ada.Text_IO.Put("  ");
    float_io.Put(yrkf, 2, 6, 0);
+   Ada.Text_IO.Put("  ");
+   float_io.Put(0.0, 2, 6, 3);
    Ada.Text_IO.Put("       ----");
    Ada.Text_IO.New_Line;
    for i in 1 .. 20 loop
@@ -93,6 +95,8 @@ begin
       float_io.Put(yr, 2, 6, 0);
       Ada.Text_IO.Put("  ");
       float_io.Put(yrkf, 2, 6, 0);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(tol, 2, 6, 3);
       if i > 3 then
          Ada.Text_IO.Put("    ");
          float_io.Put(ypc, 2, 6, 0);
@@ -103,6 +107,7 @@ begin
    end loop;
    --
    Ada.Text_IO.Put_Line("Testing Differential Equation Systems");
+   Ada.Text_IO.Put_Line("   Time   RK4-a      RK4-b");
    ysys := (0.0, 0.0);
    step := 0.1;
    t := 0.0;
