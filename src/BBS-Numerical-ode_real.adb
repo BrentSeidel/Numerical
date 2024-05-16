@@ -80,12 +80,12 @@ package body BBS.Numerical.ode_real is
    --  4th order Runge-Kutta method
    --
    function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base) return params is
-      w  : params(tf'First .. tf'Last);
-      k1 : params(tf'First .. tf'Last);
-      k2 : params(tf'First .. tf'Last);
-      k3 : params(tf'First .. tf'Last);
-      k4 : params(tf'First .. tf'Last);
-      res : params(tf'First .. tf'Last);
+      w  : params(tf'Range);
+      k1 : params(tf'Range);
+      k2 : params(tf'Range);
+      k3 : params(tf'Range);
+      k4 : params(tf'Range);
+      res : params(tf'Range);
    begin
       for i in tf'Range loop
          k1(i) := step*tf(i)(start, initial);
