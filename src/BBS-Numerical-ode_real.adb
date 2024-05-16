@@ -79,7 +79,7 @@ package body BBS.Numerical.ode_real is
    --
    --  4th order Runge-Kutta method
    --
-   function rk4s(tf : functs; start, initial : params; step : f'Base) return params is
+   function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base) return params is
       w  : params(tf'First .. tf'Last);
       k1 : params(tf'First .. tf'Last);
       k2 : params(tf'First .. tf'Last);
@@ -88,25 +88,25 @@ package body BBS.Numerical.ode_real is
       res : params(tf'First .. tf'Last);
    begin
       for i in tf'Range loop
-         k1(i) := step*tf(i)(start(i), initial);
+         k1(i) := step*tf(i)(start, initial);
       end loop;
       for i in tf'Range loop
          w(i) := initial(i) + k1(i)/2.0;
       end loop;
       for i in tf'Range loop
-         k2(i) := step*tf(i)(start(i) + step/2.0, w);
+         k2(i) := step*tf(i)(start + step/2.0, w);
       end loop;
       for i in tf'Range loop
          w(i) := initial(i) + k2(i)/2.0;
       end loop;
       for i in tf'Range loop
-         k3(i) := step*tf(i)(start(i) + step/2.0, w);
+         k3(i) := step*tf(i)(start + step/2.0, w);
       end loop;
       for i in tf'Range loop
          w(i) := initial(i) + k3(i);
       end loop;
       for i in tf'Range loop
-         k4(i) := step*tf(i)(start(i) + step, w);
+         k4(i) := step*tf(i)(start + step, w);
       end loop;
       for i in tf'Range loop
          res(i) := initial(i) + (k1(i) + 2.0*k2(i) + 2.0*k3(i) + k4(i))/6.0;

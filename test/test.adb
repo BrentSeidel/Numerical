@@ -58,7 +58,6 @@ procedure test is
    y2  : real;
    y3  : real;
    step : real;
-   tsys : ode.params(1..2);
    ysys : ode.params(1..2);
    rsys : ode.params(1..2);
    func : constant ode.functs(1 .. 2) := (f1sys'Access, f2sys'Access);
@@ -148,7 +147,6 @@ begin
    --
    Ada.Text_IO.Put_Line("Testing Differential Equation Systems");
    ysys := (0.0, 0.0);
-   tsys := (0.0, 0.0);
    step := 0.1;
    t := 0.0;
    Ada.Text_IO.Put("  ");
@@ -159,7 +157,7 @@ begin
    float_io.Put(ysys(2), 2, 6, 0);
    Ada.Text_IO.New_Line;
    for i in 1 .. 10 loop
-      rsys := ode.rk4s(func, tsys, ysys, step);
+      rsys := ode.rk4s(func, t, ysys, step);
       ysys := rsys;
       t := real(i)*step;
       Ada.Text_IO.Put("  ");

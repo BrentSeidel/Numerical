@@ -38,7 +38,6 @@ package BBS.Numerical.ode_real is
    --
    --  Note that the arrays for tf, start, and initial must have the same bounds.
    --
-   function rk4s(tf : functs; start, initial : params; step : f'Base) return params
-      with pre => (tf'First = start'First) and (tf'First = initial'First) and
-                  (tf'Last = start'Last) and (tf'Last = initial'Last);
+   function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base) return params
+      with pre => (tf'First = initial'First) and (tf'Last = initial'Last);
 end BBS.Numerical.ode_real;
