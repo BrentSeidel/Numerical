@@ -1,6 +1,8 @@
 with Ada.Numerics.Generic_Elementary_Functions;
+with Ada.Text_IO;
 package body BBS.Numerical.complex_real is
-   package elem is new Ada.Numerics.Generic_Elementary_Functions(f);
+   package elem is new Ada.Numerics.Generic_Elementary_Functions(f'Base);
+   package float_io is new Ada.Text_IO.Float_IO(f'Base);
    --
    --  Basic manipulations
    --
@@ -120,6 +122,17 @@ package body BBS.Numerical.complex_real is
       t1 : f := elem.Exp(self.r);
    begin
       return (r => t1 * elem.Cos(self.i), i => t1 * elem.Sin(self.i));
+   end;
+   --
+   --  Utility print procedure for debugging
+   --
+   procedure print(self : in complex; fore, aft, exp : Natural) is
+   begin
+      Ada.Text_IO.Put("(");
+      float_io.Put(self.r, fore, aft, exp);
+      Ada.Text_IO.Put(", ");
+      float_io.Put(self.i, fore, aft, exp);
+      Ada.Text_IO.Put(")");
    end;
    --
 end BBS.Numerical.complex_real;

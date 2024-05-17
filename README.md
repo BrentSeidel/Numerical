@@ -37,7 +37,7 @@ the nature of the function before selecting the root finding algorithm.
 The implemented algorithms are:
 * Bisection
 * Secant
-* Mueller
+* Mueller (versions for real roots and complex roots)
 
 ##  Quaternions
 Some basic operations are implemented.

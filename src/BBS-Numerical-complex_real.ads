@@ -55,6 +55,10 @@ package BBS.Numerical.complex_real is
    --
    function exp(self : in complex) return complex;
    --
+   --  Utility print procedure for debugging
+   --
+   procedure print(self : in complex; fore, aft, exp : Natural);
+   --
    --  Constants
    --
    zero : constant complex := (r => 0.0, i => 0.0);
