@@ -1,6 +1,5 @@
 with BBS.Numerical.complex_real;
 generic
-  type F is digits <>;
   with package cmplx is new BBS.Numerical.complex_real(<>);
   use type cmplx.complex;
   use type cmplx.F;
@@ -25,5 +24,5 @@ package BBS.Numerical.roots_complex is
    --  both set equal to the return value if the root is exact.
    --
    function mueller(test : test_func; x0, x2 : in out cmplx.complex;
-            limit : Positive; err : out errors) return cmplx.complex;
+            limit : in out Positive; err : out errors) return cmplx.complex;
 end BBS.Numerical.roots_complex;

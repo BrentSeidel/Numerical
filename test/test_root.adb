@@ -10,7 +10,7 @@ procedure test_root is
    package cmplx is new BBS.Numerical.complex_real(real);
    use type cmplx.complex;
    package root is new BBS.Numerical.roots_real(real);
-   package croot is new BBS.Numerical.roots_complex(F => real, cmplx => cmplx);
+   package croot is new BBS.Numerical.roots_complex(cmplx => cmplx);
    package float_io is new Ada.Text_IO.Float_IO(real);
    package elem is new Ada.Numerics.Generic_Elementary_Functions(real);
 
@@ -39,6 +39,7 @@ procedure test_root is
    cr  : cmplx.Complex;
    cl  : cmplx.Complex;
    cu  : cmplx.Complex;
+   iter : Positive;
 begin
    Ada.Text_IO.Put_Line("Testing some of the numerical routines.");
    --
@@ -67,8 +68,9 @@ begin
    --
    l := 1.0;
    u := 2.0;
-   r := root.mueller(f2'Access, l, u, 13, err);
-   Ada.Text_IO.Put("  Mueller gives root at");
+   iter := 13;
+   r := root.mueller(f2'Access, l, u, iter, err);
+   Ada.Text_IO.Put("  After " & Positive'image(iter) & " iterations, Mueller gives root at");
    float_io.Put(r, 2, 9, 0);
    Ada.Text_IO.Put(", in range ");
    float_io.Put(l, 2, 6, 0);
@@ -77,12 +79,14 @@ begin
    Ada.Text_IO.Put_Line(", with error code " & root.errors'Image(err));
    --
    Ada.Text_IO.Put_Line("Complex roots with Mueller's method");
-   cl := (r => 1.0, i => 0.0);
-   cu := (r => 2.0, i => 0.0);
-   cr := croot.mueller(f3'Access, cl, cu, 13, cerr);
-   Ada.Text_IO.Put("  Root at ");
+   cl := (r => 0.0, i => -2.0);
+   cu := (r => 0.0, i => -3.0);
+   iter := 13;
+   cr := croot.mueller(f3'Access, cl, cu, iter, cerr);
+   Ada.Text_IO.Put("  After " & Positive'Image(iter) & " iterations, root found at ");
    cr.print(2, 9, 0);
-   Ada.Text_IO.Put(", in range ");
+   Ada.Text_IO.New_Line;
+   Ada.Text_IO.Put("    In range ");
    cl.print(2, 9, 0);
    Ada.Text_IO.Put(" to ");
    cu.print(2, 9, 0);

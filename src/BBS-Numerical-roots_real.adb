@@ -74,7 +74,7 @@ package body BBS.Numerical.roots_real is
       return upper - val_high*(upper - lower)/(val_high - val_low);
    end;
    --
-   function mueller(test : test_func; x0, x2 : in out f'Base; limit : Positive; err : out errors) return f'Base is
+   function mueller(test : test_func; x0, x2 : in out f'Base; limit : in out Positive; err : out errors) return f'Base is
       x1      : f'Base := (x0 + x2)/2.0;
       step1   : f'Base := x1 - x0;
       step2   : f'Base := x2 - x1;
@@ -106,6 +106,7 @@ package body BBS.Numerical.roots_real is
          value := -2.0*test(x2)/e;
          root := x2 + value;
          if (value = 0.0) or (x0 = x1) or (root = x2) then
+            limit := i;
             return root;
          end if;
          x0 := x1;

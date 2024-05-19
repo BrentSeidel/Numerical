@@ -51,5 +51,5 @@ package BBS.Numerical.roots_real is
    --  meaningful as upper and lower bounds for the root, except that they are
    --  both set equal to the return value if the root is exact.
    --
-   function mueller(test : test_func; x0, x2 : in out f'Base; limit : Positive; err : out errors) return f'Base;
+   function mueller(test : test_func; x0, x2 : in out f'Base; limit : in out Positive; err : out errors) return f'Base;
 end;
