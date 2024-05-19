@@ -22,16 +22,16 @@ package body BBS.Numerical.roots_complex is
       e       : cmplx.complex;
       root    : cmplx.complex;
       temp    : cmplx.complex;
-      nTwo    : constant cmplx.complex := (r => -2.0, i => 0.0);
+      nTwo    : constant cmplx.complex := (-2.0)*cmplx.one;
       atemp    : ada_cmplx.Complex;
    begin
       err := none;
       for i in 0 .. limit loop
          b := delta2 + (step2 * d_small);
          discriminant := b*b - (4.0*d_small*test(x2));
-         atemp := (discriminant.r, discriminant.i);
+         atemp := (roots_complex.F(discriminant.r), roots_complex.F(discriminant.i));
          atemp := cmplx_elem.Sqrt(atemp);
-         d_big := (r => ada_cmplx.Re(atemp), i => ada_cmplx.Im(atemp));
+         d_big := (r => cmplx.F(ada_cmplx.Re(atemp)), i => cmplx.F(ada_cmplx.Im(atemp)));
          if cmplx.magnitude(b - d_big) < cmplx.magnitude(b + d_big) then
             e := b + d_big;
          else

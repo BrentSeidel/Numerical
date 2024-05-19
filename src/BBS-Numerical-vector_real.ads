@@ -9,6 +9,9 @@ package BBS.Numerical.vector_real is
       with pre => (Left'First = Right'First) and (Left'Last = Right'Last);
    function "-" (Left, Right : vect) return vect
       with pre => (Left'First = Right'First) and (Left'Last = Right'Last);
+   --
+   --  Vector dot product
+   --
    function "*" (Left, Right : vect) return f'Base
       with pre => (Left'First = Right'First) and (Left'Last = Right'Last);
    function "*" (Left : f; Right : vect) return vect;

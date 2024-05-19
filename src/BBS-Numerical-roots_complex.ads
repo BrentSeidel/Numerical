@@ -1,9 +1,10 @@
 with BBS.Numerical.complex_real;
 generic
   type F is digits <>;
+  with package cmplx is new BBS.Numerical.complex_real(<>);
+  use type cmplx.complex;
+  use type cmplx.F;
 package BBS.Numerical.roots_complex is
-   package cmplx is new BBS.Numerical.complex_real(f'Base);
-   use type cmplx.complex;
    type errors is (none, bad_args, no_solution);
    type test_func is access function (x : cmplx.complex) return cmplx.complex;
    --

@@ -7,9 +7,10 @@ with BBS.Numerical.roots_complex;
 
 procedure test_root is
    subtype real is Long_Float;
+   package cmplx is new BBS.Numerical.complex_real(real);
+   use type cmplx.complex;
    package root is new BBS.Numerical.roots_real(real);
-   package croot is new BBS.Numerical.roots_complex(real);
-   use type croot.cmplx.complex;
+   package croot is new BBS.Numerical.roots_complex(F => real, cmplx => cmplx);
    package float_io is new Ada.Text_IO.Float_IO(real);
    package elem is new Ada.Numerics.Generic_Elementary_Functions(real);
 
@@ -25,9 +26,9 @@ procedure test_root is
    --
    --  This function has no real roots - only two complex ones.
    --
-   function f3(x : croot.cmplx.Complex) return croot.cmplx.Complex is
+   function f3(x : cmplx.Complex) return cmplx.Complex is
    begin
-      return x*x + croot.cmplx.one;
+      return x*x + cmplx.one;
    end;
 
    r   : real;
@@ -35,9 +36,9 @@ procedure test_root is
    u   : real;
    err : root.errors;
    cerr : croot.errors;
-   cr  : croot.cmplx.Complex;
-   cl  : croot.cmplx.Complex;
-   cu  : croot.cmplx.Complex;
+   cr  : cmplx.Complex;
+   cl  : cmplx.Complex;
+   cu  : cmplx.Complex;
 begin
    Ada.Text_IO.Put_Line("Testing some of the numerical routines.");
    --
