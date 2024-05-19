@@ -1,0 +1,15 @@
+with "../BBS_Numerical.gpr";
+
+project test_poly is
+   for languages use ("Ada");
+   for Source_Dirs use (".");
+   for Object_Dir use "../obj";
+   for Main use ("test_poly.adb");
+   for Exec_Dir use ".";
+   package builder is
+      for switches ("Ada") use ("-s");
+   end builder;
+   package compiler is
+      for switches ("Ada") use ("-g", "-gnateE", "-gnata");
+   end compiler;
+end test_poly;

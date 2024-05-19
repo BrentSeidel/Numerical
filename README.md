@@ -39,6 +39,12 @@ The implemented algorithms are:
 * Secant
 * Mueller (versions for real roots and complex roots)
 
+##  Polynomials
+A polynomial is implemented as an array with the lower index value set to 0.  The index represents
+the exponent for the independant variable and the array value at that index is the coefficient.
+
+Some basic operations are implemented for real polynomials.
+
 ##  Quaternions
 Some basic operations are implemented.
 
