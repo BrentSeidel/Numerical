@@ -88,13 +88,49 @@ package body BBS.Numerical.polynomial_real is
       return res;
    end;
    --
-   function evaluate(Self : in poly; x : f'Base) return f'Base is
+   function evaluate(p : poly; x : f'Base) return f'Base is
       accum : f'Base := 0.0;
    begin
-      for i in reverse 1 .. Self'Last loop
-         accum := x*(accum + self(i));
+      for i in reverse 1 .. p'Last loop
+         accum := x*(accum + p(i));
       end loop;
-      return accum + Self(0);
+      return accum + p(0);
+   end;
+   --
+   --  Basic calculus
+   --
+   function integrate(p : poly; c : f'Base) return poly is
+      res : poly(0 .. p'Last + 1);
+   begin
+      res(0) := c;
+      for i in p'Range loop
+         res(i + 1) := p(i)/(f'Base(i) + 1.0);
+      end loop;
+      return res;
+   end;
+   --
+   function derivative(p : poly) return poly is
+      limit : Natural;
+   begin
+      if p'Last = 0 then
+         limit := 0;
+      else
+         limit := p'Last - 1;
+      end if;
+      Ada.Text_IO.Put_Line("Derivative: p'Last = " & Natural'Image(p'Last) &
+         ", limit = " & Natural'Image(limit));
+      declare
+         res : poly(0 .. limit);
+      begin
+         if p'Last = 0 then
+            res(0) := 0.0;
+         else
+            for i in 1 .. p'Last loop
+               res(i - 1) := f'Base(i)*p(i);
+            end loop;
+         end if;
+         return res;
+      end;
    end;
    --
 end BBS.Numerical.polynomial_real;

@@ -43,7 +43,13 @@ The implemented algorithms are:
 A polynomial is implemented as an array with the lower index value set to 0.  The index represents
 the exponent for the independant variable and the array value at that index is the coefficient.
 
-Some basic operations are implemented for real polynomials.
+Implemented operations include
+* Addition and subtraction of polynomials
+* Multiplication of polynomial by a scalar
+* Multiplication of polynomial by polynomial
+* Evaluation of polynomial
+* Integral of polynomial
+* Derivative of polynomial
 
 ##  Quaternions
 Some basic operations are implemented.

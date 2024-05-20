@@ -18,6 +18,13 @@ package BBS.Numerical.polynomial_real is
       with pre => (Left'First = 0),
            post => ("*"'Result'Last = Left'Last);
    --
-   function evaluate(Self : in poly; x : f'Base) return f'Base;
+   function evaluate(p : poly; x : f'Base) return f'Base;
    --
+   --  Basic calculus
+   --
+   function integrate(p : poly; c : f'Base) return poly
+      with post => (integrate'Result'Last = (p'Last + 1));
+   function derivative(p : poly) return poly
+      with post => (((derivative'Result'Last = (p'Last - 1)) and (p'Last > 0)) or
+                    ((derivative'Result'Last = 0) and (p'Last = 0)));
 end BBS.Numerical.polynomial_real;

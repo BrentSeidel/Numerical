@@ -27,6 +27,8 @@ procedure test_poly is
    p3  : poly.poly(0 .. 2);
    p4  : poly.poly(0 .. 4);
    p5  : poly.poly(0 .. 2);
+   p6  : poly.poly(0 .. 3);
+   p7  : poly.poly(0 .. 2);
    x   : real;
    r   : real;
    l   : real;
@@ -77,6 +79,7 @@ begin
       float_io.put(poly.evaluate(p5, x), 3, 6, 0);
       Ada.Text_IO.New_Line;
    end loop;
+   --
    Ada.Text_IO.Put_Line("Find a root of P1");
    l := 0.0;
    u := 1.0;
@@ -89,4 +92,17 @@ begin
    Ada.Text_IO.Put(" to ");
    float_io.Put(u, 2, 6, 0);
    Ada.Text_IO.Put_Line(", with error code " & root.errors'Image(err));
+   --
+   Ada.Text_IO.Put_Line("Integrals and derivatives");
+   p6 := poly.integrate(p1, 1.0);
+   Ada.Text_IO.Put("  P1 = ");
+   put_poly(p1);
+   Ada.Text_IO.New_Line;
+   Ada.Text_IO.Put("  p6 = Integral of p1 = ");
+   put_poly(p6);
+   Ada.Text_IO.New_Line;
+   p7 := poly.derivative(p6);
+   Ada.Text_IO.Put("  p7 = Derivative of P6 = ");
+   put_poly(p7);
+   Ada.Text_IO.New_Line;
 end test_poly;
