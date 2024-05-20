@@ -88,6 +88,32 @@ package body BBS.Numerical.polynomial_real is
       return res;
    end;
    --
+   --  Division based on poldiv() in "Numerical Recipes in C", second
+   --  edition, 1992 by William H Press, Saul A. Tuekolsky, William T.
+   --  Vetterlink, and Brian P. Flannery, section 5.3.
+   --
+   --  u/v => q, r
+   --
+   procedure divide(u, v : poly; q : out poly; r : out poly) is
+   begin
+      for i in u'Range loop
+         r(i) := u(i);
+      end loop;
+      q := (others => 0.0);
+      --
+      for k in reverse 0 .. u'Last - v'Last loop
+         q(k) := r(v'Last + k)/v(v'Last);
+         for j in reverse k .. v'Last+k - 1 loop
+            r(j) := r(j) - q(k)*v(j-k);
+         end loop;
+      end loop;
+      for j in v'Last .. u'Last loop
+         r(j) := 0.0;
+      end loop;
+   end;
+   --
+   --  Evaluate a polynomial at x.
+   --
    function evaluate(p : poly; x : f'Base) return f'Base is
       accum : f'Base := 0.0;
    begin
@@ -95,6 +121,24 @@ package body BBS.Numerical.polynomial_real is
          accum := x*(accum + p(i));
       end loop;
       return accum + p(0);
+   end;
+   --
+   --  Trims a polynomial by removing leading zero coefficients.
+   --
+   function trim(p : poly) return poly is
+      limit : Natural := p'Last;
+   begin
+      while (p(limit) = 0.0) and (limit > 0) loop
+         limit := limit - 1;
+      end loop;
+      declare
+         res : poly(0 .. limit);
+      begin
+         for i in 0 .. limit loop
+            res(i) := p(i);
+         end loop;
+         return res;
+      end;
    end;
    --
    --  Basic calculus

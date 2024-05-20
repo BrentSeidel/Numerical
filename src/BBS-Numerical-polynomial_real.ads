@@ -18,13 +18,34 @@ package BBS.Numerical.polynomial_real is
       with pre => (Left'First = 0),
            post => ("*"'Result'Last = Left'Last);
    --
-   function evaluate(p : poly; x : f'Base) return f'Base;
+   --  Division based on poldiv() in "Numerical Recipes in C", second
+   --  edition, 1992 by William H Press, Saul A. Tuekolsky, William T.
+   --  Vetterlink, and Brian P. Flannery, section 5.3.
+   --
+   --  u/v => q, r
+   --
+   procedure divide(u, v : poly; q : out poly; r : out poly)
+      with pre => (u'First = 0) and (v'First = 0) and
+                  (q'First = 0) and (r'First = 0);
+   --
+   --  Evaluate a polynomial at x.
+   --
+   function evaluate(p : poly; x : f'Base) return f'Base
+      with pre => (p'First = 0);
+   --
+   --  Trims a polynomial by removing leading zero coefficients.
+   --
+   function trim(p : poly) return poly
+      with pre => (p'First = 0),
+           post => (trim'Result'Last <= p'Last);
    --
    --  Basic calculus
    --
    function integrate(p : poly; c : f'Base) return poly
-      with post => (integrate'Result'Last = (p'Last + 1));
+      with pre => (p'First = 0),
+           post => (integrate'Result'Last = (p'Last + 1));
    function derivative(p : poly) return poly
-      with post => (((derivative'Result'Last = (p'Last - 1)) and (p'Last > 0)) or
+      with pre => (p'First = 0),
+           post => (((derivative'Result'Last = (p'Last - 1)) and (p'Last > 0)) or
                     ((derivative'Result'Last = 0) and (p'Last = 0)));
 end BBS.Numerical.polynomial_real;

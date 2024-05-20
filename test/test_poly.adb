@@ -29,6 +29,8 @@ procedure test_poly is
    p5  : poly.poly(0 .. 2);
    p6  : poly.poly(0 .. 3);
    p7  : poly.poly(0 .. 2);
+   p8  : poly.poly(0 .. 4);
+   p9  : poly.poly(0 .. 4);
    x   : real;
    r   : real;
    l   : real;
@@ -61,10 +63,16 @@ begin
    Ada.Text_IO.Put("  p5 = -p2 = ");
    put_poly(p5);
    Ada.Text_IO.New_Line;
+   poly.divide(p4, p1, p8, p9);
+   Ada.Text_IO.Put("  p8 = p4/p1 = ");
+   put_poly(poly.trim(p8));
+   Ada.Text_IO.Put(", remainder p9 = ");
+   put_poly(poly.trim(p9));
+   Ada.Text_IO.New_Line;
    --
    Ada.Text_IO.Put_Line("Evaluations of polynomials");
    Ada.Text_IO.Put_Line("   x        p1          p2          p3          p4          p5");
-   for i in -20 .. 20 loop
+   for i in -15 .. 15 loop
       x := real(i)*0.1;
       float_io.put(x, 3, 2, 0);
       Ada.Text_IO.Put("  ");
