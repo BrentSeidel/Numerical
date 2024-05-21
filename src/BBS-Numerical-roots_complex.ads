@@ -23,6 +23,10 @@ package BBS.Numerical.roots_complex is
    --  meaningful as upper and lower bounds for the root, except that they are
    --  both set equal to the return value if the root is exact.
    --
+   --
+   --  Note that the sucess may be sensitive to the choice of x0 and x2.  If you
+   --  know that a root exists and get a no_solution error, try different values.
+   --
    function mueller(test : test_func; x0, x2 : in out cmplx.complex;
             limit : in out Positive; err : out errors) return cmplx.complex;
 end BBS.Numerical.roots_complex;

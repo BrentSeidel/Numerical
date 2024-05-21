@@ -50,6 +50,10 @@ package BBS.Numerical.polynomial_real is
    function order(p : poly) return Natural
       with pre => (p'First = 0);
    --
+   --  Utility print procedure for debugging
+   --
+   procedure print(p : poly; fore, aft, exp : Natural);
+   --
    --  Basic calculus
    --
    function integrate(p : poly; c : f'Base) return poly

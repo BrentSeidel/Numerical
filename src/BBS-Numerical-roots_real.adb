@@ -86,16 +86,18 @@ package body BBS.Numerical.roots_real is
       b       : f'Base;
       value   : f'Base;
       e       : f'Base;
-      root    : f'Base;
+      root    : f'Base := x2;
       temp    : f'Base;
+      epsilon : constant f'Base := 1.0e-10;  --  Adjust as needed.  Maybe make a parameter
    begin
       err := none;
-      for i in 0 .. limit loop
+      for i in 1 .. limit loop
          b := delta2 + (step2 * d_small);
          discriminant := b*b - (4.0*d_small*test(x2));
          if discriminant < 0.0 then
             err := no_solution;
-            return 0.0;
+            limit := i;
+            return root;
          end if;
          d_big := elem.Sqrt(discriminant);
          if abs(b - d_big) < abs(b + d_big) then
@@ -105,7 +107,7 @@ package body BBS.Numerical.roots_real is
          end if;
          value := -2.0*test(x2)/e;
          root := x2 + value;
-         if (value = 0.0) or (x0 = x1) or (root = x2) then
+         if (abs(value) <= epsilon) or (x0 = x1) or (root = x2) then
             limit := i;
             return root;
          end if;

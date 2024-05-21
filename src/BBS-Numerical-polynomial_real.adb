@@ -95,13 +95,14 @@ package body BBS.Numerical.polynomial_real is
    --  u/v => q, r
    --
    procedure divide(u, v : poly; q : out poly; r : out poly) is
-      temp : poly(u'Range) := u;
+      temp   : poly := u;
+      v_last : constant f'Base := v(v'Last);
    begin
       q := (others => 0.0);
       r := (others => 0.0);
       --
       for k in reverse 0 .. u'Last - v'Last loop
-         q(k) := temp(v'Last + k)/v(v'Last);
+         q(k) := temp(v'Last + k)/v_last;
          for j in k .. v'Last + k - 1 loop
             temp(j) := temp(j) - q(k)*v(j-k);
          end loop;
@@ -147,6 +148,19 @@ package body BBS.Numerical.polynomial_real is
          limit := limit - 1;
       end loop;
       return limit;
+   end;
+   --
+   --  Utility print procedure for debugging
+   --
+   procedure print(p : in poly; fore, aft, exp : Natural) is
+   begin
+      for i in reverse p'Range loop
+         if p(i) >= 0.0 then
+            Ada.Text_IO.Put("+");
+         end if;
+         float_io.put(p(i), fore, aft, exp);
+         Ada.Text_IO.Put("*X^" & Natural'Image(i));
+      end loop;
    end;
    --
    --  Basic calculus

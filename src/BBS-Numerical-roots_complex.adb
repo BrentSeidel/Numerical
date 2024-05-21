@@ -21,7 +21,7 @@ package body BBS.Numerical.roots_complex is
       root    : cmplx.complex;
       temp    : cmplx.complex;
       nTwo    : constant cmplx.complex := (-2.0)*cmplx.one;
-      atemp    : ada_cmplx.Complex;
+      atemp   : ada_cmplx.Complex;
    begin
       err := none;
       for i in 0 .. limit loop
