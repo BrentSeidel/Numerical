@@ -29,8 +29,8 @@ procedure test_poly is
    p5  : poly.poly(0 .. 2);
    p6  : poly.poly(0 .. 3);
    p7  : poly.poly(0 .. 2);
-   p8  : poly.poly(0 .. 4);
-   p9  : poly.poly(0 .. 4);
+   p8  : poly.poly(0 .. 2);
+   p9  : poly.poly(0 .. 1);
    x   : real;
    r   : real;
    l   : real;
@@ -40,7 +40,7 @@ procedure test_poly is
 
    function test(x : real) return real is
    begin
-      return poly.evaluate(p1, x);
+      return poly.evaluate(p4, x);
    end;
 begin
    Ada.Text_IO.Put_Line("Testing some of the numerical routines.");
@@ -65,9 +65,9 @@ begin
    Ada.Text_IO.New_Line;
    poly.divide(p4, p1, p8, p9);
    Ada.Text_IO.Put("  p8 = p4/p1 = ");
-   put_poly(poly.trim(p8));
+   put_poly(p8);
    Ada.Text_IO.Put(", remainder p9 = ");
-   put_poly(poly.trim(p9));
+   put_poly(p9);
    Ada.Text_IO.New_Line;
    --
    Ada.Text_IO.Put_Line("Evaluations of polynomials");
@@ -88,7 +88,7 @@ begin
       Ada.Text_IO.New_Line;
    end loop;
    --
-   Ada.Text_IO.Put_Line("Find a root of P1");
+   Ada.Text_IO.Put_Line("Find a root of P4");
    l := 0.0;
    u := 1.0;
    iter := 13;

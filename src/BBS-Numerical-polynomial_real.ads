@@ -24,9 +24,15 @@ package BBS.Numerical.polynomial_real is
    --
    --  u/v => q, r
    --
+   --  The quotient and remainder may need to be trimmed to remove leading
+   --  zero coefficients.
+   --
    procedure divide(u, v : poly; q : out poly; r : out poly)
       with pre => (u'First = 0) and (v'First = 0) and
-                  (q'First = 0) and (r'First = 0);
+                  (q'First = 0) and (r'First = 0) and
+                  (q'Last >= (u'Last - v'Last)) and
+                  (r'Last >= (v'Last - 1)) and
+                  (u'Last >= v'Last);
    --
    --  Evaluate a polynomial at x.
    --
@@ -38,6 +44,11 @@ package BBS.Numerical.polynomial_real is
    function trim(p : poly) return poly
       with pre => (p'First = 0),
            post => (trim'Result'Last <= p'Last);
+   --
+   --  Return the order of a polynomial
+   --
+   function order(p : poly) return Natural
+      with pre => (p'First = 0);
    --
    --  Basic calculus
    --

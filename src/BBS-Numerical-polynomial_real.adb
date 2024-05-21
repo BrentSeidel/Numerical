@@ -95,21 +95,18 @@ package body BBS.Numerical.polynomial_real is
    --  u/v => q, r
    --
    procedure divide(u, v : poly; q : out poly; r : out poly) is
+      temp : poly(u'Range) := u;
    begin
-      for i in u'Range loop
-         r(i) := u(i);
-      end loop;
       q := (others => 0.0);
+      r := (others => 0.0);
       --
       for k in reverse 0 .. u'Last - v'Last loop
-         q(k) := r(v'Last + k)/v(v'Last);
-         for j in reverse k .. v'Last+k - 1 loop
-            r(j) := r(j) - q(k)*v(j-k);
+         q(k) := temp(v'Last + k)/v(v'Last);
+         for j in k .. v'Last + k - 1 loop
+            temp(j) := temp(j) - q(k)*v(j-k);
          end loop;
       end loop;
-      for j in v'Last .. u'Last loop
-         r(j) := 0.0;
-      end loop;
+      r(0 .. v'Last - 1) := temp(0 .. v'Last - 1);
    end;
    --
    --  Evaluate a polynomial at x.
@@ -139,6 +136,17 @@ package body BBS.Numerical.polynomial_real is
          end loop;
          return res;
       end;
+   end;
+   --
+   --  Return the order of a polynomial
+   --
+   function order(p : poly) return Natural is
+      limit : Natural := p'Last;
+   begin
+      while (p(limit) = 0.0) and (limit > 0) loop
+         limit := limit - 1;
+      end loop;
+      return limit;
    end;
    --
    --  Basic calculus
