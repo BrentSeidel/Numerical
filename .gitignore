@@ -7,8 +7,9 @@ lib/*
 *.ali
 
 # Test binaries
-test_ode
+test_derive
 test_integ
+test_ode
 test_poly
 test_root
 test_stats

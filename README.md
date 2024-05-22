@@ -17,6 +17,9 @@ Implemented algorithms are:
 * Adaptive Simpson's
 
 ##  Differentiation
+* 2 point method
+* 3 point methods
+* 5 point methods
 
 ##  Differential Equations
 These are basic algorithms for finding numerical solutions to differential
@@ -47,6 +50,7 @@ Implemented operations include
 * Addition and subtraction of polynomials
 * Multiplication of polynomial by a scalar
 * Multiplication of polynomial by polynomial
+* Division of polynomial by polynomial
 * Evaluation of polynomial
 * Integral of polynomial
 * Derivative of polynomial
