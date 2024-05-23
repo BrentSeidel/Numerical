@@ -1,8 +1,9 @@
 with BBS.Numerical.complex_real;
+with Ada.Numerics.Generic_Complex_Types;
 generic
-  with package cmplx is new BBS.Numerical.complex_real(<>);
-  use type cmplx.complex;
-  use type cmplx.F;
+   with package cmplx is new Ada.Numerics.Generic_Complex_Types(<>);
+   use type cmplx.Complex;
+   use type cmplx.Real;
 package BBS.Numerical.roots_complex is
    type errors is (none, bad_args, no_solution);
    type test_func is access function (x : cmplx.complex) return cmplx.complex;
@@ -27,6 +28,8 @@ package BBS.Numerical.roots_complex is
    --  Note that the sucess may be sensitive to the choice of x0 and x2.  If you
    --  know that a root exists and get a no_solution error, try different values.
    --
+--   function mueller(test : test_func; x0, x2 : in out cmplx.complex;
+--            limit : in out Positive; err : out errors) return cmplx.complex;
    function mueller(test : test_func; x0, x2 : in out cmplx.complex;
             limit : in out Positive; err : out errors) return cmplx.complex;
 end BBS.Numerical.roots_complex;

@@ -46,7 +46,7 @@ begin
    print(f1'Access, 1.8, 0.001);
    --
    --  Interestingly for this particular function accuracy using Float
-   --   is worse with a step size of 0.0001 for most derivative methods.
+   --  is worse with a step size of 0.0001 for most derivative methods.
    --
    print(f1'Access, 1.8, 0.0001);
    Ada.Text_IO.New_Line;

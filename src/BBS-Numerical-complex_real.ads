@@ -2,6 +2,10 @@
 --  There already is a complex number package as part of Ada.Numerics.  So, this
 --  package isn't really needed.  This is more of a practice run for me.
 --
+--  In general, the only time you would want to use this package is if the
+--  Ada.Numerics.Generic_Complex_Types package is unavailable for some
+--  reason or another.
+--
 --  The one difference is that in this package, complex numbers are an object
 --  so that object notation can be used in many case.
 --

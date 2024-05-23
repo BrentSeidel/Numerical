@@ -1,7 +1,10 @@
 with Ada.Numerics.Generic_Elementary_Functions;
+with Ada.Numerics.Generic_Complex_Types;
+with Ada.Numerics.Generic_Complex_Elementary_Functions;
 with Ada.Text_IO;
 package body BBS.Numerical.complex_real is
    package elem is new Ada.Numerics.Generic_Elementary_Functions(f'Base);
+   package ada_cmplx is new Ada.Numerics.Generic_Complex_Types(f'Base);
    package float_io is new Ada.Text_IO.Float_IO(f'Base);
    --
    --  Basic manipulations
@@ -82,6 +85,9 @@ package body BBS.Numerical.complex_real is
       self.r := mag * elem.Cos(angle);
       self.i := mag * elem.Sin(angle);
    end;
+   --
+   --  Note that there is a potential for overflow if either r or i is
+   --  greater than the maximum f'Base value.
    --
    function magnitude(self : in complex) return f'Base is
    begin

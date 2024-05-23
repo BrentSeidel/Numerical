@@ -1,9 +1,7 @@
 with Ada.Numerics.Generic_Elementary_Functions;
-with Ada.Numerics.Generic_Complex_Types;
 with Ada.Numerics.Generic_Complex_Elementary_Functions;
 package body BBS.Numerical.roots_complex is
-   package ada_cmplx is new Ada.Numerics.Generic_Complex_Types(cmplx.f);
-   package cmplx_elem is new Ada.Numerics.Generic_Complex_Elementary_Functions(ada_cmplx);
+   package cmplx_elem is new Ada.Numerics.Generic_Complex_Elementary_Functions(cmplx);
    --
    function mueller(test : test_func; x0, x2 : in out cmplx.complex;
             limit : in out Positive; err : out errors) return cmplx.complex is
@@ -20,24 +18,20 @@ package body BBS.Numerical.roots_complex is
       e       : cmplx.complex;
       root    : cmplx.complex;
       temp    : cmplx.complex;
-      nTwo    : constant cmplx.complex := (-2.0)*cmplx.one;
-      atemp   : ada_cmplx.Complex;
    begin
       err := none;
       for i in 0 .. limit loop
          b := delta2 + (step2 * d_small);
          discriminant := b*b - (4.0*d_small*test(x2));
-         atemp := (discriminant.r, discriminant.i);
-         atemp := cmplx_elem.Sqrt(atemp);
-         d_big := (r => ada_cmplx.Re(atemp), i => ada_cmplx.Im(atemp));
-         if cmplx.magnitude(b - d_big) < cmplx.magnitude(b + d_big) then
+         d_big := cmplx_elem.Sqrt(discriminant);
+         if abs(b - d_big) < abs(b + d_big) then
             e := b + d_big;
          else
             e := b - d_big;
          end if;
-         value := nTwo*test(x2)/e;
+         value := -2.0*test(x2)/e;
          root := x2 + value;
-         if (cmplx.magnitude(value) = 0.0) or (x0 = x1) or (root = x2) then
+         if (abs(value) = 0.0) or (x0 = x1) or (root = x2) then
             limit := i;
             return root;
          end if;

@@ -1,4 +1,5 @@
 with Ada.Numerics.Generic_Elementary_Functions;
+with Ada.Numerics.Generic_Complex_Types;
 with Ada.Text_IO;
 with BBS.Numerical;
 with BBS.Numerical.complex_real;
@@ -7,10 +8,10 @@ with BBS.Numerical.roots_complex;
 
 procedure test_root is
    subtype real is Long_Float;
-   package cmplx is new BBS.Numerical.complex_real(real);
-   use type cmplx.complex;
+   package cmplx is new Ada.Numerics.Generic_Complex_Types(real);
+   use type cmplx.Complex;
    package root is new BBS.Numerical.roots_real(real);
-   package croot is new BBS.Numerical.roots_complex(cmplx => cmplx);
+   package croot is new BBS.Numerical.roots_complex(cmplx);
    package float_io is new Ada.Text_IO.Float_IO(real);
    package elem is new Ada.Numerics.Generic_Elementary_Functions(real);
 
@@ -28,9 +29,18 @@ procedure test_root is
    --
    function f3(x : cmplx.Complex) return cmplx.Complex is
    begin
-      return x*x + cmplx.one;
+--      return x*x + cmplx.one;
+      return x*x + 1.0;
    end;
 
+   procedure cmplx_put(n : cmplx.Complex; fore, aft, exp : Natural) is
+   begin
+      Ada.Text_IO.Put("(");
+      float_io.Put(cmplx.Re(n), fore, aft, exp);
+      Ada.Text_IO.Put(",");
+      float_io.Put(cmplx.Im(n), fore, aft, exp);
+      Ada.Text_IO.Put(")");
+   end;
    r   : real;
    l   : real;
    u   : real;
@@ -79,16 +89,16 @@ begin
    Ada.Text_IO.Put_Line(", with error code " & root.errors'Image(err));
    --
    Ada.Text_IO.Put_Line("Complex roots with Mueller's method");
-   cl := (r => 0.0, i => -2.0);
-   cu := (r => 0.0, i => -3.0);
+   cl := (0.0, -2.0);
+   cu := (0.0, -3.0);
    iter := 13;
    cr := croot.mueller(f3'Access, cl, cu, iter, cerr);
    Ada.Text_IO.Put("  After " & Positive'Image(iter) & " iterations, root found at ");
-   cr.print(2, 9, 0);
+   cmplx_put(cr, 2, 9, 0);
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put("    In range ");
-   cl.print(2, 9, 0);
+   cmplx_put(cl, 2, 9, 0);
    Ada.Text_IO.Put(" to ");
-   cu.print(2, 9, 0);
+   cmplx_put(cu, 2, 9, 0);
    Ada.Text_IO.Put_Line(", with error code " & croot.errors'Image(cerr));
 end test_root;

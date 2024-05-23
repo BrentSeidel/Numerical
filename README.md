@@ -1,8 +1,14 @@
 # Numerical
-This will contain a collection of Ada (and possibly lisp, if I get really ambitious) packages for numerical operations.
+This will contain a collection of Ada (and possibly lisp, if I get really
+ambitious) packages for numerical operations.
 
-A rough outline of what I plan is below.  Obviously, this will be subject to change.  I expect that most, if not all
-of these packages will be generic so that they can be used on different numerical types.
+# Warning
+Don't blindly trust these or any other numerical methods.  You need to
+understand your problem and how computers do arithmatic.
+
+A rough outline of what I plan is below.  Obviously, this will be subject
+to change.  I expect that most, if not all of these packages will be generic
+so that they can be used on different numerical types.
 
 ##  Complex Numbers
 In general, you should probably use the complex package in the Ada standard
@@ -16,7 +22,12 @@ Implemented algorithms are:
 * Composite Simpson's
 * Adaptive Simpson's
 
-##  Differentiation
+##  Numerical Derivatives
+These operations can easily cause trouble if you don't understand your
+problem and computer arithmatic.  The core of taking a derivative involves
+subtracting two nearly equal numbers and dividing by a small number.  This
+has the effect of amplifying round-off errors.  Avoid these operations, if
+you can.
 * 2 point method
 * 3 point methods
 * 5 point methods
