@@ -55,6 +55,15 @@ package body BBS.Numerical.polynomial_real is
       end;
    end;
    --
+   function "-" (Right : poly) return poly is
+      res : poly(Right'Range);
+   begin
+      for i in Right'Range loop
+         res(i) := -Right(i);
+      end loop;
+      return res;
+   end;
+   --
    function "*" (Left, Right : poly) return poly is
       limit : constant Natural := Left'Last + Right'Last;
    begin

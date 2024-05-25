@@ -13,6 +13,8 @@ package BBS.Numerical.polynomial_complex is
       with pre => (Left'First = 0) and (Right'First = 0);
    function "-" (Left, Right : poly) return poly
       with pre => (Left'First = 0) and (Right'First = 0);
+   function "-" (Right : poly) return poly
+      with pre => (Right'First = 0);
    function "*" (Left, Right : poly) return poly
       with pre => (Left'First = 0) and (Right'First = 0);
    function "*" (Left : cmplx.Complex; Right : poly) return poly

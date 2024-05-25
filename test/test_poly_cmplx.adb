@@ -36,7 +36,6 @@ procedure test_poly_cmplx is
    r   : cmplx.Complex;
    l   : cmplx.Complex;
    u   : cmplx.Complex;
-   cmOne : constant cmplx.Complex := (-1.0, 0.0);  --  Complex minus one
    err : croot.errors;
    iter : Positive;
 
@@ -81,7 +80,7 @@ begin
    Ada.Text_IO.Put("  p4 = p1*p2 = ");
    cpoly.print(p4, 1, 2, 0);
    Ada.Text_IO.New_Line;
-   p5 := cmOne*p2;
+   p5 := -p2;
    Ada.Text_IO.Put("  p5 = -p2 = ");
    cpoly.print(p5, 1, 2, 0);
    Ada.Text_IO.New_Line;
@@ -98,15 +97,15 @@ begin
       x := (real(i)*0.1, 0.0);
       cmplx_put(x, 3, 2, 0);
       Ada.Text_IO.Put("  ");
-      cmplx_put(cpoly.evaluate(p1, x), 3, 6, 0);
+      cmplx_put(cpoly.evaluate(p1, x), 2, 3, 0);
       Ada.Text_IO.Put("  ");
-      cmplx_put(cpoly.evaluate(p2, x), 3, 6, 0);
+      cmplx_put(cpoly.evaluate(p2, x), 2, 3, 0);
       Ada.Text_IO.Put("  ");
-      cmplx_put(cpoly.evaluate(p3, x), 3, 6, 0);
+      cmplx_put(cpoly.evaluate(p3, x), 2, 3, 0);
       Ada.Text_IO.Put("  ");
-      cmplx_put(cpoly.evaluate(p4, x), 3, 6, 0);
+      cmplx_put(cpoly.evaluate(p4, x), 2, 3, 0);
       Ada.Text_IO.Put("  ");
-      cmplx_put(cpoly.evaluate(p5, x), 3, 6, 0);
+      cmplx_put(cpoly.evaluate(p5, x), 2, 3, 0);
       Ada.Text_IO.New_Line;
    end loop;
    --
@@ -118,7 +117,7 @@ begin
    u := (-3.1, 0.0);
    iter := 20;
    r := croot.mueller(t0'Access, l, u, iter, err);
-   Ada.Text_IO.Put("  After " & Positive'image(iter) & " iterations, Mueller gives root at");
+   Ada.Text_IO.Put("  After " & Positive'image(iter) & " iterations, Mueller gives root at ");
    cmplx_put(r, 2, 9, 0);
    Ada.Text_IO.Put(", in range ");
    cmplx_put(l, 2, 6, 0);
@@ -134,7 +133,7 @@ begin
    u := (-0.9, 0.0);
    iter := 13;
    r := croot.mueller(t1'Access, l, u, iter, err);
-   Ada.Text_IO.Put("  After " & Positive'image(iter) & " iterations, Mueller gives root at");
+   Ada.Text_IO.Put("  After " & Positive'image(iter) & " iterations, Mueller gives root at ");
    cmplx_put(r, 2, 9, 0);
    Ada.Text_IO.Put(", in range ");
    cmplx_put(l, 2, 6, 0);
@@ -150,7 +149,7 @@ begin
    u := (0.0, 0.0);
    iter := 13;
    r := croot.mueller(t2'Access, l, u, iter, err);
-   Ada.Text_IO.Put("  After " & Positive'image(iter) & " iterations, Mueller gives root at");
+   Ada.Text_IO.Put("  After " & Positive'image(iter) & " iterations, Mueller gives root at ");
    cmplx_put(r, 2, 9, 0);
    Ada.Text_IO.Put(", in range ");
    cmplx_put(l, 2, 6, 0);

@@ -68,7 +68,7 @@ begin
    Ada.Text_IO.Put("  p4 = p1*p2 = ");
    poly.print(p4, 1, 2, 0);
    Ada.Text_IO.New_Line;
-   p5 := (-1.0)*p2;
+   p5 := -p2;
    Ada.Text_IO.Put("  p5 = -p2 = ");
    poly.print(p5, 1, 2, 0);
    Ada.Text_IO.New_Line;
