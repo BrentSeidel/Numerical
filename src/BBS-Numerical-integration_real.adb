@@ -27,7 +27,7 @@ package body BBS.Numerical.integration_real is
    --  segment, the effective number of steps is doubled.
    --
    function simpson(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base is
-      step_size : constant f'Base := (upper - lower)/f(2*steps);
+      step_size : constant f'Base := (upper - lower)/f'Base(2*steps);
       ends      : constant f'Base := test(lower) + test(upper);
       sum1      : f'Base := 0.0;
       sum2      : f'Base := 0.0;
@@ -35,9 +35,9 @@ package body BBS.Numerical.integration_real is
    begin
       for i in 1 .. steps - 1 loop
          base := base + step_size;
-         sum1 := sum1 + test(base);
+         sum1 := sum1 + test(base);  --  Odd steps
          base := base + step_size;
-         sum2 := sum2+ test(base);
+         sum2 := sum2 + test(base);  --  Even steps
       end loop;
       base := base + step_size;
       sum1 := sum1 + test(base);
