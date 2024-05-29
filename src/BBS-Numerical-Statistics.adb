@@ -1,17 +1,20 @@
 with Ada.Text_IO;
 with Ada.Numerics;
 with Ada.Numerics.Generic_Elementary_Functions;
+with BBS.Numerical.functions_real;
 with BBS.Numerical.Integration_real;
 package body BBS.Numerical.Statistics is
    package elem is new Ada.Numerics.Generic_Elementary_Functions(f'Base);
+   use type f'Base;
    package float_io is new Ada.Text_IO.Float_IO(f'Base);
    package integ is new BBS.Numerical.Integration_real(f'Base);
+   package funct is new BBS.Numerical.functions_real(f'Base);
    --  -----------------------------------------------------------------
    --
    --  Compute the mean of an array of data
    --
    function mean(d : data_array) return F'Base is
-      sum : F := 0.0;
+      sum : F'Base := 0.0;
    begin
       for i in d'Range loop
          sum := sum + d(i);
@@ -39,8 +42,8 @@ package body BBS.Numerical.Statistics is
    --  instead of mean() if you need both values.
    --
    procedure variance(d : data_array; var : out F'Base; mean : out F'Base) is
-      sum2 : F := 0.0;
-      sum  : F := 0.0;
+      sum2 : F'Base := 0.0;
+      sum  : F'Base := 0.0;
    begin
       for i in d'Range loop
          sum  := sum + d(i);
@@ -54,7 +57,7 @@ package body BBS.Numerical.Statistics is
    --
    --  Normal distribution
    --
-   function normal(p : F'Base) return F'Base is
+   function normal_pdf(p : F'Base) return F'Base is
       scale : constant F'Base := 1.0/elem.Sqrt(2.0*Ada.Numerics.Pi);
    begin
       return scale*elem.Exp(-p*p/2.0);
@@ -62,7 +65,7 @@ package body BBS.Numerical.Statistics is
    --
    --  Normal distribution with mean and sigma
    --
-   function normal(p, mean, sigma : F'Base) return F'Base is
+   function normal_pdf(p, mean, sigma : F'Base) return F'Base is
       scale : constant F'Base := 1.0/(sigma*elem.Sqrt(2.0*Ada.Numerics.Pi));
    begin
       return scale*elem.Exp(-(p-mean)*(p-mean)/(2.0*sigma*sigma));
@@ -71,8 +74,19 @@ package body BBS.Numerical.Statistics is
    --  Compute the area under a Normal curve from a to b using the
    --  specified number of steps of Simpson's integration.
    --
-   function normal_area(a, b : F'Base; steps : Positive) return F'Base is
+   function normal_cdf(a, b : F'Base; steps : Positive) return F'Base is
    begin
-      return integ.simpson(normal'Access, a, b, steps);
+      return integ.simpson(normal_pdf'Access, a, b, steps);
+   end;
+   --
+   --  Chi squared distribution.
+   --  Note that the degrees of freedom (k) must be positive otherwise that
+   --  would imply zero or fewer data points.
+   --
+   --  The value is (x^(k/2)*exp(-x/2))/(2^(k/2)*gamma(k/2))
+   --
+   function chi2_pdf(x : f'Base; k : Positive) return f'Base is
+   begin
+      return (elem."**"(x, (f'Base(k)/2.0))*elem.Exp(-x/2.0))/(elem."**"(2.0, (f'Base(k)/2.0)*funct.gamma2n(k)));
    end;
 end;
