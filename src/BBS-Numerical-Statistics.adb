@@ -83,10 +83,28 @@ package body BBS.Numerical.Statistics is
    --  Note that the degrees of freedom (k) must be positive otherwise that
    --  would imply zero or fewer data points.
    --
-   --  The value is (x^(k/2)*exp(-x/2))/(2^(k/2)*gamma(k/2))
+   --               (x^(k/2-1)*exp(-x/2))
+   --  The value us --------------------
+   --               (2^(k/2)*gamma(k/2))
    --
    function chi2_pdf(x : f'Base; k : Positive) return f'Base is
    begin
-      return (elem."**"(x, (f'Base(k)/2.0))*elem.Exp(-x/2.0))/(elem."**"(2.0, (f'Base(k)/2.0)*funct.gamma2n(k)));
+      if x > 0.0 then
+         return (elem."**"(x, (f'Base(k)/2.0)-1.0)*elem.Exp(-x/2.0))/
+                (elem."**"(2.0, (f'Base(k)/2.0)*funct.gamma2n(k)));
+      else
+         return 0.0;
+      end if;
+   end;
+   --
+   function chi2_cdf(a, b : F'Base; k, steps : Positive) return F'Base is
+   begin
+      deg_freedom := k;
+      return integ.simpson(partial_chi2'Access, a, b, steps);
+   end;
+   --
+   function partial_chi2(x : f'Base) return f'Base is
+   begin
+      return chi2_pdf(x, deg_freedom);
    end;
 end;

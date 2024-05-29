@@ -41,4 +41,15 @@ package BBS.Numerical.statistics is
    --  would imply zero or fewer data points.
    --
    function chi2_pdf(x : f'Base; k : Positive) return f'Base;
+   --
+   function chi2_cdf(a, b : F'Base; k, steps : Positive) return F'Base;
+   --
+private
+   --
+   --  This is a bit of a hack to get a chi square function that can
+   --  be integrated.
+   --
+   deg_freedom : Positive;
+   --
+   function partial_chi2(x : f'Base) return f'Base;
 end;
