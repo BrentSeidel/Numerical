@@ -91,7 +91,7 @@ package body BBS.Numerical.Statistics is
    begin
       if x > 0.0 then
          return (elem."**"(x, (f'Base(k)/2.0)-1.0)*elem.Exp(-x/2.0))/
-                (elem."**"(2.0, (f'Base(k)/2.0)*funct.gamma2n(k)));
+                (elem."**"(2.0, (f'Base(k)/2.0))*funct.gamma2n(k));
       else
          return 0.0;
       end if;

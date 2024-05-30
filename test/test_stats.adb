@@ -46,9 +46,9 @@ begin
       Ada.Text_IO.Put("  ");
       float_io.Put(stat.normal_cdf(0.0, val, 20), 1, 5, 0);
       Ada.Text_IO.Put("  ");
-      float_io.Put(stat.chi2_pdf(val, 2), 1, 5, 0);
+      float_io.Put(stat.chi2_pdf(val, 1), 1, 5, 0);
       Ada.Text_IO.Put("  ");
-      float_io.Put(stat.chi2_cdf(0.0, val, 2, 20), 1, 5, 0);
+      float_io.Put(stat.chi2_cdf(0.0, val, 1, 20), 1, 5, 0);
       Ada.Text_IO.New_Line;
    end loop;
 end test_stats;
