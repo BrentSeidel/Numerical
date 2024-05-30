@@ -16,5 +16,12 @@ package BBS.Numerical.functions_real is
    --  This will be easier to implement than the full gamma functions since
    --  gamma(1/2) is sqrt(pi), gamma(1) is 1, and gamma(a+1) is a*gamma(a).
    --
+   --  Note that for Float, gamma2n overflows with n > 70.
+   --
    function gamma2n(n : Positive) return f'Base;
+   --
+   --  Return the natural logarithm of gamma2n.  This allows larger
+   --  values of n without overflow.
+   --
+   function lngamma2n(n : Positive) return f'Base;
 end BBS.Numerical.functions_real;

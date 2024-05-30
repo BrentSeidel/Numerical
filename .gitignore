@@ -8,6 +8,7 @@ lib/*
 
 # Test binaries
 test_derive
+test_func
 test_integ
 test_ode
 test_poly

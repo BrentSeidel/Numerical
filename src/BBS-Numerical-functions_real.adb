@@ -16,7 +16,7 @@ package body BBS.Numerical.functions_real is
    --  gamma(1/2) is sqrt(pi), gamma(1) is 1, and gamma(a+1) is a*gamma(a).
    --
    function gamma2n(n : Positive) return f'Base is
-      base : f'Base := elem.sqrt(Ada.Numerics.Pi);
+      base : f'Base;
    begin
       --
       --  If n is even, then base is 1, otherwise it is sqrt(pi)
@@ -30,6 +30,29 @@ package body BBS.Numerical.functions_real is
          base := elem.sqrt(Ada.Numerics.Pi);
          for i in 1 .. (n/2) loop
             base := base*(f'Base(i)-0.5);
+         end loop;
+      end if;
+      return base;
+   end;
+   --
+   --  Return the natural logarithm of gamma2n.  This allows larger
+   --  values of n without overflow.
+   --
+   function lngamma2n(n : Positive) return f'Base is
+      base : f'Base;
+   begin
+      --
+      --  If n is even, then base is 1, otherwise it is sqrt(pi)
+      --
+      if 2*(n/2) = n then
+         base := 0.0;
+         for i in 2 .. (n/2) loop
+            base := base + elem.log(f'Base(i-1));
+         end loop;
+      else
+         base := elem.log(elem.sqrt(Ada.Numerics.Pi));
+         for i in 1 .. (n/2) loop
+            base := base + elem.log((f'Base(i)-0.5));
          end loop;
       end if;
       return base;
