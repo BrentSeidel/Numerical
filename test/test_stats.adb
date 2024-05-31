@@ -38,15 +38,17 @@ begin
    Ada.Text_IO.Put_Line("             Normal             Chi^2");
    Ada.Text_IO.Put_Line("    X     PDF      CDF      PDF      CDF");
    for i in 0 .. 20 loop
-      val := real(i)*0.1;
+      val := real(i)*1.0;
       Ada.Text_IO.Put("  ");
-      float_io.Put(val, 1, 2, 0);
+      float_io.Put(val, 2, 2, 0);
       Ada.Text_IO.Put("  ");
       float_io.Put(stat.normal_pdf(val), 1, 5, 0);
       Ada.Text_IO.Put("  ");
       float_io.Put(stat.normal_cdf(0.0, val, 20), 1, 5, 0);
       Ada.Text_IO.Put("  ");
       float_io.Put(stat.chi2_pdf(val, 1), 1, 5, 0);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(stat.chi2_exp(val, 1), 1, 5, 0);
       Ada.Text_IO.Put("  ");
       float_io.Put(stat.chi2_cdf(0.0, val, 1, 20), 1, 5, 0);
       Ada.Text_IO.New_Line;

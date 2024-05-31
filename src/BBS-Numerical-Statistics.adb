@@ -84,14 +84,33 @@ package body BBS.Numerical.Statistics is
    --  would imply zero or fewer data points.
    --
    --               (x^(k/2-1)*exp(-x/2))
-   --  The value us --------------------
+   --  The value is --------------------
    --               (2^(k/2)*gamma(k/2))
+   --
+   --  For k > about 70, gamma(k/2) will overflow Float.  So for more
+   --  degrees of freedom, need to use logarithms to do the calculations.
+   --  Other large numbers from the exponents will also mostly cancel out.
+   --
+   --  The value is exp[(log(x)*(k/2-1) - x/2) - (log(2)*(k/2) + log(gamma(k/2)))]
    --
    function chi2_pdf(x : f'Base; k : Positive) return f'Base is
    begin
       if x > 0.0 then
          return (elem."**"(x, (f'Base(k)/2.0)-1.0)*elem.Exp(-x/2.0))/
                 (elem."**"(2.0, (f'Base(k)/2.0))*funct.gamma2n(k));
+      else
+         return 0.0;
+      end if;
+   end;
+   --
+   function chi2_exp(x : f'Base; k : Positive) return f'Base is
+      part1 : f'Base;
+      part2 : f'Base;
+   begin
+      if x > 0.0 then
+         part1 := elem.log(x)*((f'Base(k)/2.0)-1.0) - (x/2.0);
+         part2 := elem.log(2.0)*(f'Base(x)/2.0) + funct.lngamma2n(k);
+         return elem.exp(part1 - part2);
       else
          return 0.0;
       end if;
@@ -105,6 +124,6 @@ package body BBS.Numerical.Statistics is
    --
    function partial_chi2(x : f'Base) return f'Base is
    begin
-      return chi2_pdf(x, deg_freedom);
+      return chi2_exp(x, deg_freedom);
    end;
 end;
