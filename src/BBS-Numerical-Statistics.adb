@@ -109,7 +109,7 @@ package body BBS.Numerical.Statistics is
    begin
       if x > 0.0 then
          part1 := elem.log(x)*((f'Base(k)/2.0)-1.0) - (x/2.0);
-         part2 := elem.log(2.0)*(f'Base(x)/2.0) + funct.lngamma2n(k);
+         part2 := elem.log(2.0)*(f'Base(k)/2.0) + funct.lngamma2n(k);
          return elem.exp(part1 - part2);
       else
          return 0.0;

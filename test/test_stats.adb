@@ -36,7 +36,7 @@ begin
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line("Probability Distributions");
    Ada.Text_IO.Put_Line("             Normal             Chi^2");
-   Ada.Text_IO.Put_Line("    X     PDF      CDF      PDF      CDF");
+   Ada.Text_IO.Put_Line("     X     PDF      CDF      PDF      PDF      CDF");
    for i in 0 .. 20 loop
       val := real(i)*1.0;
       Ada.Text_IO.Put("  ");
