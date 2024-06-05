@@ -21,6 +21,7 @@ procedure test_stats is
        (x => 5.0, y => 4.0));
    res  : linreg.simple_linreg_result;
    val : real;
+   dof : Positive := 50;
 begin
    Ada.Text_IO.Put_Line("Testing some of the numerical routines.");
    res := linreg.simple_linear(data);
@@ -36,7 +37,7 @@ begin
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line("Probability Distributions");
    Ada.Text_IO.Put_Line("             Normal             Chi^2");
-   Ada.Text_IO.Put_Line("     X     PDF      CDF      PDF      PDF      CDF");
+   Ada.Text_IO.Put_Line("     X     PDF      CDF      PDF      CDF");
    for i in 0 .. 20 loop
       val := real(i)*1.0;
       Ada.Text_IO.Put("  ");
@@ -46,11 +47,9 @@ begin
       Ada.Text_IO.Put("  ");
       float_io.Put(stat.normal_cdf(0.0, val, 20), 1, 5, 0);
       Ada.Text_IO.Put("  ");
-      float_io.Put(stat.chi2_pdf(val, 20), 1, 5, 0);
+      float_io.Put(stat.chi2_pdf(val, dof), 1, 5, 0);
       Ada.Text_IO.Put("  ");
-      float_io.Put(stat.chi2_exp(val, 20), 1, 5, 0);
-      Ada.Text_IO.Put("  ");
-      float_io.Put(stat.chi2_cdf(0.0, val, 20, 20), 1, 5, 0);
+      float_io.Put(stat.chi2_cdf(0.0, val, dof, 20), 1, 5, 0);
       Ada.Text_IO.New_Line;
    end loop;
 end test_stats;
