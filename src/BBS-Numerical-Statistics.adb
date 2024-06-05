@@ -117,9 +117,10 @@ package body BBS.Numerical.Statistics is
    end;
    --
    function chi2_cdf(a, b : F'Base; k, steps : Positive) return F'Base is
+      tol : f'Base := 0.0001;
    begin
       deg_freedom := k;
-      return integ.simpson(partial_chi2'Access, a, b, steps);
+      return integ.adapt_simpson(partial_chi2'Access, a, b, tol, steps);
    end;
    --
    function partial_chi2(x : f'Base) return f'Base is
