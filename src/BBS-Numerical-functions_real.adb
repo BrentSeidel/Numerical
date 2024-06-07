@@ -57,4 +57,29 @@ package body BBS.Numerical.functions_real is
       end if;
       return base;
    end;
+   --
+   --  Compute the factorial of a number.  This will probably overflow Float at
+   --  around n = 35.
+   --
+   function factorial(n : Natural) return f'Base is
+      base : f'Base := 1.0;
+   begin
+      for i in 1 .. n loop
+         base := base*f'Base(i);
+      end loop;
+      return base;
+   end;
+   --
+   --  Compute the natural log of the factorial.  This will allow much larger
+   --  values of n before overflowing.
+   --
+   function lnfact(n : Natural) return f'Base is
+      base : f'Base := 0.0;
+   begin
+      for i in 1 .. n loop
+         base := base + elem.Log(f'Base(i));
+      end loop;
+      return base;
+   end;
+
 end BBS.Numerical.functions_real;

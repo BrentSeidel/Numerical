@@ -6,6 +6,7 @@
 generic
   type F is digits <>;
 package BBS.Numerical.functions_real is
+   --
    --  Compute the gamma function of a positive number divided by two.
    --  This is initially used by the chi-squared statistics function, but
    --  may have other applications.  The full gamma function will be
@@ -24,4 +25,15 @@ package BBS.Numerical.functions_real is
    --  values of n without overflow.
    --
    function lngamma2n(n : Positive) return f'Base;
+   --
+   --  Compute the factorial of a number.  This will probably overflow Float at
+   --  around n = 35.
+   --
+   function factorial(n : Natural) return f'Base;
+   --
+   --  Compute the natural log of the factorial.  This will allow much larger
+   --  values of n before overflowing.
+   --
+   function lnfact(n : Natural) return f'Base;
+   --
 end BBS.Numerical.functions_real;

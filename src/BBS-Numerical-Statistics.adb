@@ -121,8 +121,26 @@ package body BBS.Numerical.Statistics is
       return integ.adapt_simpson(partial_chi2'Access, a, b, tol, steps);
    end;
    --
+   --  This uses the global deg_freedom so that it can be called as a function of
+   --  one variable by the integration routine.
+   --
    function partial_chi2(x : f'Base) return f'Base is
    begin
       return chi2_pdf(x, deg_freedom);
+   end;
+   --
+   --  *** Under development - do not use yet. ***
+   --  Perform a chi^2 test on two sets of data.  Both expected and observed have
+   --  the same range.
+   --
+   function chi2_test(expected, observed : data_array; k : Positive) return F'Base is
+      x2 : f'Base := 0.0;
+      diff : f'Base;
+   begin
+      for i in expected'Range loop
+         diff := observed(i) - expected(i);
+         x2 := x2 + (diff*diff/expected(i));
+      end loop;
+      return 0.0;
    end;
 end;

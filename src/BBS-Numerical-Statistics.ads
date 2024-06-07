@@ -44,6 +44,16 @@ package BBS.Numerical.statistics is
    --
    function chi2_cdf(a, b : F'Base; k, steps : Positive) return F'Base;
    --
+   --  Perform a chi^2 test on two sets of data
+   --
+   --  This calculates alpha from the expected and observed data sets and then
+   --  computes the chi^2 cdf value from alpha and the degrees of freedom.  This
+   --  is the value that is returned.  The larger this value, the more likely the
+   --  data sets are different.
+   --
+   function chi2_test(expected, observed : data_array; k : Positive) return F'Base
+     with pre => ((expected'First = observed'First) and (expected'Last = observed'Last));
+   --
 private
    --
    --  This is a bit of a hack to get a chi square function that can

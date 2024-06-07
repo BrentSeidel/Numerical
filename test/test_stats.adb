@@ -52,4 +52,5 @@ begin
       float_io.Put(stat.chi2_cdf(0.0, val, dof, 20), 1, 5, 0);
       Ada.Text_IO.New_Line;
    end loop;
+   Ada.Text_IO.New_Line;
 end test_stats;
