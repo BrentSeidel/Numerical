@@ -36,4 +36,24 @@ package BBS.Numerical.functions_real is
    --
    function lnfact(n : Natural) return f'Base;
    --
+   --  Compute the binomial coefficient - n choose k.  Note that the result is
+   --  an integer value, but f'Base is used to allow greater range.
+   --
+   --   (n)      n!
+   --   ( ) = --------
+   --   (k)   k!(n-k)!
+   --
+   --  Expanding the factorials and cancelling terms leads to the following
+   --  formula.  Note that since it is symmetrical with respect to k, the limit
+   --  for the product can be the lesser of k or (n-k).
+   --
+   --   (n)    k   n + 1 - i
+   --   ( ) = PROD ---------
+   --   (k)   i=1      i
+   --
+   --  This also allows larger values of n and k without overflowing.
+   --
+   function nChoosek(n, k : Natural) return f'Base
+     with pre => (n >= k);
+   --
 end BBS.Numerical.functions_real;

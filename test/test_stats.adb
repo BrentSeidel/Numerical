@@ -53,4 +53,13 @@ begin
       Ada.Text_IO.New_Line;
    end loop;
    Ada.Text_IO.New_Line;
+   for n in 0 .. 10 loop
+      Ada.Text_IO.put("  ");
+      float_io.put(real(n), 2, 0, 0);
+      for k in 0 .. n loop
+         Ada.Text_IO.Put("  ");
+         float_io.Put(funct.nchoosek(n, k), 4, 0, 0);
+      end loop;
+      Ada.Text_IO.New_Line;
+   end loop;
 end test_stats;

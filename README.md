@@ -80,10 +80,13 @@ Some basic functions are implemented for analyzing data
 
 The normal distribution is implemented.
 
-The Chi^2 distribution is in development.
+The Chi^2 distribution is implemented.
 
 ##  Functions
 These are special functions not included with Ada's elementary functions
 that are useful or needed by other routines here.
 * gamma2n - Divides the positive integer argument by two and computes the gamma function.  Used to support chi^2.
 * lngamma2n - Natural log of gamma2n.  Allows larger values of n without overflow.
+* factorial - Computes the factorial of n.
+* lnfact - Computes the natual log of the factorial of n allowing larger values of n without overflow.
+* nChoosek - Computes binomial coefficent based on n and k.
