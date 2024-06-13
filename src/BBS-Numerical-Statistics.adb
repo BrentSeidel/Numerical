@@ -143,4 +143,21 @@ package body BBS.Numerical.Statistics is
       end loop;
       return 0.0;
    end;
+   --
+   --  The student's T distrubution is defined as:
+   --         gamma((nu+1)/2                 t*t  -(nu+1)/2
+   --  f(t) = ----------------------- * (1 + ---)
+   --         sqrt(pi*nu)*gamma(nu/2)         nu
+   --
+   --  Where nu is the degrees of freedom
+   --
+   function studentT_pdf(t : f'Base; nu : Positive) return f'Base is
+      part1 : f'Base := funct.lngamma2n(nu+1);
+      part2 : f'Base := elem.log(elem.Sqrt(Ada.Numerics.Pi*f'Base(nu))) +
+        funct.lngamma2n(nu);
+      part3 : f'Base := elem.Log(1.0 + (t*t)/f'Base(nu))*(-(f'Base(nu+1)/2.0));
+   begin
+      return elem.Exp(part1 + part3 - part2);
+   end;
+   --
 end;

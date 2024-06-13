@@ -44,6 +44,7 @@ package BBS.Numerical.statistics is
    --
    function chi2_cdf(a, b : F'Base; k, steps : Positive) return F'Base;
    --
+   --  *** Under development - do not use yet. ***
    --  Perform a chi^2 test on two sets of data
    --
    --  This calculates alpha from the expected and observed data sets and then
@@ -53,6 +54,15 @@ package BBS.Numerical.statistics is
    --
    function chi2_test(expected, observed : data_array; k : Positive) return F'Base
      with pre => ((expected'First = observed'First) and (expected'Last = observed'Last));
+   --
+   --  The student's T distrubution is defined as:
+   --         gamma((nu+1)/2                 t*t  -(nu+1)/2
+   --  f(t) = ----------------------- * (1 + ---)
+   --         sqrt(pi*nu)*gamma(nu/2)         nu
+   --
+   --  Where nu is the degrees of freedom
+   --
+   function studentT_pdf(t : f'Base; nu : Positive) return f'Base;
    --
 private
    --

@@ -22,6 +22,7 @@ procedure test_stats is
    res  : linreg.simple_linreg_result;
    val : real;
    dof : Positive := 50;
+   sum : real;
 begin
    Ada.Text_IO.Put_Line("Testing some of the numerical routines.");
    res := linreg.simple_linear(data);
@@ -50,16 +51,24 @@ begin
       float_io.Put(stat.chi2_pdf(val, dof), 1, 5, 0);
       Ada.Text_IO.Put("  ");
       float_io.Put(stat.chi2_cdf(0.0, val, dof, 20), 1, 5, 0);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(stat.studentT_pdf(val, dof), 1, 5, 0);
       Ada.Text_IO.New_Line;
    end loop;
    Ada.Text_IO.New_Line;
    for n in 0 .. 10 loop
       Ada.Text_IO.put("  ");
       float_io.put(real(n), 2, 0, 0);
+      Ada.Text_IO.Put("|");
+      sum := 0.0;
       for k in 0 .. n loop
          Ada.Text_IO.Put("  ");
-         float_io.Put(funct.nchoosek(n, k), 4, 0, 0);
+         val := funct.nChoosek(n, k);
+         float_io.Put(val, 4, 0, 0);
+         sum := sum + val;
       end loop;
+      Ada.Text_IO.Put("|  ");
+      float_io.Put(sum, 4, 0, 0);
       Ada.Text_IO.New_Line;
    end loop;
 end test_stats;
