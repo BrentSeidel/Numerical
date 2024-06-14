@@ -21,8 +21,8 @@ procedure test_stats is
        (x => 5.0, y => 4.0));
    res  : linreg.simple_linreg_result;
    val : real;
-   dof : Positive := 50;
-   sum : real;
+   dof : Positive := 20;
+--   sum : real;
 begin
    Ada.Text_IO.Put_Line("Testing some of the numerical routines.");
    res := linreg.simple_linear(data);
@@ -37,38 +37,41 @@ begin
    float_io.Put(res.variance, 2, 3, 0);
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line("Probability Distributions");
-   Ada.Text_IO.Put_Line("             Normal             Chi^2");
-   Ada.Text_IO.Put_Line("     X     PDF      CDF      PDF      CDF");
+   Ada.Text_IO.Put_Line("                 Normal                     Chi^2                     Student's T");
+   Ada.Text_IO.Put_Line("     X     PDF           CDF           PDF           CDF           PDF           CDF");
    for i in 0 .. 20 loop
       val := real(i)*1.0;
       Ada.Text_IO.Put("  ");
       float_io.Put(val, 2, 2, 0);
       Ada.Text_IO.Put("  ");
-      float_io.Put(stat.normal_pdf(val), 1, 5, 0);
+      float_io.Put(stat.normal_pdf(val), 1, 6, 3);
       Ada.Text_IO.Put("  ");
-      float_io.Put(stat.normal_cdf(0.0, val, 20), 1, 5, 0);
+      float_io.Put(stat.normal_cdf(0.0, val, 20), 1, 6, 3);
       Ada.Text_IO.Put("  ");
-      float_io.Put(stat.chi2_pdf(val, dof), 1, 5, 0);
+      float_io.Put(stat.chi2_pdf(val, dof), 1, 6, 3);
       Ada.Text_IO.Put("  ");
-      float_io.Put(stat.chi2_cdf(0.0, val, dof, 20), 1, 5, 0);
+      float_io.Put(stat.chi2_cdf(0.0, val, dof, 20), 1, 6, 3);
       Ada.Text_IO.Put("  ");
-      float_io.Put(stat.studentT_pdf(val, dof), 1, 5, 0);
+      float_io.Put(stat.studentT_pdf(val, dof), 1, 6, 3);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(stat.studentT_cdf(0.0, val, dof, 20), 1, 6, 3);
+      Ada.Text_IO.Put("  ");
       Ada.Text_IO.New_Line;
    end loop;
    Ada.Text_IO.New_Line;
-   for n in 0 .. 10 loop
-      Ada.Text_IO.put("  ");
-      float_io.put(real(n), 2, 0, 0);
-      Ada.Text_IO.Put("|");
-      sum := 0.0;
-      for k in 0 .. n loop
-         Ada.Text_IO.Put("  ");
-         val := funct.nChoosek(n, k);
-         float_io.Put(val, 4, 0, 0);
-         sum := sum + val;
-      end loop;
-      Ada.Text_IO.Put("|  ");
-      float_io.Put(sum, 4, 0, 0);
-      Ada.Text_IO.New_Line;
-   end loop;
+--   for n in 0 .. 10 loop
+--      Ada.Text_IO.put("  ");
+--      float_io.put(real(n), 2, 0, 0);
+--      Ada.Text_IO.Put("|");
+--      sum := 0.0;
+--      for k in 0 .. n loop
+--         Ada.Text_IO.Put("  ");
+--         val := funct.nChoosek(n, k);
+--         float_io.Put(val, 4, 0, 0);
+--         sum := sum + val;
+--      end loop;
+--      Ada.Text_IO.Put("|  ");
+--      float_io.Put(sum, 4, 0, 0);
+--      Ada.Text_IO.New_Line;
+--   end loop;
 end test_stats;

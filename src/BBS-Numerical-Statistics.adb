@@ -160,4 +160,18 @@ package body BBS.Numerical.Statistics is
       return elem.Exp(part1 + part3 - part2);
    end;
    --
+   --  This uses the global deg_freedom so that it can be called as a function of
+   --  one variable by the integration routine.
+   --
+   function partial_studentT(x : f'Base) return f'Base is
+   begin
+      return studentT_pdf(x, deg_freedom);
+   end;
+   --
+   function studentT_cdf(a, b : F'Base; nu, steps : Positive) return F'Base is
+      tol : f'Base := 0.0001;
+   begin
+      deg_freedom := nu;
+      return integ.adapt_simpson(partial_studentT'Access, a, b, tol, steps);
+   end;
 end;

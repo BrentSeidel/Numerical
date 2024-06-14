@@ -64,12 +64,15 @@ package BBS.Numerical.statistics is
    --
    function studentT_pdf(t : f'Base; nu : Positive) return f'Base;
    --
+   function studentT_cdf(a, b : F'Base; nu, steps : Positive) return F'Base;
+   --
 private
    --
-   --  This is a bit of a hack to get a chi square function that can
+   --  This is a bit of a hack to get some function into a form that can
    --  be integrated.
    --
    deg_freedom : Positive;
    --
    function partial_chi2(x : f'Base) return f'Base;
+   function partial_studentT(x : f'Base) return f'Base;
 end;
