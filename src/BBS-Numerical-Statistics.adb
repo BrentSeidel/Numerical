@@ -174,4 +174,16 @@ package body BBS.Numerical.Statistics is
       deg_freedom := nu;
       return integ.adapt_simpson(partial_studentT'Access, a, b, tol, steps);
    end;
+   --
+   --  Probability mass function for Poisson distribution.
+   --         lambda^k * exp(-lambda)
+   --  p(k) = -----------------------
+   --                  k!
+   --
+   function poisson_pmf(k : Natural; lambda : Positive) return f'Base is
+      part1 : f'Base := elem.log(f'Base(lambda))*f'Base(k) - f'Base(lambda);
+      part2 : f'Base := funct.lnfact(k);
+   begin
+      return elem.exp(part1 - part2);
+   end;
 end;

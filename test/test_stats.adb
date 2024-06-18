@@ -56,6 +56,7 @@ begin
       Ada.Text_IO.Put("  ");
       float_io.Put(stat.studentT_cdf(0.0, val, dof, 20), 1, 6, 3);
       Ada.Text_IO.Put("  ");
+      float_io.Put(stat.poisson_pmf(Natural(i), dof), 1, 6, 3);
       Ada.Text_IO.New_Line;
    end loop;
    Ada.Text_IO.New_Line;

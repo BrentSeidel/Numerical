@@ -1,5 +1,12 @@
 generic
    type F is digits <>;
+   --
+   --  Note on naming conventions for probability distributions.  For continuous
+   --  distrubution functions, there are generally two functions.  The one with the
+   --  "_pdf" suffix is the probability density function.  The one with the
+   --  "_cdf" suffix is the cumulative distribution function.  For discrete functions,
+   --  the "_pmf" suffix is for the probability mass function.
+   --
 package BBS.Numerical.statistics is
    type data_array is array (Integer range <>) of F'Base;
    --  -----------------------------------------------------------------
@@ -65,6 +72,10 @@ package BBS.Numerical.statistics is
    function studentT_pdf(t : f'Base; nu : Positive) return f'Base;
    --
    function studentT_cdf(a, b : F'Base; nu, steps : Positive) return F'Base;
+   --
+   --  Probability mass function for Poisson distribution.
+   --
+   function poisson_pmf(k : Natural; lambda : Positive) return f'Base;
    --
 private
    --
