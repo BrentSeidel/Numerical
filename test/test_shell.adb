@@ -13,6 +13,11 @@ begin
       Ada.Text_IO.Put_Line("  2 - Common functions");
       Ada.Text_IO.Put_Line("  3 - Interpolation");
       Ada.Text_IO.Put_Line("  4 - Numerical integration");
+      Ada.Text_IO.Put_Line("  5 - Differential Equations");
+      Ada.Text_IO.Put_Line("  6 - Complex polynomials");
+      Ada.Text_IO.Put_Line("  7 - Real polynomials");
+      Ada.Text_IO.Put_Line("  8 - Root finding");
+      Ada.Text_IO.Put_Line("  9 - Statistics");
       Ada.Text_IO.Put("Selection: ");
       Ada.Integer_Text_IO.Get(selection, 0);
       --
@@ -33,5 +38,15 @@ begin
       test_cases.test_interp;
    elsif selection = 4 then
       test_cases.test_integ;
+   elsif selection = 5 then
+      test_cases.test_ode;
+   elsif selection = 6 then
+      test_cases.test_poly_cmplx;
+   elsif selection = 7 then
+      test_cases.test_poly;
+   elsif selection = 8 then
+      test_cases.test_root;
+   elsif selection = 9 then
+      test_cases.test_stats;
    end if;
 end;
