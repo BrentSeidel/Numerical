@@ -1,10 +1,10 @@
 with "../BBS_Numerical.gpr";
 
-project test_derive is
+project test_shell is
    for languages use ("Ada");
    for Source_Dirs use (".");
    for Object_Dir use "../obj";
-   for Main use ("test_derive.adb");
+   for Main use ("test_shell.adb");
    for Exec_Dir use ".";
    package builder is
       for switches ("Ada") use ("-s");
@@ -12,4 +12,4 @@ project test_derive is
    package compiler is
       for switches ("Ada") use ("-g", "-gnateE", "-gnata");
    end compiler;
-end test_derive;
+end test_shell;

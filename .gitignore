@@ -7,7 +7,7 @@ lib/*
 *.ali
 
 # Test binaries
-test_derive
+test_shell
 test_func
 test_integ
 test_ode
