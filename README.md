@@ -16,22 +16,6 @@ numerics library.  This is more of a practice run for me.  The one difference
 is that complex numbers are a tagged record so that object notation can be used
 for some of the operations, if that's important to you.
 
-##  Integration
-Implemented algorithms are:
-* Composite trapezoid
-* Composite Simpson's
-* Adaptive Simpson's
-
-##  Numerical Derivatives
-These operations can easily cause trouble if you don't understand your
-problem and computer arithmatic.  The core of taking a derivative involves
-subtracting two nearly equal numbers and dividing by a small number.  This
-has the effect of amplifying round-off errors.  Avoid these operations, if
-you can.
-* 2 point method
-* 3 point methods
-* 5 point methods
-
 ##  Differential Equations
 These are basic algorithms for finding numerical solutions to differential
 equations.
@@ -43,15 +27,35 @@ the implemented algorithms are:
 * 4th order Adams-Bashforth/Adams-Moulton
 * 4th order Runge-Kutta for systems of differential equations
 
-##  Root Finding
-These are used to find roots (zero crossings) of functions.  There are a number
-of different methods with diffrent pros and cons.  It is important to understand
-the nature of the function before selecting the root finding algorithm.
+##  Functions
+These are special functions not included with Ada's elementary functions
+that are useful or needed by other routines here.
+* gamma2n - Divides the positive integer argument by two and computes the gamma function.  Used to support chi^2.
+* lngamma2n - Natural log of gamma2n.  Allows larger values of n without overflow.
+* factorial - Computes the factorial of n.
+* lnfact - Computes the natual log of the factorial of n allowing larger values of n without overflow.
+* nChoosek - Computes binomial coefficent based on n and k.
 
-The implemented algorithms are:
-* Bisection
-* Secant
-* Mueller (versions for real roots and complex roots)
+##  Integration
+Implemented algorithms are:
+* Composite trapezoid
+* Composite Simpson's
+* Adaptive Simpson's
+
+## Interpolation
+Implemented algorithms are:
+* Lagrange 2 point (linear)
+* Lagrange 3 point (quadratic)
+
+##  Numerical Derivatives
+These operations can easily cause trouble if you don't understand your
+problem and computer arithmatic.  The core of taking a derivative involves
+subtracting two nearly equal numbers and dividing by a small number.  This
+has the effect of amplifying round-off errors.  Avoid these operations, if
+you can.
+* 2 point method
+* 3 point methods
+* 5 point methods
 
 ##  Polynomials
 A polynomial is implemented as an array with the lower index value set to 0.  The index represents
@@ -66,11 +70,21 @@ Implemented operations include
 * Integral of polynomial
 * Derivative of polynomial
 
-##  Quaternions
-Some basic operations are implemented.
-
 ##  Regression
 Simple linear regression is implemented.
+
+##  Root Finding
+These are used to find roots (zero crossings) of functions.  There are a number
+of different methods with diffrent pros and cons.  It is important to understand
+the nature of the function before selecting the root finding algorithm.
+
+The implemented algorithms are:
+* Bisection
+* Secant
+* Mueller (versions for real roots and complex roots)
+
+##  Quaternions
+Some basic operations are implemented.
 
 ## Statistics
 Some basic functions are implemented for analyzing data
@@ -78,15 +92,8 @@ Some basic functions are implemented for analyzing data
 *  Variance
 *  Limits
 
-The normal distribution is implemented.
-
-The Chi^2 distribution is implemented.
-
-##  Functions
-These are special functions not included with Ada's elementary functions
-that are useful or needed by other routines here.
-* gamma2n - Divides the positive integer argument by two and computes the gamma function.  Used to support chi^2.
-* lngamma2n - Natural log of gamma2n.  Allows larger values of n without overflow.
-* factorial - Computes the factorial of n.
-* lnfact - Computes the natual log of the factorial of n allowing larger values of n without overflow.
-* nChoosek - Computes binomial coefficent based on n and k.
+The following probability distribution are implemented
+* Normal (PDF and CDF)
+* Chi^2 (PDF and CDF)
+* Student's T (PDF and CDF)
+* Poisson (PMF)

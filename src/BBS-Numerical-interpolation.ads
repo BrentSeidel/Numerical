@@ -6,11 +6,16 @@ package BBS.Numerical.interpolation is
       x : f'Base;
       y : f'Base;
    end record;
+   type points is array (Integer range <>) of point;
    --
-   --  Linear interpolation.
-   --
-   --  Note that this will be most accurate for x between the two points.
+   --  Note interpolations will be most accurate for x between the points.
    --  Outside of that is extrapolation.
    --
-   function linear(p0, p1: point; x : f'Base) return f'Base;
+   --  Linear interpolation.  This uses a two point Lagrange polynomial
+   --
+   function linear(p0, p1 : point; x : f'Base) return f'Base;
+   --
+   --  Quadratic interpolation.  This uses a three point Lagrange polynomial
+   --
+   function quadratic(p0, p1, p2 : point; x : f'Base) return f'Base;
 end;

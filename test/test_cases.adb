@@ -53,7 +53,7 @@ package body test_cases is
    begin
       Ada.Text_IO.Put_Line("Testing functions.");
       Ada.Text_IO.Put_Line("  Gamma Function");
-      Ada.Text_IO.Put_Line("    N     gamma2n     lngamma2n  exp(lngamma2n)");
+      Ada.Text_IO.Put_Line("    N     gamma2n     lngamma2n  exp(lngamma2n)  factorial    lnfact   exp(lnfact)");
       for i in 1 .. 100 loop
          Ada.Text_IO.Put("  ");
          float_io.Put(Real(i), 3, 0, 0);
@@ -63,6 +63,12 @@ package body test_cases is
          float_io.Put(funct.lngamma2n(i), 3, 2, 0);
          Ada.Text_IO.Put("  ");
          float_io.Put(elem.exp(funct.lngamma2n(i)), 2, 6, 3);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(funct.factorial(i), 2, 6, 3);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(funct.lnfact(i), 3, 2, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(elem.exp(funct.lnfact(i)), 2, 6, 3);
          Ada.Text_IO.New_Line;
       end loop;
       Ada.Text_IO.Put_Line("N choose K");
@@ -125,20 +131,25 @@ package body test_cases is
    procedure test_interp is
       p1 : interp.point;
       p2 : interp.point;
+      p3 : interp.point;
       x  : real;
       y0 : real;
       y1 : real;
+      y2 : real;
    begin
       Ada.Text_IO.Put_Line("Testing interpolation");
       p1.x := 1.0;
       p1.y := interp_f1(p1.x);
       p2.x := 2.0;
       p2.y := interp_f1(p2.x);
-      Ada.Text_IO.Put_Line("  N  Actual  Interp  Error");
-      for i in 0 .. 30 loop
+      p3.x := 3.0;
+      p3.y := interp_f1(p3.x);
+      Ada.Text_IO.Put_Line("    N      Actual     Linear     Error      Quadratic  Error");
+      for i in 0 .. 40 loop
          x := real(i)*0.1;
          y0 := interp_f1(x);
          y1 := interp.linear(p1, p2, x);
+         y2 := interp.quadratic(p1, p2, p3, x);
          Ada.Text_IO.Put("  ");
          float_io.put(x, 3, 1, 0);
          Ada.Text_IO.Put("  ");
@@ -147,6 +158,10 @@ package body test_cases is
          float_io.Put(y1, 2, 6, 0);
          Ada.Text_IO.Put("  ");
          float_io.Put(y0 - y1, 2, 6, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(y2, 2, 6, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(y0 - y2, 2, 6, 0);
          Ada.Text_IO.New_Line;
       end loop;
    end;
