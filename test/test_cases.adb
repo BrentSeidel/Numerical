@@ -132,24 +132,34 @@ package body test_cases is
       p1 : interp.point;
       p2 : interp.point;
       p3 : interp.point;
+      p4 : interp.point;
+      p5 : interp.point;
       x  : real;
       y0 : real;
       y1 : real;
       y2 : real;
+      y3 : real;
+      y4 : real;
    begin
       Ada.Text_IO.Put_Line("Testing interpolation");
       p1.x := 1.0;
       p1.y := interp_f1(p1.x);
       p2.x := 2.0;
       p2.y := interp_f1(p2.x);
-      p3.x := 3.0;
+      p3.x := 1.3;
       p3.y := interp_f1(p3.x);
-      Ada.Text_IO.Put_Line("    N      Actual     Linear     Error      Quadratic  Error");
-      for i in 0 .. 40 loop
+      p4.x := 1.7;
+      p4.y := interp_f1(p4.x);
+      p5.x := 1.5;
+      p5.y := interp_f1(p5.x);
+      Ada.Text_IO.Put_Line("    N      Actual     2 point    Error      3 point    Error      4 point    Error      5 point    Error");
+      for i in 0 .. 30 loop
          x := real(i)*0.1;
          y0 := interp_f1(x);
-         y1 := interp.linear(p1, p2, x);
-         y2 := interp.quadratic(p1, p2, p3, x);
+         y1 := interp.lag2(p1, p2, x);
+         y2 := interp.lag3(p1, p2, p3, x);
+         y3 := interp.lag4(p1, p2, p3, p4, x);
+         y4 := interp.lag5(p1, p2, p3, p4, p5, x);
          Ada.Text_IO.Put("  ");
          float_io.put(x, 3, 1, 0);
          Ada.Text_IO.Put("  ");
@@ -162,6 +172,14 @@ package body test_cases is
          float_io.Put(y2, 2, 6, 0);
          Ada.Text_IO.Put("  ");
          float_io.Put(y0 - y2, 2, 6, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(y3, 2, 6, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(y0 - y3, 2, 6, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(y4, 2, 6, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(y0 - y4, 2, 6, 0);
          Ada.Text_IO.New_Line;
       end loop;
    end;

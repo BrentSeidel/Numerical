@@ -43,9 +43,15 @@ Implemented algorithms are:
 * Adaptive Simpson's
 
 ## Interpolation
+These methods construct a polynomial that passes through the provided points.
+Generally these are most accurate within the range of the provided points.
+There is a danger of oscillation with higher order polynomials.
+
 Implemented algorithms are:
 * Lagrange 2 point (linear)
 * Lagrange 3 point (quadratic)
+* Lagrange 4 point (cubic)
+* Lagrange 5 point (quartic)
 
 ##  Numerical Derivatives
 These operations can easily cause trouble if you don't understand your
