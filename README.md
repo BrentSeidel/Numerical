@@ -76,6 +76,11 @@ Implemented operations include
 * Integral of polynomial
 * Derivative of polynomial
 
+## Random Numbers
+Pseud-Random Number Generators implemented are
+* Linear Congruent Generator with settable parameters
+* Mersenne Twister (MT19937 algorithm)
+
 ##  Regression
 Simple linear regression is implemented.
 

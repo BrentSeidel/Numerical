@@ -1,7 +1,9 @@
 with Ada.Numerics.Generic_Complex_Types;
 with Ada.Numerics.Generic_Elementary_Functions;
 with Ada.Text_IO;
+with Ada.Integer_Text_IO;
 --
+with BBS;
 with BBS.Numerical;
 with BBS.Numerical.derivative_real;
 with BBS.Numerical.functions_real;
@@ -10,6 +12,7 @@ with BBS.Numerical.interpolation;
 with BBS.Numerical.ode_real;
 with BBS.Numerical.polynomial_complex;
 with BBS.Numerical.polynomial_real;
+with BBS.Numerical.random;
 with BBS.Numerical.regression;
 with BBS.Numerical.roots_complex;
 with BBS.Numerical.roots_real;
@@ -18,6 +21,7 @@ package test_cases is
    subtype real is Float;
    --
    package float_io is new Ada.Text_IO.Float_IO(real);
+   package uint32_io is new Ada.Text_IO.Modular_IO(BBS.uint32);
    package elem is new Ada.Numerics.Generic_Elementary_Functions(real);
    package cmplx is new Ada.Numerics.Generic_Complex_Types(real);
    use type cmplx.Complex;
@@ -43,6 +47,7 @@ package test_cases is
    procedure test_ode;
    procedure test_poly_cmplx;
    procedure test_poly;
+   procedure test_random;
    procedure test_root;
    procedure test_stats;
 private

@@ -622,6 +622,22 @@ package body test_cases is
       Ada.Text_IO.New_Line;
    end test_poly;
 --  ----------------------------------------------------------------------------
+   procedure test_random is
+      lin   : BBS.Numerical.Random.LCG;
+      twist : BBS.Numerical.Random.MT;
+   begin
+      Ada.Text_IO.Put_Line("Testing Random Numbers.");
+      Ada.Text_IO.Put_Line("   LCG        MT");
+      lin.init;
+      twist.init;
+      for i in 0 .. 20 loop
+         uint32_io.Put(lin.getNext, 10);
+         Ada.Text_IO.Put("  ");
+         uint32_io.Put(twist.getNext, 10);
+         Ada.Text_IO.New_Line;
+      end loop;
+   end;
+--  ----------------------------------------------------------------------------
    function root_f1(x : real) return real is
    begin
       return (100.0/(x*x))*elem.sin(10.0/x);
