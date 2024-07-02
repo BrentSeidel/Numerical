@@ -633,7 +633,11 @@ package body test_cases is
       for i in 0 .. 20 loop
          uint32_io.Put(lin.getNext, 10);
          Ada.Text_IO.Put("  ");
+         float_io.Put(real(lin.getNextF), 1, 6, 0);
+         Ada.Text_IO.Put("  ");
          uint32_io.Put(twist.getNext, 10);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(real(twist.getNextF), 1, 6, 0);
          Ada.Text_IO.New_Line;
       end loop;
    end;

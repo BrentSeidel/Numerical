@@ -6,9 +6,16 @@ package BBS.Numerical.Random is
    --  The abstract random number generator.  All RNGs will provide
    --  these operations.
    --
+   type double is digits 12;
    type RNG is abstract tagged private;
    procedure init(self : in out RNG) is abstract;
+   --
+   --  Returns the next random number as uint32
+   --
    function getNext(self : in out RNG) return uint32 is abstract;
+   --
+   --  Returns the next random number as a real number from 0.0 to 1.0.
+   function getNextF(self : in out RNG) return double is abstract;
    --
    --  Linear congruent RNG.  You can configure the parameters as needed.
    --
@@ -19,6 +26,8 @@ package BBS.Numerical.Random is
    procedure setSeed(self : in out LCG; seed : uint32);
    overriding
    function getNext(self : in out LCG) return uint32;
+   overriding
+   function getNextF(self : in out LCG) return double;
    --
    --  Mersenne Twister RNG.  The algorithm used is MT19937.
    --
@@ -28,6 +37,8 @@ package BBS.Numerical.Random is
    procedure init(self : in out MT; seed : uint32);
    overriding
    function getNext(self : in out MT) return uint32;
+   overriding
+   function getNextF(self : in out MT) return double;
 private
    --
    type RNG is abstract tagged record

@@ -39,6 +39,11 @@ package body BBS.Numerical.Random is
       return self.seed;
    end;
    --
+   function getNextF(self : in out LCG) return double is
+   begin
+      return double(self.getNext)/double(self.modulus);
+   end;
+   --
    --  Mersenne Twister RNG.  The algorithm used is MT19937.
    --
    --  This has better statistical properties than the LCG.  Use this if
@@ -79,6 +84,11 @@ package body BBS.Numerical.Random is
       y := y xor ((y*16#4000#) and 4022730752);
       y := y xor (y/16#0002_0000#);
       return y;
+   end;
+   --
+   function getNextF(self : in out MT) return double is
+   begin
+      return double(self.getNext)/double(16#1_0000_0000#);
    end;
    --
    procedure MT_generate(self : in out MT) is
