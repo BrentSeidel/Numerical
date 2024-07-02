@@ -2,6 +2,16 @@ package body BBS.Numerical.Random is
    --
    --  Linear congruent RNG.  You can configure the parameters as needed.
    --
+   --  Note that while this fast, this is not a particularly good RNG.  However
+   --  the choice of parameters can make the difference between dreadful
+   --  and decent.  Whether this is a problem or not depends on your
+   --  application.  Some variation of this is used as the default RNG
+   --  in many libraries.
+   --
+   --  For example, the ANSI C committee provide the following parameters
+   --  as "not recommended":  modulus = 2^32, a = 1103515245, c = 12345,
+   --  then divided by 2^16.
+   --
    procedure init(self : in out LCG) is
    begin
       self.seed := 1;
@@ -25,11 +35,14 @@ package body BBS.Numerical.Random is
    --
    function getNext(self : in out LCG) return uint32 is
    begin
-      self.seed := ((self.a*self.seed + self.c) mod self.modulus);
+      self.seed := uint32((uint64(self.a)*uint64(self.seed) + uint64(self.c)) mod uint64(self.modulus));
       return self.seed;
    end;
    --
    --  Mersenne Twister RNG.  The algorithm used is MT19937.
+   --
+   --  This has better statistical properties than the LCG.  Use this if
+   --  that is important for your application.
    --
    procedure init(self : in out MT) is
    begin
