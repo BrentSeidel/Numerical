@@ -42,7 +42,7 @@ package BBS.Numerical.statistics is
    --  minus the value from 0 to "a".
    --
    function normal_cdf(a, b : F'Base; steps : Positive) return F'Base;
-   --
+   --  -----------------------------------------------------------------
    --  Chi square distribution.
    --  Note that the degrees of freedom (k) must be positive otherwise that
    --  would imply zero or fewer data points.
@@ -61,7 +61,7 @@ package BBS.Numerical.statistics is
    --
    function chi2_test(expected, observed : data_array; k : Positive) return F'Base
      with pre => ((expected'First = observed'First) and (expected'Last = observed'Last));
-   --
+   --  -----------------------------------------------------------------
    --  The student's T distrubution is defined as:
    --         gamma((nu+1)/2                 t*t  -(nu+1)/2
    --  f(t) = ----------------------- * (1 + ---)
@@ -72,14 +72,22 @@ package BBS.Numerical.statistics is
    function studentT_pdf(t : f'Base; nu : Positive) return f'Base;
    --
    function studentT_cdf(a, b : F'Base; nu, steps : Positive) return F'Base;
+   --  -----------------------------------------------------------------
+   --  Exponential distribution.
+   --  The PDF is lambda*exp(-lambda*x)
+   --  The CDF is 1 - exp(-lambda*x)
    --
+   function exp_pdf(x, lambda : f'Base) return f'Base;
+   --
+   function exp_cdf(x, lambda : f'Base) return f'Base;
+   --  -----------------------------------------------------------------
    --  Probability mass function for Poisson distribution.
    --
    function poisson_pmf(k : Natural; lambda : Positive) return f'Base;
    --
 private
    --
-   --  This is a bit of a hack to get some function into a form that can
+   --  This is a bit of a hack to get some functions into a form that can
    --  be integrated.
    --
    deg_freedom : Positive;

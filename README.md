@@ -104,7 +104,9 @@ Some basic functions are implemented for analyzing data
 *  Limits
 
 The following probability distribution are implemented
-* Normal (PDF and CDF)
 * Chi^2 (PDF and CDF)
-* Student's T (PDF and CDF)
+* Exponential (PDF and CDF)
+* Normal (PDF and CDF)
 * Poisson (PMF)
+* Student's T (PDF and CDF)
+

@@ -745,11 +745,10 @@ package body test_cases is
       float_io.Put(res.variance, 2, 3, 0);
       Ada.Text_IO.New_Line;
       Ada.Text_IO.Put_Line("Probability Distributions");
-      Ada.Text_IO.Put_Line("                 Normal                     Chi^2                     Student's T");
-      Ada.Text_IO.Put_Line("     X     PDF           CDF           PDF           CDF           PDF           CDF");
+      Ada.Text_IO.Put_Line("               Normal                     Chi^2                     Student's T           Poisson             Exponential");
+      Ada.Text_IO.Put_Line("   X     PDF           CDF           PDF           CDF           PDF           CDF           PMF           PDF           CDF");
       for i in 0 .. 20 loop
          val := real(i)*1.0;
-         Ada.Text_IO.Put("  ");
          float_io.Put(val, 2, 2, 0);
          Ada.Text_IO.Put("  ");
          float_io.Put(stat.normal_pdf(val), 1, 6, 3);
@@ -763,6 +762,10 @@ package body test_cases is
          float_io.Put(stat.studentT_pdf(val, dof), 1, 6, 3);
          Ada.Text_IO.Put("  ");
          float_io.Put(stat.studentT_cdf(0.0, val, dof, 20), 1, 6, 3);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(stat.exp_cdf(val, 1.0), 1, 6, 3);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(stat.exp_pdf(val, 1.0), 1, 6, 3);
          Ada.Text_IO.Put("  ");
          float_io.Put(stat.poisson_pmf(Natural(i), dof), 1, 6, 3);
          Ada.Text_IO.New_Line;

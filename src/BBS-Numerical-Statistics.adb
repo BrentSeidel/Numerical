@@ -78,7 +78,7 @@ package body BBS.Numerical.Statistics is
    begin
       return integ.simpson(normal_pdf'Access, a, b, steps);
    end;
-   --
+   --  -----------------------------------------------------------------
    --  Chi squared distribution.
    --  Note that the degrees of freedom (k) must be positive otherwise that
    --  would imply zero or fewer data points.
@@ -143,7 +143,7 @@ package body BBS.Numerical.Statistics is
       end loop;
       return 0.0;
    end;
-   --
+   --  -----------------------------------------------------------------
    --  The student's T distrubution is defined as:
    --         gamma((nu+1)/2                 t*t  -(nu+1)/2
    --  f(t) = ----------------------- * (1 + ---)
@@ -174,7 +174,29 @@ package body BBS.Numerical.Statistics is
       deg_freedom := nu;
       return integ.adapt_simpson(partial_studentT'Access, a, b, tol, steps);
    end;
+   --  -----------------------------------------------------------------
+   --  Exponential distribution.
+   --  The PDF is lambda*exp(-lambda*x)
+   --  The CDF is 1 - exp(-lambda*x)
    --
+   function exp_pdf(x, lambda : f'Base) return f'Base is
+   begin
+      if x < 0.0 then
+         return 0.0;
+      else
+         return lambda*elem.exp(-lambda*x);
+      end if;
+   end;
+   --
+   function exp_cdf(x, lambda : f'Base) return f'Base is
+   begin
+      if x < 0.0 then
+         return 0.0;
+      else
+         return 1.0 - elem.exp(-lambda*x);
+      end if;
+   end;
+   --  -----------------------------------------------------------------
    --  Probability mass function for Poisson distribution.
    --         lambda^k * exp(-lambda)
    --  p(k) = -----------------------
