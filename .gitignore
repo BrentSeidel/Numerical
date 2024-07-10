@@ -3,6 +3,12 @@
 obj/*
 lib/*
 
+# LaTex auxiliary files
+doc/*.aux
+doc/*.log
+doc/*.synctex.gz
+doc/*.toc
+
 # Ada Library Information
 *.ali
 

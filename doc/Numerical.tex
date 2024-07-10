@@ -1,0 +1,98 @@
+\documentclass[10pt, openany]{book}
+
+\usepackage{fancyhdr}
+\usepackage{imakeidx}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\usepackage{geometry}
+\geometry{letterpaper}
+
+\usepackage{fancyvrb}
+\usepackage{fancybox}
+
+\usepackage{url}
+\usepackage{multicol}
+%
+% Rules to allow import of graphics files in EPS format
+%
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.eps}
+\DeclareGraphicsRule{.eps}{eps}{.eps}{}
+%
+%  Include the listings package
+%
+\usepackage{listings}
+%
+% Macro definitions
+%
+\newcommand{\operation}[1]{\textbf{\texttt{#1}}}
+\newcommand{\package}[1]{\texttt{#1}}
+\newcommand{\function}[1]{\texttt{#1}}
+\newcommand{\constant}[1]{\emph{\texttt{#1}}}
+\newcommand{\keyword}[1]{\texttt{#1}}
+\newcommand{\datatype}[1]{\texttt{#1}}
+%
+% Front Matter
+%
+\title{Basic Numerical Analysis Routines}
+\author{Brent Seidel \\ Phoenix, AZ}
+\date{ \today }
+%========================================================
+%%% BEGIN DOCUMENT
+\begin{document}
+%
+% Produce the front matter
+%
+\frontmatter
+\maketitle
+\begin{center}
+This document is \copyright 2024 Brent Seidel.  All rights reserved.
+
+\paragraph{}Note that this is a draft version and not the final version for publication.
+\end{center}
+\tableofcontents
+
+\mainmatter
+%----------------------------------------------------------
+\chapter{Introduction}
+
+Back in the 1980s when I was an undergraduate, I took a numerical analysis course and quite enjoyed it.  Then my first job out of college was working on a numerical analysis library for a small startup that went the way of most startups.  I was recently inspired to dig out my old textbook and try implementing some of the routines.  This collection includes some of those, plus others.
+
+Note that some packages are for complex numbers and some are for real numbers.  At some point, they may be combined.  Most packages are generic.  The packages are:
+
+\section{BBS.Numerical.complex\_real}
+This is an object oriented collection of complex number routines.  After writing this, I discovered \package{Ada.Numerics.Generic\_Complex\_Types}.  So this package is deprecated in favor of the Ada package.
+
+\section{BBS.Numerical.derivative\_real}
+This package contains functions to compute the derivative of real valued functions.
+
+\section{BBS.Numerical.functions\_real}
+This package contains some functions that are used by other packages.
+
+\section{BBS.Numerical.integration\_real}
+\section{BBS.Numerical.interpolation}
+\section{BBS.Numerical.ode\_real}
+\section{BBS.Numerical.polynomial\_complex}
+\section{BBS.Numerical.polynomial\_real}
+\section{BBS.Numerical.quaternion}
+\section{BBS.Numerical.random}
+\section{BBS.Numerical.regression}
+\section{BBS.Numerical.roots\_complex}
+\section{BBS.Numerical.roots\_real}
+\section{BBS.Numerical.statistics}
+\section{BBS.Numerical.vector\_real}
+
+%----------------------------------------------------------
+\chapter{How to Obtain}
+
+%----------------------------------------------------------
+\chapter{Build Instructions}
+
+%----------------------------------------------------------
+\chapter{API Description}
+
+
+\end{document}
+
