@@ -9,7 +9,7 @@ generic
    --
 package BBS.Numerical.statistics is
    type data_array is array (Integer range <>) of F'Base;
-   --  -----------------------------------------------------------------
+   --  =================================================================
    --  Statistics of a sample of data
    --
    --  Compute the mean of an array of data
@@ -24,7 +24,7 @@ package BBS.Numerical.statistics is
    --  instead of mean() if you need both values.
    --
    procedure variance(d : data_array; var : out F'Base; mean : out F'Base);
-   --  -----------------------------------------------------------------
+   --  =================================================================
    --  Distributions
    --
    --  Standard Normal distribution
@@ -50,17 +50,6 @@ package BBS.Numerical.statistics is
    function chi2_pdf(x : f'Base; k : Positive) return f'Base;
    --
    function chi2_cdf(a, b : F'Base; k, steps : Positive) return F'Base;
-   --
-   --  *** Under development - do not use yet. ***
-   --  Perform a chi^2 test on two sets of data
-   --
-   --  This calculates alpha from the expected and observed data sets and then
-   --  computes the chi^2 cdf value from alpha and the degrees of freedom.  This
-   --  is the value that is returned.  The larger this value, the more likely the
-   --  data sets are different.
-   --
-   function chi2_test(expected, observed : data_array; k : Positive) return F'Base
-     with pre => ((expected'First = observed'First) and (expected'Last = observed'Last));
    --  -----------------------------------------------------------------
    --  The student's T distrubution is defined as:
    --         gamma((nu+1)/2                 t*t  -(nu+1)/2
@@ -85,6 +74,17 @@ package BBS.Numerical.statistics is
    --
    function poisson_pmf(k : Natural; lambda : Positive) return f'Base;
    --
+   --  =================================================================
+   --  Statistical tests
+   --
+   --  One sample t-test
+   --  Given sample mean x_bar, sample std deviation s, and sample size n,
+   --  compute the student's T statistic for the difference between x_bar
+   --  and the specified mean mu0.
+   --
+   function studentT_one(x_bar, mu0, s, n : f'Base) return f'Base;
+   --
+   --  =================================================================
 private
    --
    --  This is a bit of a hack to get some functions into a form that can

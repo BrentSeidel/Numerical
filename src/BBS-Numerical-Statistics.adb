@@ -9,7 +9,8 @@ package body BBS.Numerical.Statistics is
    package float_io is new Ada.Text_IO.Float_IO(f'Base);
    package integ is new BBS.Numerical.Integration_real(f'Base);
    package funct is new BBS.Numerical.functions_real(f'Base);
-   --  -----------------------------------------------------------------
+   --  =================================================================
+   --  Statistics of a sample of data
    --
    --  Compute the mean of an array of data
    --
@@ -52,7 +53,7 @@ package body BBS.Numerical.Statistics is
       mean := sum/F(d'Length);
       var  := (sum2 - sum*sum/F'Base(d'Length))/F'Base(d'Length - 1);
    end;
-   --  -----------------------------------------------------------------
+   --  =================================================================
    --  Distributions
    --
    --  Normal distribution
@@ -128,21 +129,6 @@ package body BBS.Numerical.Statistics is
    begin
       return chi2_pdf(x, deg_freedom);
    end;
-   --
-   --  *** Under development - do not use yet. ***
-   --  Perform a chi^2 test on two sets of data.  Both expected and observed have
-   --  the same range.
-   --
-   function chi2_test(expected, observed : data_array; k : Positive) return F'Base is
-      x2 : f'Base := 0.0;
-      diff : f'Base;
-   begin
-      for i in expected'Range loop
-         diff := observed(i) - expected(i);
-         x2 := x2 + (diff*diff/expected(i));
-      end loop;
-      return 0.0;
-   end;
    --  -----------------------------------------------------------------
    --  The student's T distrubution is defined as:
    --         gamma((nu+1)/2                 t*t  -(nu+1)/2
@@ -208,4 +194,19 @@ package body BBS.Numerical.Statistics is
    begin
       return elem.exp(part1 - part2);
    end;
+   --  =================================================================
+   --  Statistical tests
+   --
+   --  One sample t-test
+   --  Given sample mean x_bar, sample std deviation s, and sample size n,
+   --  compute the student's T statistic for the difference between x_bar
+   --  and the specified mean mu0.
+   --
+   function studentT_one(x_bar, mu0, s, n : f'Base) return f'Base is
+      diff : constant f'Base := x_bar - mu0;
+      bottom : constant f'Base := s/elem.sqrt(n);
+   begin
+      return diff/bottom;
+   end;
+   --  =================================================================
 end;
