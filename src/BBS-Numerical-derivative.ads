@@ -1,6 +1,6 @@
 generic
   type F is digits <>;
-package BBS.Numerical.derivative_real is
+package BBS.Numerical.derivative is
    -- --------------------------------------------------------------------------
    --  Define a type for the function to integrate.
    --
@@ -31,4 +31,4 @@ package BBS.Numerical.derivative_real is
    --
    function pt5a(f1 : test_func; x, h : f'Base) return f'Base;
    function pt5b(f1 : test_func; x, h : f'Base) return f'Base;
-end BBS.Numerical.derivative_real;
+end BBS.Numerical.derivative;

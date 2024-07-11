@@ -1,5 +1,5 @@
 with Ada.Text_IO;
-package body BBS.Numerical.derivative_real is
+package body BBS.Numerical.derivative is
    package float_io is new Ada.Text_IO.Float_IO(f'Base);
    -- --------------------------------------------------------------------------
    --
@@ -35,4 +35,4 @@ package body BBS.Numerical.derivative_real is
       return (-25.0*f1(x) + 48.0*f1(x + h) - 36.0*f1(x + 2.0*h) + 16.0*f1(x + 3.0*h) - 3.0*f1(x + 4.0*h))/(12.0*h);
    end;
    --
-end BBS.Numerical.derivative_real;
+end BBS.Numerical.derivative;

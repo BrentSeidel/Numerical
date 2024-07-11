@@ -1,14 +1,14 @@
 with Ada.Text_IO;
 with Ada.Numerics;
 with Ada.Numerics.Generic_Elementary_Functions;
-with BBS.Numerical.functions_real;
+with BBS.Numerical.functions;
 with BBS.Numerical.Integration_real;
 package body BBS.Numerical.Statistics is
    package elem is new Ada.Numerics.Generic_Elementary_Functions(f'Base);
    use type f'Base;
    package float_io is new Ada.Text_IO.Float_IO(f'Base);
    package integ is new BBS.Numerical.Integration_real(f'Base);
-   package funct is new BBS.Numerical.functions_real(f'Base);
+   package funct is new BBS.Numerical.functions(f'Base);
    --  =================================================================
    --  Statistics of a sample of data
    --

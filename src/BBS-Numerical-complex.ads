@@ -11,7 +11,7 @@
 --
 generic
   type F is digits <>;
-package BBS.Numerical.complex_real is
+package BBS.Numerical.complex is
    type complex is tagged record
       r : f'Base;
       i : f'Base;
@@ -71,4 +71,4 @@ package BBS.Numerical.complex_real is
    i : complex renames j;
 private
 
-end BBS.Numerical.complex_real;
+end BBS.Numerical.complex;

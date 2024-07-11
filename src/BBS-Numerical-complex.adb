@@ -2,7 +2,7 @@ with Ada.Numerics.Generic_Elementary_Functions;
 with Ada.Numerics.Generic_Complex_Types;
 with Ada.Numerics.Generic_Complex_Elementary_Functions;
 with Ada.Text_IO;
-package body BBS.Numerical.complex_real is
+package body BBS.Numerical.complex is
    package elem is new Ada.Numerics.Generic_Elementary_Functions(f'Base);
    package ada_cmplx is new Ada.Numerics.Generic_Complex_Types(f'Base);
    package float_io is new Ada.Text_IO.Float_IO(f'Base);
@@ -141,4 +141,4 @@ package body BBS.Numerical.complex_real is
       Ada.Text_IO.Put(")");
    end;
    --
-end BBS.Numerical.complex_real;
+end BBS.Numerical.complex;

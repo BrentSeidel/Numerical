@@ -5,8 +5,8 @@ with Ada.Integer_Text_IO;
 --
 with BBS;
 with BBS.Numerical;
-with BBS.Numerical.derivative_real;
-with BBS.Numerical.functions_real;
+with BBS.Numerical.derivative;
+with BBS.Numerical.functions;
 with BBS.Numerical.integration_real;
 with BBS.Numerical.interpolation;
 with BBS.Numerical.ode_real;
@@ -26,8 +26,8 @@ package test_cases is
    package cmplx is new Ada.Numerics.Generic_Complex_Types(real);
    use type cmplx.Complex;
    --
-   package derive is new BBS.Numerical.derivative_real(real);
-   package funct is new BBS.Numerical.functions_real(real);
+   package derive is new BBS.Numerical.derivative(real);
+   package funct is new BBS.Numerical.functions(real);
    package integ is new BBS.Numerical.integration_real(real);
    package interp is new BBS.Numerical.interpolation(real);
    package ode is new BBS.Numerical.ode_real(real);

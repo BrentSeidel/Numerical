@@ -5,7 +5,7 @@
 --  example, the normal distribution function is in the Statistics package.
 generic
   type F is digits <>;
-package BBS.Numerical.functions_real is
+package BBS.Numerical.functions is
    --
    --  Compute the gamma function of a positive number divided by two.
    --  This is initially used by the chi-squared statistics function, but
@@ -56,4 +56,4 @@ package BBS.Numerical.functions_real is
    function nChoosek(n, k : Natural) return f'Base
      with pre => (n >= k);
    --
-end BBS.Numerical.functions_real;
+end BBS.Numerical.functions;

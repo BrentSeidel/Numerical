@@ -62,13 +62,13 @@ Back in the 1980s when I was an undergraduate, I took a numerical analysis cours
 
 Note that some packages are for complex numbers and some are for real numbers.  At some point, they may be combined.  Most packages are generic.  The packages are:
 
-\section{BBS.Numerical.complex\_real}
+\section{BBS.Numerical.complex}
 This is an object oriented collection of complex number routines.  After writing this, I discovered \package{Ada.Numerics.Generic\_Complex\_Types}.  So this package is deprecated in favor of the Ada package.
 
-\section{BBS.Numerical.derivative\_real}
-This package contains functions to compute the derivative of real valued functions.
+\section{BBS.Numerical.derivative}
+This is a generic package that contains functions to compute the derivative of real valued functions with a single argument.
 
-\section{BBS.Numerical.functions\_real}
+\section{BBS.Numerical.functions}
 This package contains some functions that are used by other packages.
 
 \section{BBS.Numerical.integration\_real}
@@ -87,11 +87,34 @@ This package contains some functions that are used by other packages.
 %----------------------------------------------------------
 \chapter{How to Obtain}
 
+This collections is currently available on GitHub at \url{https://github.com/BrentSeidel/Numerical}.
+
+\section{Dependencies}
+\subsection{Ada Libraries}
+\subsection{Other Libraries}
+
 %----------------------------------------------------------
 \chapter{Build Instructions}
 
 %----------------------------------------------------------
 \chapter{API Description}
+\section{BBS.Numerical.complex}
+This package is deprecated in favor of the Ada package \package{Ada.Numerics.Generic\_Complex\_Types}.
+
+\section{BBS.Numerical.derivative}
+\section{BBS.Numerical.functions}
+\section{BBS.Numerical.integration\_real}
+\section{BBS.Numerical.interpolation}
+\section{BBS.Numerical.ode\_real}
+\section{BBS.Numerical.polynomial\_complex}
+\section{BBS.Numerical.polynomial\_real}
+\section{BBS.Numerical.quaternion}
+\section{BBS.Numerical.random}
+\section{BBS.Numerical.regression}
+\section{BBS.Numerical.roots\_complex}
+\section{BBS.Numerical.roots\_real}
+\section{BBS.Numerical.statistics}
+\section{BBS.Numerical.vector\_real}
 
 
 \end{document}
