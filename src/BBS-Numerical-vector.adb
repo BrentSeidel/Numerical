@@ -1,6 +1,6 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 with Ada.Text_IO;
-package body BBS.Numerical.vector_real is
+package body BBS.Numerical.vector is
    package elem is new Ada.Numerics.Generic_Elementary_Functions(f);
    package float_io is new Ada.Text_IO.Float_IO(f'Base);
    --
@@ -74,4 +74,4 @@ package body BBS.Numerical.vector_real is
       return res;
    end;
    --
-end BBS.Numerical.vector_real;
+end BBS.Numerical.vector;

@@ -1,5 +1,5 @@
 with Ada.Text_IO;
-package body BBS.Numerical.ode_real is
+package body BBS.Numerical.ode is
    package float_io is new Ada.Text_IO.Float_IO(f'Base);
    -- --------------------------------------------------------------------------
    --  Single step methods
@@ -114,4 +114,4 @@ package body BBS.Numerical.ode_real is
       return res;
    end;
    --
-end BBS.Numerical.ode_real;
+end BBS.Numerical.ode;

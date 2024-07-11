@@ -66,14 +66,14 @@ Note that some packages are for complex numbers and some are for real numbers.  
 This is an object oriented collection of complex number routines.  After writing this, I discovered \package{Ada.Numerics.Generic\_Complex\_Types}.  So this package is deprecated in favor of the Ada package.
 
 \section{BBS.Numerical.derivative}
-This is a generic package that contains functions to compute the derivative of real valued functions with a single argument.
+This is a generic package with a real type parameter.  It contains functions to compute the derivative of real valued functions with a single argument.
 
 \section{BBS.Numerical.functions}
 This package contains some functions that are used by other packages.
 
 \section{BBS.Numerical.integration\_real}
 \section{BBS.Numerical.interpolation}
-\section{BBS.Numerical.ode\_real}
+\section{BBS.Numerical.ode}
 \section{BBS.Numerical.polynomial\_complex}
 \section{BBS.Numerical.polynomial\_real}
 \section{BBS.Numerical.quaternion}
@@ -82,7 +82,7 @@ This package contains some functions that are used by other packages.
 \section{BBS.Numerical.roots\_complex}
 \section{BBS.Numerical.roots\_real}
 \section{BBS.Numerical.statistics}
-\section{BBS.Numerical.vector\_real}
+\section{BBS.Numerical.vector}
 
 %----------------------------------------------------------
 \chapter{How to Obtain}
@@ -102,19 +102,89 @@ This collections is currently available on GitHub at \url{https://github.com/Bre
 This package is deprecated in favor of the Ada package \package{Ada.Numerics.Generic\_Complex\_Types}.
 
 \section{BBS.Numerical.derivative}
+This is a generic package with a real type parameter, \datatype{F}.
+
+It defines a function type \datatype{test\_func} as \datatype{access function (x : f'Base) return f'Base}.
+
+WARNING:
+The calculations here may involve adding small numbers to large numbers and taking the difference of two nearly equal numbers.
+The world of computers is not the world of mathematics where numbers have infinite precision.  If you aren't careful, you can get into a situation where $(x + h) = x$, or $f(x) = f(x +/- h)$. For example assume that the float type has 6 digits.  Then, if x is 1,000,000 and h is 1, adding x and h is a wasted operation.
+
+The functions are:
+\subsection{Two Point Formulas}
+Two point formula.  Use h $>$ 0 for forward-difference and h $<$ 0 for backward-difference.  Derivative calculated at point x.  While this is the basis for defining the derivative in calculus, it generally shouldn't be used.
+
+\function{pt2(f1 : test\_func; x, h : f'Base) return f'Base}
+\begin{itemize}
+  \item \function{f1} - the function that you with to find the derivative of
+  \item \function{x} - the point at which to calculate the derivative
+  \item \function{h} - the step size
+\end{itemize}
+
+\subsection{Three Point Formulas}
+Compute the derivative at $x$ using values at $x$, $x+h$, and $x+2h$.
+
+\function{pt3a(f1 : test\_func; x, h : f'Base) return f'Base}
+\begin{itemize}
+  \item \function{f1} - the function that you with to find the derivative of
+  \item \function{x} - the point at which to calculate the derivative
+  \item \function{h} - the step size
+\end{itemize}
+
+Compute the derivative at $x$ using values at $x-h$ and $x+h$.
+
+\function{pt3b(f1 : test\_func; x, h : f'Base) return f'Base}
+\begin{itemize}
+  \item \function{f1} - the function that you with to find the derivative of
+  \item \function{x} - the point at which to calculate the derivative
+  \item \function{h} - the step size
+\end{itemize}
+
+\subsection{Five Point Formulas}
+
+Compute the derivative at $x$ using values at $x-2h$, $x-h$, $x+h$, and $x+2h$.
+
+\function{pt5a(f1 : test\_func; x, h : f'Base) return f'Base}
+\begin{itemize}
+  \item \function{f1} - the function that you with to find the derivative of
+  \item \function{x} - the point at which to calculate the derivative
+  \item \function{h} - the step size
+\end{itemize}
+
+Compute the derivative at $x$ using values at $x$, $x+h$, $x+2h$, $x+3h$, and $x+4h$.
+
+\function{pt5b(f1 : test\_func; x, h : f'Base) return f'Base}
+\begin{itemize}
+  \item \function{f1} - the function that you with to find the derivative of
+  \item \function{x} - the point at which to calculate the derivative
+  \item \function{h} - the step size
+\end{itemize}
+
 \section{BBS.Numerical.functions}
+
 \section{BBS.Numerical.integration\_real}
+
 \section{BBS.Numerical.interpolation}
-\section{BBS.Numerical.ode\_real}
+
+\section{BBS.Numerical.ode}
+
 \section{BBS.Numerical.polynomial\_complex}
+
 \section{BBS.Numerical.polynomial\_real}
+
 \section{BBS.Numerical.quaternion}
+
 \section{BBS.Numerical.random}
+
 \section{BBS.Numerical.regression}
+
 \section{BBS.Numerical.roots\_complex}
+
 \section{BBS.Numerical.roots\_real}
+
 \section{BBS.Numerical.statistics}
-\section{BBS.Numerical.vector\_real}
+
+\section{BBS.Numerical.vector}
 
 
 \end{document}

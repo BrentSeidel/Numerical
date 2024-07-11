@@ -9,7 +9,7 @@ with BBS.Numerical.derivative;
 with BBS.Numerical.functions;
 with BBS.Numerical.integration_real;
 with BBS.Numerical.interpolation;
-with BBS.Numerical.ode_real;
+with BBS.Numerical.ode;
 with BBS.Numerical.polynomial_complex;
 with BBS.Numerical.polynomial_real;
 with BBS.Numerical.random;
@@ -30,7 +30,7 @@ package test_cases is
    package funct is new BBS.Numerical.functions(real);
    package integ is new BBS.Numerical.integration_real(real);
    package interp is new BBS.Numerical.interpolation(real);
-   package ode is new BBS.Numerical.ode_real(real);
+   package ode is new BBS.Numerical.ode(real);
    package cpoly is new BBS.Numerical.polynomial_complex(cmplx);
    use type cpoly.poly;
    package poly is new BBS.Numerical.polynomial_real(real);

@@ -1,6 +1,6 @@
 generic
   type F is digits <>;
-package BBS.Numerical.ode_real is
+package BBS.Numerical.ode is
    -- --------------------------------------------------------------------------
    --  Define a type for the function to integrate.
    --
@@ -40,4 +40,4 @@ package BBS.Numerical.ode_real is
    --
    function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base) return params
       with pre => (tf'First = initial'First) and (tf'Last = initial'Last);
-end BBS.Numerical.ode_real;
+end BBS.Numerical.ode;

@@ -1,6 +1,6 @@
 generic
   type F is digits <>;
-package BBS.Numerical.vector_real is
+package BBS.Numerical.vector is
    type vect is array (integer range <>) of f'Base;
    --
    --  Basic arithmatic operations
@@ -25,4 +25,4 @@ package BBS.Numerical.vector_real is
    --
    function normalize(self : in vect) return vect;
    --
-end BBS.Numerical.vector_real;
+end BBS.Numerical.vector;
