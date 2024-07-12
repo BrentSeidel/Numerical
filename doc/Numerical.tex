@@ -254,32 +254,175 @@ With some algebra, this becomes:
 \end{itemize}
 
 \section{BBS.Numerical.integration\_real}
+This is a generic package with a real type parameter, \datatype{F}.
+
+It defines a function type \datatype{test\_func} as \datatype{access function (x : f'Base) return f'Base}.
+
 This package contains routines to perform numerical integration of a function with one parameter.  Thus it computes an approximation to:
 \begin{displaymath}
   y = \int_a^b f(x) dx
 \end{displaymath}
 
+\subsection{Trapezoid Rule}
+This estimates the value of the integral using the composite trapezoid rule.
+
+\function{trapezoid(test : test\_func; lower, upper : f'Base; steps : Positive) return f'Base}
+\begin{itemize}
+  \item $test$ - The function to integrate.  It must match the datatype for \datatype{test\_func}.
+  \item $lower$ - The lower bounds of the integration.
+  \item $upper$ - The upper bounds of the integration.
+  \item $steps$ - The number of steps to use.
+\end{itemize}
+
+\subsection{Simpson's Rule}
+This estimates the value of the integral using the composite Simpson's rule.
+
+\function{simpson(test : test\_func; lower, upper : f'Base; steps : Positive) return f'Base}
+\begin{itemize}
+  \item $test$ - The function to integrate.  It must match the datatype for \datatype{test\_func}.
+  \item $lower$ - The lower bounds of the integration.
+  \item $upper$ - The upper bounds of the integration.
+  \item $steps$ - The number of steps to use.
+\end{itemize}
+
+\subsection{Adaptive Simpson's}
+This estimates the value of the integral using an adaptive version of Simpson's rule.  The interval is divided into two and each side is evaluated using the composite Simpson's with 1 and 2 steps.  The difference between the two evaluations is used as an error estimate.  If the error is two big, the interval is divided again and the function recurses until either the recursion limit is reached or the error is within limits.
+
+\function{adapt\_simpson(test : test\_func; lower, upper : f'Base; tol : in out f'Base;  levels : Natural) return f'Base}
+\begin{itemize}
+  \item $test$ - The function to integrate.  It must match the datatype for \datatype{test\_func}.
+  \item $lower$ - The lower bounds of the integration.
+  \item $upper$ - The upper bounds of the integration.
+  \item $tol$ - The desired error limit.  This also returns the estimated error.
+  \item $levels$ - The allowed recursion depth.
+\end{itemize}
+
 \section{BBS.Numerical.interpolation}
+This is a generic package with a real type parameter, \datatype{F}.  It uses Lagrange polynomials to interpolate a value given a set of points.  The following data types are defined:
+\begin{itemize}
+  \item \datatype{point} - A record with $x$ and $y$ values of type \datatype{F}.
+  \item \datatype{points} - A currently unused array of \datatype{point}.
+\end{itemize}
+Interpolation is most accurate within the range of the provided data points.  Outside of that range, it becomes extrapolation and may become increasingly inaccurate.  While higher order methods tend to be more accurate, there is also a potential for oscillations.  It is important to understand your data - if the data is linear or nearly so, using a 5th order method is probably a mistake.
+
+\function{lag2(p0, p1 : point; x : f'Base) return f'Base}
+\begin{itemize}
+  \item Interpolation with two points is linear interpolation.  The data is approximated as $y = ax+b$.
+  \item $p0$ - The first known point.
+  \item $p1$ - The second known point.
+  \item $x$ - The location to interpolate.
+\end{itemize}
+
+\function{lag3(p0, p1, p2 : point; x : f'Base) return f'Base}
+\begin{itemize}
+  \item Interpolation with three points is quadratic interpolation.  The data is approximated as $y = ax^2+bx+c$.
+  \item $p0$ - The first known point.
+  \item $p1$ - The second known point.
+  \item $p2$ - The third known point.
+  \item $x$ - The location to interpolate.
+\end{itemize}
+
+\function{lag4(p0, p1, p2, p3 : point; x : f'Base) return f'Base}
+\begin{itemize}
+  \item Interpolation with four points is cubic interpolation.  The data is approximated as $y = ax^3+bx^2+cx+d$.
+  \item $p0$ - The first known point.
+  \item $p1$ - The second known point.
+  \item $p2$ - The third known point.
+  \item $p3$ - The fourth known point.
+  \item $x$ - The location to interpolate.
+\end{itemize}
+
+\function{lag5(p0, p1, p2, p3, p4 : point; x : f'Base) return f'Base}
+\begin{itemize}
+  \item Interpolation with five points is quartic interpolation.  The data is approximated as $y = ax^4+bx^3+cx^2+dx+e$.
+  \item $p0$ - The first known point.
+  \item $p1$ - The second known point.
+  \item $p2$ - The third known point.
+  \item $p3$ - The fourth known point.
+  \item $p4$ - The fifth known point.
+  \item $x$ - The location to interpolate.
+\end{itemize}
 
 \section{BBS.Numerical.ode}
+This is a generic package with a real type parameter, \datatype{F}.  It contains methods for numerically solving differential equations.
+
+It defines the following datatypes:
+\begin{itemize}
+   \item \datatype{test\_func} as \datatype{access function (t, y : f'Base) return f'Base}
+   \item \datatype{params} as \datatype{array (integer range <>) of f'Base}
+   \item \datatype{sys\_func} as \datatype{access function (t : f'Base; y : params) return f'Base}
+   \item \datatype{functs} as \datatype{array (integer range <>) of sys\_func}
+\end{itemize}
+
+The goal is to solve an equations:
+\begin{displaymath}
+  \frac{dy}{dt} = f(t, y)
+\end{displaymath}
+ for $a\leq t\leq b$, and $y(a) = \alpha$
+ 
+\subsection{Historical}
+Euler's method is mostly of historic interest.  It may be used if the function is expensive to evaluate and accuracy isn't very important.  It most case however, there are better methods.
+
+\function{euler(tf : test\_func; start, initial, step : f'Base) return f'Base}
+\begin{itemize}
+  \item $tf$ - The differential equation to solve.
+  \item $start$ - The starting independent value for the step ($a$).
+  \item $initial$ - The initial value of the differential equation ($\alpha$).
+  \item $step$ - The step size.
+\end{itemize}
+
+\subsection{Runge-Kutta Methods}
+The 4th order Runge-Kutta method is the workhorse differential equation solver.
+
+\function{rk4(tf : test\_func; start, initial, step : f'Base) return f'Base}
+\begin{itemize}
+  \item $tf$ - The differential equation to solve.
+  \item $start$ - The starting independent value for the step ($a$).
+  \item $initial$ - The initial value of the differential equation ($\alpha$).
+  \item $step$ - The step size.
+\end{itemize}
+
+By combining a specific 4th order with specific 5th order Runge-Kutta method, one can produce an error estimate.  This is the Runge-Kutta-Fehlber method.  The error estimate can be used to adjust the step size, if needed to improve accuracy.
+
+\function{rkf(tf : test\_func; start, initial, step : f'Base; tol : out f'Base) return f'Base}
+\begin{itemize}
+  \item $tf$ - The differential equation to solve.
+  \item $start$ - The starting independent value for the step ($a$).
+  \item $initial$ - The initial value of the differential equation ($\alpha$).
+  \item $step$ - The step size.
+  \item $tol$ - The error estimate as an output.
+\end{itemize}
+
+\subsection{Multistep Methods}
+
+\subsection{Systems of Differential Equations}
 
 \section{BBS.Numerical.polynomial\_complex}
+This is a generic package with a complex package parameter, \datatype{cmplx}.  This has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.
 
 \section{BBS.Numerical.polynomial\_real}
+This is a generic package with a real type parameter, \datatype{F}.
 
 \section{BBS.Numerical.quaternion}
+This is a generic package with a real type parameter, \datatype{F}.
 
 \section{BBS.Numerical.random}
+This is not a generic package.
 
 \section{BBS.Numerical.regression}
+This is a generic package with a real type parameter, \datatype{F}.
 
 \section{BBS.Numerical.roots\_complex}
+This is a generic package with a complex package parameter, \datatype{cmplx}.  This has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.
 
 \section{BBS.Numerical.roots\_real}
+This is a generic package with a real type parameter, \datatype{F}.
 
 \section{BBS.Numerical.statistics}
+This is a generic package with a real type parameter, \datatype{F}.
 
 \section{BBS.Numerical.vector}
+This is a generic package with a real type parameter, \datatype{F}.
 
 
 \end{document}
