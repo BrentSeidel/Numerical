@@ -2,7 +2,7 @@ generic
    type F is digits <>;
    --
    --  Note on naming conventions for probability distributions.  For continuous
-   --  distrubution functions, there are generally two functions.  The one with the
+   --  distribution functions, there are generally two functions.  The one with the
    --  "_pdf" suffix is the probability density function.  The one with the
    --  "_cdf" suffix is the cumulative distribution function.  For discrete functions,
    --  the "_pmf" suffix is for the probability mass function.

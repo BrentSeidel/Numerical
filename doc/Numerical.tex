@@ -69,20 +69,44 @@ This is an object oriented collection of complex number routines.  After writing
 This is a generic package with a real type parameter.  It contains functions to compute the derivative of real valued functions with a single argument.
 
 \section{BBS.Numerical.functions}
-This package contains some functions that are used by other packages.
+This is a generic package with a real type parameter.  It contains some functions that are used by other packages.
 
 \section{BBS.Numerical.integration\_real}
+This is a generic package with a real type parameter.  It contains functions to compute integrals of real valued functions with a single argument.
+
 \section{BBS.Numerical.interpolation}
+This is a generic package with a real type parameter.  It contains functions to interpolate a value between a set of data points.  The functions can also extrapolate (if using a value of $x$ outside of the range of the data points, however this is likely to be inaccurate.
+
 \section{BBS.Numerical.ode}
+This is a generic package with a real type parameter.  It contains functions to solve ordinary differential equations.
+
 \section{BBS.Numerical.polynomial\_complex}
+This is a generic package with a complex type parameter (from \package{Ada.Numerics.Generic\_Complex\_Types}.  It contains functions for polynomials.
+
 \section{BBS.Numerical.polynomial\_real}
+This is a generic package with a real type parameter.  It contains functions for polynomials.
+
 \section{BBS.Numerical.quaternion}
+This is a generic package with a real type parameter.  It contains functions for quaternions.
+
 \section{BBS.Numerical.random}
+This is not a generic package.  It contains functions for generating pseudo-random numbers.
+
 \section{BBS.Numerical.regression}
+This is a generic package with a real type parameter.  It contains functions for performing regression analysis of data.
+
 \section{BBS.Numerical.roots\_complex}
+This is a generic package with a complex type parameter (from \package{Ada.Numerics.Generic\_Complex\_Types}.  It contains functions for finding zeros of functions.
+
 \section{BBS.Numerical.roots\_real}
+This is a generic package with a real type parameter.  It contains functions for finding zeros of functions.
+
 \section{BBS.Numerical.statistics}
+This is a generic package with a real type parameter.  It contains statistics related functions.
+
 \section{BBS.Numerical.vector}
+This is a generic package with a real type parameter.  It contains functions for vectors.
+
 
 %----------------------------------------------------------
 \chapter{How to Obtain}
@@ -91,10 +115,25 @@ This collections is currently available on GitHub at \url{https://github.com/Bre
 
 \section{Dependencies}
 \subsection{Ada Libraries}
+The following Ada libraries are used:
+\begin{itemize}
+  \item \package{Ada.Numerics}
+  \item \package{Ada.Numerics.Generic\_Complex\_Types}
+  \item \package{Ada.Numerics.Generic\_Complex\_Elementary\_Functions}
+  \item \package{Ada.Numerics.Generic\_Elementary\_Functions}
+  \item \package{Ada.Text\_IO} (used for debugging purposes)
+\end{itemize}
 \subsection{Other Libraries}
+This library depends on the root package \package{BBS} available at \url{https://github.com/BrentSeidel/BBS-Ada}.
+Internal packages used within this library are:
+\begin{itemize}
+  \item \package{BBS.Numerical.functions}
+  \item \package{BBS.Numerical.Integration\_real}
+\end{itemize}
 
 %----------------------------------------------------------
-\chapter{Build Instructions}
+\chapter{Usage Instructions}
+This is a library of routines intended to be used by some program.  To use these in your program, edit your *\keyword{.gpr} file to include a line to \keyword{with} the path to \keyword{BBS\_Numerical.gpr}.  Then in your Ada code \keyword{with} in the package(s) you need and use the routines.
 
 %----------------------------------------------------------
 \chapter{API Description}
@@ -108,11 +147,11 @@ It defines a function type \datatype{test\_func} as \datatype{access function (x
 
 WARNING:
 The calculations here may involve adding small numbers to large numbers and taking the difference of two nearly equal numbers.
-The world of computers is not the world of mathematics where numbers have infinite precision.  If you aren't careful, you can get into a situation where $(x + h) = x$, or $f(x) = f(x +/- h)$. For example assume that the float type has 6 digits.  Then, if x is 1,000,000 and h is 1, adding x and h is a wasted operation.
+The world of computers is not the world of mathematics where numbers have infinite precision.  If you aren't careful, you can get into a situation where $(x + h) = x$, or $f(x) = f(x \pm h)$. For example assume that the float type has 6 digits.  Then, if $x$ is $1,000,000$ and $h$ is $1$, adding $x$ and $h$ is a wasted operation.
 
 The functions are:
 \subsection{Two Point Formulas}
-Two point formula.  Use h $>$ 0 for forward-difference and h $<$ 0 for backward-difference.  Derivative calculated at point x.  While this is the basis for defining the derivative in calculus, it generally shouldn't be used.
+Two point formula.  Use $h>0$ for forward-difference and $h<0$ for backward-difference.  Derivative calculated at point $x$.  While this is the basis for defining the derivative in calculus, it generally shouldn't be used.
 
 \function{pt2(f1 : test\_func; x, h : f'Base) return f'Base}
 \begin{itemize}
@@ -161,8 +200,64 @@ Compute the derivative at $x$ using values at $x$, $x+h$, $x+2h$, $x+3h$, and $x
 \end{itemize}
 
 \section{BBS.Numerical.functions}
+This is a generic package with a real type parameter, \datatype{F}.  Its primary purpose is to contain functions that are used by other packages in this library.  They may also be useful to the end user.
+
+\subsection{Gamma Function Related}
+Some of the probability functions require computing $\Gamma(\frac{n}{2})$.  Since $\Gamma(\frac{1}{2})=\sqrt{pi}$, $\Gamma(1) = 1$, and $\Gamma(a+1) = a*\Gamma(a)$, computing $\Gamma(\frac{n}{2})$, where $n$ is a positive integer is simpler than computing the full $\Gamma$ function.
+
+Computes $\Gamma$ of $2n$.  Note that this will overflow for \datatype{Float} for $n>70$.
+
+\function{gamma2n(n : Positive) return f'Base}
+\begin{itemize}
+  \item $n$ - A positive integer representing twice the value for computing $\Gamma$.
+  \item Returns the actual value.
+\end{itemize}
+
+To compute $\Gamma$ of $2n$ where $n>70$, logarithms can be used.  This returns the $log_e(\Gamma(n))$.
+
+\function{lngamma2n(n : Positive) return f'Base}
+\begin{itemize}
+  \item $n$ - A positive integer representing twice the value for computing $\Gamma$.
+  \item Returns the natural log of the value.
+\end{itemize}
+
+\subsection{Factorial Related}
+The factorial functions are similar to the $\Gamma$ functions.  Since the parameter is not divided by two in this case, overflow will occur for $n>35$.  Thus, as for $\Gamma$, there are two versions.  The first returns the actual value, the second returns the natural log of the value.
+
+\function{factorial(n : Natural) return f'Base}
+\begin{itemize}
+  \item $n$ - A natural integer representing.
+  \item Returns the actual factorial value.
+\end{itemize}
+\function{lnfact(n : Natural) return f'Base}
+\begin{itemize}
+  \item $n$ - A natural integer representing.
+  \item Returns the natural log of the factorial value.
+\end{itemize}
+
+\subsection{Combinatorial Related}
+The one function computes the binomial coefficients (aka N choose K).  By definition, this computes:
+\begin{displaymath}
+  \binom{n}{k} = \frac{n!}{k!(b-k)!}
+\end{displaymath}
+With some algebra, this becomes:
+\begin{displaymath}
+  \binom{n}{k} = \prod^k_{i=1}\frac{n+1-i}{i}
+\end{displaymath}
+ which is easier to compute.  The function is:
+
+\function{nChoosek(n, k : Natural) return f'Base}
+\begin{itemize}
+  \item $n$ - The number of items.
+  \item $k$ - The number of items to choose.
+  \item There is a restriction that $n\geq{}k$
+\end{itemize}
 
 \section{BBS.Numerical.integration\_real}
+This package contains routines to perform numerical integration of a function with one parameter.  Thus it computes an approximation to:
+\begin{displaymath}
+  y = \int_a^b f(x) dx
+\end{displaymath}
 
 \section{BBS.Numerical.interpolation}
 
