@@ -394,8 +394,74 @@ By combining a specific 4th order with specific 5th order Runge-Kutta method, on
 \end{itemize}
 
 \subsection{Multistep Methods}
+The multistep methods depends on the values at multiple previous positions rather than just an initial value.  Thus, generally another method (typically a Runge-Kutta) method is used to generate these values.
+
+Fourth order Adams-Bashforth method.  This is a four step explicit method.
+
+\function{ab4(tf : test\_func; start, step : f'Base; i0, i1, i2, i3 : f'Base) return f'Base}
+\begin{itemize}
+  \item $tf$ - The differential equation to solve.
+  \item $start$ - The starting independent value for the step ($a$).
+  \item $step$ - The step size.
+  \item $i0$ - The initial value of the differential equation ($\alpha$).
+  \item $i1$ - The initial value of the differential equation ($\alpha_1$).
+  \item $i2$ - The initial value of the differential equation ($\alpha_2$).
+  \item $i3$ - The initial value of the differential equation ($\alpha_3$).
+\end{itemize}
+
+Fourth order Adams-Moulton method.  This is a three step implicit method.
+
+\function{am4(tf : test\_func; start, step : f'Base; i0, i1, i2, i3 : f'Base) return f'Base}
+\begin{itemize}
+  \item $tf$ - The differential equation to solve.
+  \item $start$ - The starting independent value for the step ($a$).
+  \item $step$ - The step size.
+  \item $i0$ - The initial value of the differential equation ($\alpha$).
+  \item $i1$ - The initial value of the differential equation ($\alpha_1$).
+  \item $i2$ - The initial value of the differential equation ($\alpha_2$).
+  \item $i3$ - The initial value of the differential equation ($\alpha_3$).
+\end{itemize}
+
+Fourth order Adams-Bashforth/Adams-Moutlton method.  This uses the Adams-Bashforth method to predict the final value and then uses the Adams-Moulton method to refine that value as a corrector method.
+
+\function{abam4(tf : test\_func; start, step : f'Base; i0, i1, i2, i3 : f'Base) return f'Base}
+\begin{itemize}
+  \item $tf$ - The differential equation to solve.
+  \item $start$ - The starting independent value for the step ($a$).
+  \item $step$ - The step size.
+  \item $i0$ - The initial value of the differential equation ($\alpha$).
+  \item $i1$ - The initial value of the differential equation ($\alpha_1$).
+  \item $i2$ - The initial value of the differential equation ($\alpha_2$).
+  \item $i3$ - The initial value of the differential equation ($\alpha_3$).
+\end{itemize}
 
 \subsection{Systems of Differential Equations}
+The previous methods solve a single first order differential equation.  If you have a higher order equation or a system of coupled equations, then you need a method that works on systems of differential equations.  An nth order system of first order equations has the form:
+\begin{align*}
+  \frac{dy_1}{dt} &= f_1(t, y_1, ..., y_n) \\
+  \frac{dy_2}{dt} &= f_2(t, y_1, ..., y_n) \\
+  &\vdots\\
+  \frac{dy_n}{dt} &= f_n(t, y_1, ..., y_n)
+\end{align*}
+with $a\leq t\leq b$, and initial conditions:
+\begin{align*}
+  y_1(a) &= \alpha_1 \\
+  y_2(a) &= \alpha_2 \\
+  &\vdots \\
+  y_n(a) &= \alpha_n
+\end{align*}
+
+To solve higher order differential equations, they need to be transformed into a system of first order equations.
+
+\function{function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base) return params}
+\begin{itemize}
+  \item $tf$ - An array containing the system of differential equations to solve ($f_1 ... f_n$).
+  \item $start$ - The starting independent value for the step ($a$).
+  \item $initial$ - An array containing the initial values for the system of differential equation ($\alpha_1 ... \alpha_n$).
+  \item $step$ - The step size.
+  \item There is a restriction that the array bounds for $tf$ and $initial$ must be the same.
+  \item The returned array has the same bounds as $tf$ and $initial$.
+\end{itemize}
 
 \section{BBS.Numerical.polynomial\_complex}
 This is a generic package with a complex package parameter, \datatype{cmplx}.  This has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.
