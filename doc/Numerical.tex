@@ -764,7 +764,27 @@ Return the next random number as a floating point in the range 0.0 to 1.0.  This
 \end{itemize}
 
 \section{BBS.Numerical.regression}
-This is a generic package with a real type parameter, \datatype{F}.
+This is a generic package with a real type parameter, \datatype{F}.  It defines the following datatypes:
+\begin{itemize}
+  \item \datatype{point} which is a record of two fields: $x$ and $y$, both of which are \datatype{F'Base}.
+  \item \datatype{data\_array} as an array of \datatype{point}.
+  \item \datatype{simple\_linreg\_result} is a record containing the results of simple linear regression.  The fields are:
+  \begin{itemize}
+    \item $a$ - The Y intercept
+    \item $b$ - The slope
+    \item $SSe$ - The sum of square errors
+    \item $variance$ - The sum of square errors normalized by the number of data points (actually $n-2$).
+  \end{itemize}
+\end{itemize}
+
+\subsection{Simple Linear Regression}
+Given a set of ($x$, $y$) points where $x$ is assumed to have no error, find the line, $y=ax+b$ that best fits the data.
+
+\function{simple\_linear(d : data\_array) return simple\_linreg\_result}
+\begin{itemize}
+  \item $d$ - An array of the data points to analyze.
+  \item Returns a record of type \datatype{simple\_linreg\_result} containing the parameters for the line as well as estimates of how good the fit is.
+\end{itemize}
 
 \section{BBS.Numerical.roots\_complex}
 This is a generic package with a complex package parameter, \datatype{cmplx}.  This has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.
