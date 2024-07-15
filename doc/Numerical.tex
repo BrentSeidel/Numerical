@@ -787,10 +787,78 @@ Given a set of ($x$, $y$) points where $x$ is assumed to have no error, find the
 \end{itemize}
 
 \section{BBS.Numerical.roots\_complex}
-This is a generic package with a complex package parameter, \datatype{cmplx}.  This has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.
+This is a generic package with a complex package parameter, \datatype{cmplx}.  This has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.  It contains methods for finding roots of equations with complex variables.
+
+It defines the following datatypes:
+\begin{itemize}
+   \item \datatype{test\_func} as \datatype{access function (x : cmplx.complex) return cmplx.complex}
+   \item \datatype{errors} as an enumeration of \datatype{(none, bad\_args, no\_solution)}
+\end{itemize}
+
+Solve for (possibly) complex roots using Mueller's method.  Mueller's method starts with three initial approximations to the root and solves the parabola through these three points to produce the next approximation.
+
+\function{mueller(test : test\_func; x0, x2 : in out cmplx.complex; limit : in out Positive; err : out errors) return cmplx.complex}
+\begin{itemize}
+  \item $test$ - The function to find a root of.
+  \item $x0$ and $x2$ - Starting points for the root finding
+  \item $limit$ - The number of iterations.
+  \item $err$ - An error code.
+  \item Returns an estimate of a root of the function.
+\end{itemize}
 
 \section{BBS.Numerical.roots\_real}
-This is a generic package with a real type parameter, \datatype{F}.
+This is a generic package with a real type parameter, \datatype{F}.  It contains methods for finding roots of equations with complex variables.
+
+It defines the following datatypes:
+\begin{itemize}
+   \item \datatype{test\_func} as \datatype{access function (x : f'Base) return f'Base}
+   \item \datatype{errors} as an enumeration of \datatype{(none, bad\_args, no\_solution)}
+\end{itemize}
+
+\subsection{Linear Methods}
+If there is an odd number of roots between the lower and upper limits, the bisection algorithm will always converge.  Each iteration simply halves the interval between the limits, keeping a root between them.  The result is the midpoint of the final interval after the specified number of iterations.
+
+The lower and upper values are updated during the iterations to provide an interval containing the root.
+
+\function{bisection(test : test\_func; lower, upper : in out f'Base; limit : Positive; err : out errors) return f'Base}
+\begin{itemize}
+  \item $test$ - The function to find a root of.
+  \item $lower$ - The lower bound of the interval for the root.
+  \item $upper$ - The upper bound of the interval for the root.
+  \item $limit$ - The number of iterations.
+  \item $err$ - An error code.
+  \item Returns an estimate of a root of the function.
+\end{itemize}
+
+If there is an odd number of roots between the lower and upper limits, the secant method will always converge.  Each stage of the iteration identifies a point where a line between the lower and upper values crosses the axis.  This point is used instead of the midpoint in the bisection algorithm.
+
+Depending on the function, this can converge to a root much faster than the bisection algorithm.  On the other had, it can also converge much slower.
+
+The lower and upper values are updated during the iterations to provide an interval containing the root.  If the root is exact, the lower and upper values are equal to the returned value.
+
+This method will fail if during the process, the function values at the upper and lower bounds are ever equal.  This will cause a divide by zero error.
+
+\function seacant(test : test\_func; lower, upper : in out f'Base; limit : Positive; err : out errors) return f'Base;
+\begin{itemize}
+  \item $test$ - The function to find a root of.
+  \item $lower$ - The lower bound of the interval for the root.
+  \item $upper$ - The upper bound of the interval for the root.
+  \item $limit$ - The number of iterations.
+  \item $err$ - An error code.
+  \item Returns an estimate of a root of the function.
+\end{itemize}
+
+\subsection{Mueller's Method}
+Solve for a root using Mueller's method.  Mueller's method starts with three initial approximations to the root and solves the parabola through these three points to produce the next approximation.
+
+\function{mueller(test : test\_func; x0, x2 : in out f'Base; limit : in out Positive; err : out errors) return f'Base}
+\begin{itemize}
+  \item $test$ - The function to find a root of.
+  \item $x0$ and $x2$ - Starting points for the root finding
+  \item $limit$ - The number of iterations.
+  \item $err$ - An error code.
+  \item Returns an estimate of a root of the function.
+\end{itemize}
 
 \section{BBS.Numerical.statistics}
 This is a generic package with a real type parameter, \datatype{F}.

@@ -1,4 +1,3 @@
---with BBS.Numerical.complex_real;
 with Ada.Numerics.Generic_Complex_Types;
 generic
    with package cmplx is new Ada.Numerics.Generic_Complex_Types(<>);
