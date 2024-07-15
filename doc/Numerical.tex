@@ -25,6 +25,11 @@
 %
 \usepackage{listings}
 %
+%  For bibliography
+%
+%\usepackage{biblatex}
+%\addbibresource{Numerical.bib}
+%
 % Macro definitions
 %
 \newcommand{\operation}[1]{\textbf{\texttt{#1}}}
@@ -464,7 +469,87 @@ To solve higher order differential equations, they need to be transformed into a
 \end{itemize}
 
 \section{BBS.Numerical.polynomial\_complex}
-This is a generic package with a complex package parameter, \datatype{cmplx}.  This has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.
+This is a generic package with a complex package parameter, \datatype{cmplx}.  This parameter has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.
+
+The package defines the datatype \datatype{poly} as \datatype{array (Natural range  <>) of cmplx.Complex}.  Polynomials are implemented as an array of coefficients where the index in the array represents the exponent of the independent variable.  The index range starts from 0 and extends to the order of the polynomial.  This package contains operations on polynomials with complex number coefficients and independent variable.
+
+\subsection{Basic Operations}
+The basic binary operations on polynomials, addition (`+'), subtraction (`-'), and multiplication (`*') are implemented and assigned to the operators.  Unary negation ('-') is implemented and assigned to the `-' operator.  Multiplication of a polynomial by a scalar is implemented and assigned to the `*' operator for both scalar first and scalar last.
+
+Division is based on the \function{poludiv()} implementation of synthetic division in \cite{NR-C}.  It divides two polynomials and returns a remainder and quotient.
+\begin{align*}
+  \frac{u}{v} = q, r
+\end{align*}
+\function{divide(u, v : poly; q : out poly; r : out poly)}
+\begin{itemize}
+  \item $u$ - The numerator for division.
+  \item $v$ - The denominator for division.
+  \item $q$ - The quotient result of the division.
+  \item $r$ - The remainder from the division.
+  \item This is a procedure, thus nothing is returned.
+\end{itemize}
+
+\subsection{Other Operations}
+
+Evaluate a polynomial at a specific value of the independent variable.
+
+\function{evaluate(p : poly; x : cmplx.Complex) return cmplx.Complex}
+\begin{itemize}
+  \item $p$ - The polynomial to evaluate.
+  \item $x$ - The independent variable.
+  \item Returns the value of the polynomial evaluated at $x$.
+\end{itemize}
+
+Eliminate any leading coefficients with a zero value.  For example $0x^3+x^2+3x+4$ gets trimmed to $x^2+3x+4$.
+
+\function{trim(p : poly) return poly}
+\begin{itemize}
+  \item $p$ - The polynomial to trim.
+  \item Returns the trimmed polynomial of order equal to or less than the original polynomial.
+\end{itemize}
+
+Determine the order of a polynomial.  That is the maximum index with a non-zero value.
+
+\function{order(p : poly) return Natural}
+\begin{itemize}
+  \item $p$ - The polynomial to determine the order of.
+  \item Returns the order of the polynomial.
+\end{itemize}
+
+\subsection{Utility}
+For development or debugging purposes a simple print polynomial procedure is provided.
+
+\function{print(p : poly; fore, aft, exp : Natural)}
+\begin{itemize}
+  \item $p$ - The polynomial to print.
+  \item fore, aft, and exp - values passed in for floating point formatting.
+  \item This is a procedure so no value is returned.  A representation of the polynomial is displayed on the default output.
+\end{itemize}
+
+\subsection{Calculus}
+Integrals and derivatives of polynomials are fairly easy to generate.  So, functions are provided to take a polynomial and return the integral or the derivative.
+\begin{align*}
+  \int ax^n dx = a\frac{x^{n+1}}{n+1}+C
+\end{align*}
+The resulting polynomial for integration has order one greater than the original polynomial.
+
+\function{integrate(p : poly; c : cmplx.Complex) return poly}
+\begin{itemize}
+  \item $p$ - The polynomial to integrate.
+  \item $c$ - The constant term.
+  \item Returns the integral of $p$.
+\end{itemize}
+
+\begin{align*}
+  \frac{d}{dx}x^n = n x^{n-1}
+\end{align*}
+The resulting polynomial for differentiation has order one less than the original polynomial.
+
+\function{derivative(p : poly) return poly}
+\begin{itemize}
+  \item $p$ - The polynomial to differentiate.
+  \item Returns the derivative of the original polynomial.
+\end{itemize}
 
 \section{BBS.Numerical.polynomial\_real}
 This is a generic package with a real type parameter, \datatype{F}.
@@ -475,6 +560,7 @@ This is a generic package with a real type parameter, \datatype{F}.
 \section{BBS.Numerical.random}
 This is not a generic package.
 
+\cite{MT19937}
 \section{BBS.Numerical.regression}
 This is a generic package with a real type parameter, \datatype{F}.
 
@@ -490,6 +576,11 @@ This is a generic package with a real type parameter, \datatype{F}.
 \section{BBS.Numerical.vector}
 This is a generic package with a real type parameter, \datatype{F}.
 
+\nocite{NA3rd}
+\bibliographystyle{plain}
+\bibliography{Numerical.bib}
+
+%\printbibliography
 
 \end{document}
 

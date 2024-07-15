@@ -8,6 +8,8 @@ doc/*.aux
 doc/*.log
 doc/*.synctex.gz
 doc/*.toc
+doc/*.bbl
+doc/*.blg
 
 # Ada Library Information
 *.ali
