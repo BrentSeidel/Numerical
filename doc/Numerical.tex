@@ -38,6 +38,7 @@
 \newcommand{\constant}[1]{\emph{\texttt{#1}}}
 \newcommand{\keyword}[1]{\texttt{#1}}
 \newcommand{\datatype}[1]{\texttt{#1}}
+\newcommand{\uvec}[1]{\textnormal{\bfseries{#1}}}
 %
 % Front Matter
 %
@@ -474,7 +475,7 @@ This is a generic package with a complex package parameter, \datatype{cmplx}.  T
 The package defines the datatype \datatype{poly} as \datatype{array (Natural range  <>) of cmplx.Complex}.  Polynomials are implemented as an array of coefficients where the index in the array represents the exponent of the independent variable.  The index range starts from 0 and extends to the order of the polynomial.  This package contains operations on polynomials with complex number coefficients and independent variable.
 
 \subsection{Basic Operations}
-The basic binary operations on polynomials, addition (`+'), subtraction (`-'), and multiplication (`*') are implemented and assigned to the operators.  Unary negation ('-') is implemented and assigned to the `-' operator.  Multiplication of a polynomial by a scalar is implemented and assigned to the `*' operator for both scalar first and scalar last.
+The basic binary operations on polynomials, addition (`+'), subtraction (`-'), and multiplication (`*') are implemented and assigned to the operators.  Unary negation (`-') is implemented and assigned to the `-' operator.  Multiplication of a polynomial by a scalar is implemented and assigned to the `*' operator for both scalar first and scalar last.
 
 Division is based on the \function{poludiv()} implementation of synthetic division in \cite{NR-C}.  It divides two polynomials and returns a remainder and quotient.
 \begin{align*}
@@ -554,8 +555,120 @@ The resulting polynomial for differentiation has order one less than the origina
 \section{BBS.Numerical.polynomial\_real}
 This is a generic package with a real type parameter, \datatype{F}.
 
+The package defines the datatype \datatype{poly} as \datatype{array (Natural range  <>) of f'Base}.  Polynomials are implemented as an array of coefficients where the index in the array represents the exponent of the independent variable.  The index range starts from 0 and extends to the order of the polynomial.  This package contains operations on polynomials with real number coefficients and independent variable.
+
+\subsection{Basic Operations}
+The basic binary operations on polynomials, addition (`+'), subtraction (`-'), and multiplication (`*') are implemented and assigned to the operators.  Unary negation (`-') is implemented and assigned to the `-' operator.  Multiplication of a polynomial by a scalar is implemented and assigned to the `*' operator for both scalar first and scalar last.
+
+Division is based on the \function{poludiv()} implementation of synthetic division in \cite{NR-C}.  It divides two polynomials and returns a remainder and quotient.
+\begin{align*}
+  \frac{u}{v} = q, r
+\end{align*}
+\function{divide(u, v : poly; q : out poly; r : out poly)}
+\begin{itemize}
+  \item $u$ - The numerator for division.
+  \item $v$ - The denominator for division.
+  \item $q$ - The quotient result of the division.
+  \item $r$ - The remainder from the division.
+  \item This is a procedure, thus nothing is returned.
+\end{itemize}
+
+\subsection{Other Operations}
+
+Evaluate a polynomial at a specific value of the independent variable.
+
+\function{evaluate(p : poly; x : f'Base) return f'Base}
+\begin{itemize}
+  \item $p$ - The polynomial to evaluate.
+  \item $x$ - The independent variable.
+  \item Returns the value of the polynomial evaluated at $x$.
+\end{itemize}
+
+Eliminate any leading coefficients with a zero value.  For example $0x^3+x^2+3x+4$ gets trimmed to $x^2+3x+4$.
+
+\function{trim(p : poly) return poly}
+\begin{itemize}
+  \item $p$ - The polynomial to trim.
+  \item Returns the trimmed polynomial of order equal to or less than the original polynomial.
+\end{itemize}
+
+Determine the order of a polynomial.  That is the maximum index with a non-zero value.
+
+\function{order(p : poly) return Natural}
+\begin{itemize}
+  \item $p$ - The polynomial to determine the order of.
+  \item Returns the order of the polynomial.
+\end{itemize}
+
+\subsection{Utility}
+For development or debugging purposes a simple print polynomial procedure is provided.
+
+\function{print(p : poly; fore, aft, exp : Natural)}
+\begin{itemize}
+  \item $p$ - The polynomial to print.
+  \item fore, aft, and exp - values passed in for floating point formatting.
+  \item This is a procedure so no value is returned.  A representation of the polynomial is displayed on the default output.
+\end{itemize}
+
+\subsection{Calculus}
+Integrals and derivatives of polynomials are fairly easy to generate.  So, functions are provided to take a polynomial and return the integral or the derivative.
+\begin{align*}
+  \int ax^n dx = a\frac{x^{n+1}}{n+1}+C
+\end{align*}
+The resulting polynomial for integration has order one greater than the original polynomial.
+
+\function{integrate(p : poly; c : f'Base) return poly}
+\begin{itemize}
+  \item $p$ - The polynomial to integrate.
+  \item $c$ - The constant term.
+  \item Returns the integral of $p$.
+\end{itemize}
+
+\begin{align*}
+  \frac{d}{dx}x^n = n x^{n-1}
+\end{align*}
+The resulting polynomial for differentiation has order one less than the original polynomial.
+
+\function{derivative(p : poly) return poly}
+\begin{itemize}
+  \item $p$ - The polynomial to differentiate.
+  \item Returns the derivative of the original polynomial.
+\end{itemize}
+
 \section{BBS.Numerical.quaternion}
 This is a generic package with a real type parameter, \datatype{F}.
+
+Quaternions are an extension of complex numbers into three dimensions.  A quaternion $q$ is defined as follows:
+\begin{align*}
+  q=a+b\uvec{i}+c\uvec{j}+d\uvec{k}
+\end{align*}
+Where
+\begin{align*}
+  \uvec{i}^2+\uvec{j}^2+\uvec{k}^2=\uvec{i}\uvec{j}\uvec{k}=-1
+\end{align*}
+
+This package defines the datatype \datatype{quaternion} as a tagged record with fields $r$, $i$, $j$, and $k$, each of type \datatype{F'Base}.  This means that it is treated as an object and some of the functions can be called in object oriented fashion.
+
+\subsection{Basic Operations}
+The basic binary operations on polynomials, addition (`+'), subtraction (`-'), multiplication (`*'), and division (`/') are implemented and assigned to the operators.  Multiplication of a polynomial by a scalar is implemented and assigned to the `*' operator for both scalar first and scalar last.  Note that with quaternions, multiplication is not necessarily commutative.  That is, in general $q_1 q_2 \neq q_2 q_1$.
+
+\subsection{Other Operations}
+
+Compute the magnitude of a quaternion (similar to absolute value) using $|q| = \sqrt{a^2+b^2+c^2+d^2}$.  Note that overflow is possible if any of $a$, $b$, $c$, $d$ are greater than the square root of the maximum value of \datatype{F'Base}.
+
+\function{magnitude(self : in quaternion) return f'Base}
+\begin{itemize}
+  \item $self$ - The quaternion to have its magnitude returned.
+  \item Returns the magnitude of $self$.
+\end{itemize}
+
+Scale a quaternion to have a magnitude of 1 (a unit vector).  Since the magnitude is computed to be used as a scale factor, the same comments about overflow apply here.
+
+\function{normalize(self : in quaternion) return quaternion}
+\begin{itemize}
+  \item $self$ - The quaternion to be scaled.
+  \item Returns a unit quaternion with the same direction as $self$.
+\end{itemize}
 
 \section{BBS.Numerical.random}
 This is not a generic package.
