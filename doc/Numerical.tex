@@ -673,7 +673,96 @@ Scale a quaternion to have a magnitude of 1 (a unit vector).  Since the magnitud
 \section{BBS.Numerical.random}
 This is not a generic package.
 
-\cite{MT19937}
+The Ada standard doesn't specify the random number generator to be used.  This package provides two different methods of generating a sequence of pseudo-random numbers.  This package defines an abstract tagged type, \datatype{RNG}, which is used to specify the operations that all random number generators need to provide.  It also defines the type \datatype{double} as \datatype{digits 12}.  This type is used to convert the \datatype{uint32} output of the random number generator into a real number in the range 0.0 to 1.0.
+
+I wrote implementations of these in Java around 2010.  The following routines are based on the Java routines translated into Ada.
+
+\subsection{Linear Congruent Generator}
+The linear congruent generator is based on algorithms in \cite{NR-C}.  It provides a datatype \datatype{LCG} which defines an object containing the parameters and state for the generator.  This allows for multiple random number streams with the same or different parameters.
+
+The linear congruent generator is based on the formula:
+\begin{align*}
+  R_{n+1} = (aR_n + c) \mod modulus
+\end{align*}
+where $R_0$ is the starting point or seed of the generator.  This generator is fairly fast and has minimal state information.  With a proper choice of parameters, if can produce decent results.  With an improper choice of parameters, the results are not very random.
+
+Initialize the \datatype{LCG} object to some default values.
+
+\function{init(self : in out LCG)}
+\begin{itemize}
+  \item $self$ - The LCG object to initialize.
+\end{itemize}
+
+Initialize the \datatype{LCG} object with specified parameters.  Since the linear-congruent generator is commonly used, parameters can be chosen to emulate the sequence from many other systems.
+
+\function{init(self : in out LCG; seed, modulus, a, c : uint32)}
+\begin{itemize}
+  \item $self$ - The LCG object to initialize.
+  \item $seed$ - The initial value for the generator.
+  \item $modulus$ - The modulus for the generator.
+  \item $a$ - The $a$ coefficient in the generator formula.
+  \item $c$ - The $c$ coefficient in the generator formula.
+\end{itemize}
+
+The initial, ($seed$) value can be sent in a generator without changing the other values.
+
+
+\function{setSeed(self : in out LCG; seed : uint32)}
+\begin{itemize}
+  \item $self$ - The LCG object to adjust.
+  \item $seed$ - The new seed value.
+\end{itemize}
+
+Return the next random number in raw format as a \datatype{uint32}.
+
+\function{getNext(self : in out LCG) return uint32}
+\begin{itemize}
+  \item $self$ - The LCG object to get the next random number from.
+  \item Returns the next \datatype{uint32} in the sequence.
+\end{itemize}
+
+Return the next random number as a floating point in the range 0.0 to 1.0.  This can then be cast to the desired real number type.
+
+\function{getNextF(self : in out LCG) return double}
+\begin{itemize}
+  \item $self$ - The LCG object to get the next random number from.
+  \item Returns the next real number in the sequence.
+\end{itemize}
+
+\subsection{Mersenne Twister Generator}
+The mersenne twister generator is based on algorithms in \cite{MT19937}.  It provides a datatype \datatype{MT} which defines an object containing the parameters and state for the generator.  This allows for multiple random number streams with the same or different parameters.  While this generator is fairly fast, it requires about 624 \datatype{uint32} values of state information, thus considerably more memory than \datatype{LCG}.
+
+Initialize the \datatype{MT} object to some default values.
+
+\function{init(self : in out MT)}
+\begin{itemize}
+  \item $self$ - The MT object to initialize.
+\end{itemize}
+
+Initialize the \datatype{MT} object with specified seed.
+
+\function{init(self : in out MT; seed : uint32)}
+\begin{itemize}
+  \item $self$ - The LCG object to initialize.
+  \item $seed$ - The initial value for the generator.
+\end{itemize}
+
+Return the next random number in raw format as a \datatype{uint32}.
+
+\function{getNext(self : in out MT) return uint32}
+\begin{itemize}
+  \item $self$ - The MT object to get the next random number from.
+  \item Returns the next \datatype{uint32} in the sequence.
+\end{itemize}
+
+Return the next random number as a floating point in the range 0.0 to 1.0.  This can then be cast to the desired real number type.
+
+\function{getNextF(self : in out MT) return double}
+\begin{itemize}
+  \item $self$ - The MT object to get the next random number from.
+  \item Returns the next real number in the sequence.
+\end{itemize}
+
 \section{BBS.Numerical.regression}
 This is a generic package with a real type parameter, \datatype{F}.
 
@@ -689,11 +778,11 @@ This is a generic package with a real type parameter, \datatype{F}.
 \section{BBS.Numerical.vector}
 This is a generic package with a real type parameter, \datatype{F}.
 
+\clearpage
+\addcontentsline{toc}{chapter}{Bibleography}
 \nocite{NA3rd}
 \bibliographystyle{plain}
 \bibliography{Numerical.bib}
-
-%\printbibliography
 
 \end{document}
 
