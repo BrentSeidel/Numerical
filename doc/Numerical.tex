@@ -1031,7 +1031,32 @@ Use the one sample t test to compare the mean of a sample to a specified mean.  
 \end{itemize}
 
 \section{BBS.Numerical.vector}
-This is a generic package with a real type parameter, \datatype{F}.
+This is a generic package with a real type parameter, \datatype{F}.  It contains some vector related routines.  It defines the datatype \datatype{vect} as \datatype{array (integer range <>) of f'Base}
+
+\subsection{Basic Operations}
+Addition (`+') and subtraction (`-') of vectors is defined and assigned to the operators.  These operations require both vectors to have the same index ranges and return a vector with the same index range.
+
+Multiplication (`*') of vectors is defined and assigned to the operator.  It requires both vectors to have the same index and returns the scaler dot product of the vectors.
+
+Multiplication (`*') of a vector by a scaler is defined and assigned to the operator for both scaler first and scaler last.  It returns a vector with the same index range as the source vector.
+
+\subsection{Other Operations}
+
+Compute the magnitude of a vector by taking the square root of the sum of the squares of the elements.  Note that overflow is possible if any of the elements are greater than the square root of the maximum value of \datatype{F'Base}.
+
+\function{magnitude(self : in vect) return f'Base}
+\begin{itemize}
+  \item $self$ - The vector to take the magnitude of.
+  \item Returns the magnitude of the vector.
+\end{itemize}
+
+Scale the elements in a vector so that the vector has a magnitude of one.  The same overflow warning for the \function{magnitude} function also apply here.
+
+\function{normalize(self : in vect) return vect}
+\begin{itemize}
+  \item $self$ - The vector to normalize.
+  \item Returns the normalized vector.
+\end{itemize}
 
 \clearpage
 \addcontentsline{toc}{chapter}{Bibleography}
