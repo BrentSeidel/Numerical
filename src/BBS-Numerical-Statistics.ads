@@ -16,7 +16,7 @@ package BBS.Numerical.statistics is
    --
    function mean(d : data_array) return F'Base;
    --
-   --  Compute the median of an array of data
+   --  Compute the limits of an array of data
    --
    procedure limits(d : data_array; min : out F'Base; max : out F'Base);
    --

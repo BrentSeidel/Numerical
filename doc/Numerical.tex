@@ -849,7 +849,15 @@ This method will fail if during the process, the function values at the upper an
 \end{itemize}
 
 \subsection{Mueller's Method}
-Solve for a root using Mueller's method.  Mueller's method starts with three initial approximations to the root and solves the parabola through these three points to produce the next approximation.
+Mueller's method uses three points to model a quadratic curve and uses that to find a candidate root.    Unlike the bisection method, Mueller's method does not require a root to be located within the three points.  This can potentially be used to find complex roots, however this implementation does not.
+
+This method will fail if the function value at the three points is equal.
+
+In this implementation, the user provides two points and the third is generated as the average of these two points.  This keeps the call the same as the bisection and secant functions.
+
+Note that for this algorithm, the x0 and x2 values are not necessarily meaningful as upper and lower bounds for the root, except that they are both set equal to the return value if the root is exact.
+
+Note that the success may be sensitive to the choice of x0 and x2.  If you know that a root exists and get a no\_solution error, try different values.
 
 \function{mueller(test : test\_func; x0, x2 : in out f'Base; limit : in out Positive; err : out errors) return f'Base}
 \begin{itemize}
@@ -861,7 +869,166 @@ Solve for a root using Mueller's method.  Mueller's method starts with three ini
 \end{itemize}
 
 \section{BBS.Numerical.statistics}
-This is a generic package with a real type parameter, \datatype{F}.
+This is a generic package with a real type parameter, \datatype{F}.  It contains a number of statistics related routines.  It defines the datatype \datatype{data\_array} as \datatype{array (Integer range <>) of F'Base}.
+
+\subsection{Data Statistics}
+These routines compute statistics on the values in a \datatype{data\_array}.
+
+Compute the mean of a set of values.  For $n$ values, computes:
+\begin{align*}
+  m = \frac{1}{n}\sum_{i=1}^n d_i
+\end{align*}
+
+\function{mean(d : data\_array) return F'Base}
+\begin{itemize}
+  \item $d$ - The array containing the data.
+  \item Returns the mean value of the data.
+\end{itemize}
+
+Compute the limits of a set of data.
+
+\function{limits(d : data\_array; min : out F'Base; max : out F'Base)}
+\begin{itemize}
+  \item $d$ - The array containing the data.
+  \item $min$ - Output as the minimum value in the array.
+  \item $max$ - Output as the maximum value in the array.
+  \item This is a procedure and does not return a value.
+\end{itemize}
+
+Compute the variance of a set of data.  Since computing the variance also requires computing the mean, this procedure returns both values.
+
+\function{variance(d : data\_array; var : out F'Base; mean : out F'Base)}
+\begin{itemize}
+  \item $d$ - The array containing the data.
+  \item $var$ - Output as the variance of the data in the array.
+  \item $mean$ - Output as the mean of the data in the array.
+  \item This is a procedure and does not return a value.
+\end{itemize}
+
+\subsection{Probability Distributions}
+Note on naming conventions for probability distributions.  For continuous distribution functions, there are generally two functions.  The one with the ``\_pdf'' suffix is the probability density function.  The one with the ``\_cdf'' suffix is the cumulative distribution function.  For discrete functions, the ``\_pmf'' suffix is for the probability mass function.
+
+\subsubsection{Normal Distribution}
+Compute the standard normal distribution where the PDF is given by $x = e^{-p^2}$.
+
+\function{normal\_pdf(p : F'Base) return F'Base}
+\begin{itemize}
+  \item $p$ - The value.
+  \item Returns the probability density at point $p$.
+\end{itemize}
+
+Compute the normal distribution with a specified mean and standard deviation ($\sigma$).
+
+\function{normal\_pdf(p, mean, sigma : F'Base) return F'Base}
+\begin{itemize}
+  \item $p$ - The value.
+  \item $mean$ - The mean of the distribution.
+  \item $sigma$ - The standard deviation of the distribution.
+  \item Returns the probability density at point $p$.
+\end{itemize}
+
+Compute the normal cumulative distribution for the standard normal function.  This is computed by integrating the standard normal function from $a$ to $b$.
+\begin{align*}
+  p = \int^b_a e^{-x^2} dx
+\end{align*}
+
+\function{normal\_cdf(a, b : F'Base; steps : Positive) return F'Base}
+\begin{itemize}
+  \item $a$ - Starting point for integration.
+  \item $b$ - Ending point for integration.
+  \item $steps$ - Number of steps for Simpson's rule integration.
+  \item Returns the cumulative probability between $a$ and $b$.
+\end{itemize}
+
+\subsubsection{$\chi^2$ Distribution}
+Compute the $\chi^2$ distribution where the PDF is given by:
+\begin{align*}
+  p = \frac{1}{2^{\frac{k}{2}}\Gamma(\frac{k}{2})}x^{\frac{k}{2}-1}e^{-\frac{x}{2}}
+\end{align*}
+\function{chi2\_pdf(x : f'Base; k : Positive) return f'Base}
+\begin{itemize}
+  \item $x$ - The value.
+  \item $k$ - The number of degrees of freedom.  Must be greater than zero.
+  \item Returns the probability density at point $x$.
+\end{itemize}
+
+Compute the cumulative $\chi^2$ between $a$ and $b$.
+
+\function{chi2\_cdf(a, b : F'Base; k, steps : Positive) return F'Base}
+\begin{itemize}
+  \item $a$ - Starting point for integration.
+  \item $b$ - Ending point for integration.
+  \item $steps$ - Recursion depth for adaptive Simpson's rule integration.
+  \item Returns the cumulative probability between $a$ and $b$.
+\end{itemize}
+
+\subsubsection{Student's T Distribution}
+Compute the student's t distribution where the PDF is given by:
+\begin{align*}
+  p = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{\pi\nu}\Gamma(\frac{\nu}{2})}(1+\frac{t^2}{\nu})^{-\frac{\nu+1}{2}}
+\end{align*}
+\function{studentT\_pdf(t : f'Base; nu : Positive) return f'Base}
+\begin{itemize}
+  \item $t$ - The value.
+  \item $nu$ - Shape parameter ($\nu$).
+  \item Returns the probability density at point $t$.
+\end{itemize}
+
+Compute the cumulative student t between $a$ and $b$.
+
+\function{studentT\_cdf(a, b : F'Base; nu, steps : Positive) return F'Base}
+\begin{itemize}
+  \item $a$ - Starting point for integration.
+  \item $b$ - Ending point for integration.
+  \item $steps$ - Recursion depth for adaptive Simpson's rule integration.
+  \item Returns the cumulative probability between $a$ and $b$.
+\end{itemize}
+
+\subsubsection{Exponential Distribution}
+Compute the exponential distribution where the PDF is given by $\lambda e^{-\lambda x}$.
+
+\function{exp\_pdf(x, lambda : f'Base) return f'Base}
+\begin{itemize}
+  \item $x$ - The value.
+  \item $lambda$ - The shape parameter ($\lambda$)
+  \item Returns the probability at point $x$.
+\end{itemize}
+
+Compute the cumulative exponential between $0$ and $x$.  This is given by $1-e^{-\lambda x}$
+
+\function{exp\_cdf(x, lambda : f'Base) return f'Base}
+\begin{itemize}
+  \item $x$ - The value.
+  \item $lambda$ - The shape parameter ($\lambda$)
+  \item Returns the cumulative probability from $0$ to $x$.
+\end{itemize}
+
+\subsubsection{Poisson Distribution}
+Since the Poisson Distribution is a discrete distribution rather than a cumulative distribution, we compute a probability mass function.  This is given by:
+\begin{align*}
+  p(k) = \frac{\lambda^k e^{-\lambda}}{k!}
+\end{align*}
+\function{poisson\_pmf(k : Natural; lambda : Positive) return f'Base}
+\begin{itemize}
+  \item $k$ - The value.
+  \item $lambda$ - The shape parameter ($\lambda$)
+  \item Returns the probability of $k$.
+\end{itemize}
+
+
+\subsection{Statistical Tests}
+
+\subsubsection{Student's T Tests}
+Use the one sample t test to compare the mean of a sample to a specified mean.  Given the sample mean, $\bar{x}$, the sample standard deviation, $s$, and the sample size, $n$, compute the student's t statistic for the difference between $\bar{x}$ and the specified mean, $\mu_0$.
+
+\function{studentT\_one(x\_bar, mu0, s, n : f'Base) return f'Base}
+\begin{itemize}
+  \item $x_bar$ - The sample mean ($\bar{x}$).
+  \item $mu0$ - The specified mean ($\mu_0$).
+  \item $s$ - The sample standard deviation ($s$).
+  \item $n$ - The number of samples ($n$).
+  \item Returns the t statistic for the difference between the $\bar{x}$ and $\mu_0$.
+\end{itemize}
 
 \section{BBS.Numerical.vector}
 This is a generic package with a real type parameter, \datatype{F}.
