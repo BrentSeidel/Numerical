@@ -472,7 +472,7 @@ To solve higher order differential equations, they need to be transformed into a
 \section{BBS.Numerical.polynomial\_complex}
 This is a generic package with a complex package parameter, \datatype{cmplx}.  This parameter has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.
 
-The package defines the datatype \datatype{poly} as \datatype{array (Natural range  <>) of cmplx.Complex}.  Polynomials are implemented as an array of coefficients where the index in the array represents the exponent of the independent variable.  The index range starts from 0 and extends to the order of the polynomial.  This package contains operations on polynomials with complex number coefficients and independent variable.
+The package defines the datatype \datatype{poly} as \datatype{array (Natural range  <>) of cmplx.Complex}, with a constraint that \datatype{poly'First} is equal to 0.  Polynomials are implemented as an array of coefficients where the index in the array represents the exponent of the independent variable.  The index range starts from 0 and extends to the order of the polynomial.  This package contains operations on polynomials with complex number coefficients and independent variable.
 
 \subsection{Basic Operations}
 The basic binary operations on polynomials, addition (`+'), subtraction (`-'), and multiplication (`*') are implemented and assigned to the operators.  Unary negation (`-') is implemented and assigned to the `-' operator.  Multiplication of a polynomial by a scalar is implemented and assigned to the `*' operator for both scalar first and scalar last.
