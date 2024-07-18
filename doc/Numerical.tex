@@ -773,12 +773,14 @@ This is a generic package with a real type parameter, \datatype{F}.  It defines 
     \item $a$ - The Y intercept
     \item $b$ - The slope
     \item $SSe$ - The sum of square errors
-    \item $variance$ - The sum of square errors normalized by the number of data points (actually $n-2$).
+    \item $var$ - The sum of square errors normalized by the degrees of freedom ($n-2$).
+    \item $Bvar$ - The variance of the slope.
+    \item $cor$ - The correlation coefficient (R) (note that correlation does not imply causation).
   \end{itemize}
 \end{itemize}
 
 \subsection{Simple Linear Regression}
-Given a set of ($x$, $y$) points where $x$ is assumed to have no error, find the line, $y=ax+b$ that best fits the data.
+Given a set of ($x$, $y$) points where $x$ is assumed to have no error, and the errors on $y$ are assumed to have a mean of zero, normal distribution, and constant variance, find the line, $y=ax+b+\epsilon$, where $\epsilon$ is the error, that best fits the data.
 
 \function{simple\_linear(d : data\_array) return simple\_linreg\_result}
 \begin{itemize}

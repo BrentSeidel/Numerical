@@ -50,6 +50,7 @@ package test_cases is
    procedure test_random;
    procedure test_root;
    procedure test_stats;
+   procedure test_regression;
 private
    procedure cmplx_put(n : cmplx.Complex; fore, aft, exp : Natural);
 
