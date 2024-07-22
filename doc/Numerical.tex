@@ -16,7 +16,13 @@
 \geometry{letterpaper}
 %
 \usepackage{url}
+\usepackage{gensymb}
 \usepackage{multicol}
+%
+\usepackage[pdf]{pstricks}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.pdf}
+\DeclareGraphicsRule{.pdf}{pdf}{.pdf}{}
 %
 % Rules to allow import of graphics files in EPS format
 %
@@ -27,11 +33,6 @@
 %  Include the listings package
 %
 \usepackage{listings}
-%
-%  For bibliography
-%
-%\usepackage{biblatex}
-%\addbibresource{Numerical.bib}
 %
 % Macro definitions
 %
@@ -85,7 +86,7 @@ This document is \copyright 2024 Brent Seidel.  All rights reserved.
 \tableofcontents
 
 \mainmatter
-%----------------------------------------------------------
+%========================================================
 \chapter{Introduction}
 
 Back in the 1980s when I was an undergraduate, I took a numerical analysis course and quite enjoyed it.  Then my first job out of college was working on a numerical analysis library for a small startup that went the way of most startups.  I was recently inspired to dig out my old textbook and try implementing some of the routines.  This collection includes some of those, plus others.
@@ -137,8 +138,7 @@ This is a generic package with a real type parameter.  It contains statistics re
 \section{BBS.Numerical.vector}
 This is a generic package with a real type parameter.  It contains functions for vectors.
 
-
-%----------------------------------------------------------
+%========================================================
 \chapter{How to Obtain}
 
 This collections is currently available on GitHub at \url{https://github.com/BrentSeidel/Numerical}.
@@ -161,15 +161,17 @@ Internal packages used within this library are:
   \item \package{BBS.Numerical.Integration\_real}
 \end{itemize}
 
-%----------------------------------------------------------
+%========================================================
 \chapter{Usage Instructions}
 This is a library of routines intended to be used by some program.  To use these in your program, edit your *\keyword{.gpr} file to include a line to \keyword{with} the path to \keyword{BBS\_Numerical.gpr}.  Then in your Ada code \keyword{with} in the package(s) you need and use the routines.
 
-%----------------------------------------------------------
+%========================================================
 \chapter{API Description}
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.complex}
 This package is deprecated in favor of the Ada package \package{Ada.Numerics.Generic\_Complex\_Types}.
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.derivative}
 This is a generic package with a real type parameter, \datatype{F}.
 
@@ -182,8 +184,9 @@ The world of computers is not the world of mathematics where numbers have infini
 The functions are:
 \subsection{Two Point Formulas}
 Two point formula.  Use $h>0$ for forward-difference and $h<0$ for backward-difference.  Derivative calculated at point $x$.  While this is the basis for defining the derivative in calculus, it generally shouldn't be used.
-
-\function{pt2(f1 : test\_func; x, h : f'Base) return f'Base}
+\begin{lstlisting}
+function pt2(f1 : test_func; x, h : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item \function{f1} - the function that you with to find the derivative of
   \item \function{x} - the point at which to calculate the derivative
@@ -192,8 +195,9 @@ Two point formula.  Use $h>0$ for forward-difference and $h<0$ for backward-diff
 
 \subsection{Three Point Formulas}
 Compute the derivative at $x$ using values at $x$, $x+h$, and $x+2h$.
-
-\function{pt3a(f1 : test\_func; x, h : f'Base) return f'Base}
+\begin{lstlisting}
+function pt3a(f1 : test_func; x, h : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item \function{f1} - the function that you with to find the derivative of
   \item \function{x} - the point at which to calculate the derivative
@@ -201,8 +205,9 @@ Compute the derivative at $x$ using values at $x$, $x+h$, and $x+2h$.
 \end{itemize}
 
 Compute the derivative at $x$ using values at $x-h$ and $x+h$.
-
-\function{pt3b(f1 : test\_func; x, h : f'Base) return f'Base}
+\begin{lstlisting}
+function pt3b(f1 : test_func; x, h : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item \function{f1} - the function that you with to find the derivative of
   \item \function{x} - the point at which to calculate the derivative
@@ -212,8 +217,9 @@ Compute the derivative at $x$ using values at $x-h$ and $x+h$.
 \subsection{Five Point Formulas}
 
 Compute the derivative at $x$ using values at $x-2h$, $x-h$, $x+h$, and $x+2h$.
-
-\function{pt5a(f1 : test\_func; x, h : f'Base) return f'Base}
+\begin{lstlisting}
+function pt5a(f1 : test_func; x, h : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item \function{f1} - the function that you with to find the derivative of
   \item \function{x} - the point at which to calculate the derivative
@@ -221,14 +227,16 @@ Compute the derivative at $x$ using values at $x-2h$, $x-h$, $x+h$, and $x+2h$.
 \end{itemize}
 
 Compute the derivative at $x$ using values at $x$, $x+h$, $x+2h$, $x+3h$, and $x+4h$.
-
-\function{pt5b(f1 : test\_func; x, h : f'Base) return f'Base}
+\begin{lstlisting}
+function pt5b(f1 : test_func; x, h : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item \function{f1} - the function that you with to find the derivative of
   \item \function{x} - the point at which to calculate the derivative
   \item \function{h} - the step size
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.functions}
 This is a generic package with a real type parameter, \datatype{F}.  Its primary purpose is to contain functions that are used by other packages in this library.  They may also be useful to the end user.
 
@@ -236,16 +244,18 @@ This is a generic package with a real type parameter, \datatype{F}.  Its primary
 Some of the probability functions require computing $\Gamma(\frac{n}{2})$.  Since $\Gamma(\frac{1}{2})=\sqrt{pi}$, $\Gamma(1) = 1$, and $\Gamma(a+1) = a*\Gamma(a)$, computing $\Gamma(\frac{n}{2})$, where $n$ is a positive integer is simpler than computing the full $\Gamma$ function.
 
 Computes $\Gamma$ of $2n$.  Note that this will overflow for \datatype{Float} for $n>70$.
-
-\function{gamma2n(n : Positive) return f'Base}
+\begin{lstlisting}
+function gamma2n(n : Positive) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $n$ - A positive integer representing twice the value for computing $\Gamma$.
   \item Returns the actual value.
 \end{itemize}
 
 To compute $\Gamma$ of $2n$ where $n>70$, logarithms can be used.  This returns the $log_e(\Gamma(n))$.
-
-\function{lngamma2n(n : Positive) return f'Base}
+\begin{lstlisting}
+function lngamma2n(n : Positive) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $n$ - A positive integer representing twice the value for computing $\Gamma$.
   \item Returns the natural log of the value.
@@ -253,13 +263,16 @@ To compute $\Gamma$ of $2n$ where $n>70$, logarithms can be used.  This returns 
 
 \subsection{Factorial Related}
 The factorial functions are similar to the $\Gamma$ functions.  Since the parameter is not divided by two in this case, overflow will occur for $n>35$.  Thus, as for $\Gamma$, there are two versions.  The first returns the actual value, the second returns the natural log of the value.
-
-\function{factorial(n : Natural) return f'Base}
+\begin{lstlisting}
+function factorial(n : Natural) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $n$ - A natural integer representing.
   \item Returns the actual factorial value.
 \end{itemize}
-\function{lnfact(n : Natural) return f'Base}
+\begin{lstlisting}
+function lnfact(n : Natural) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $n$ - A natural integer representing.
   \item Returns the natural log of the factorial value.
@@ -275,14 +288,18 @@ With some algebra, this becomes:
   \binom{n}{k} = \prod^k_{i=1}\frac{n+1-i}{i}
 \end{displaymath}
  which is easier to compute.  The function is:
-
-\function{nChoosek(n, k : Natural) return f'Base}
+\begin{lstlisting}
+function nChoosek(n, k : Natural) return f'Base
+     with pre => (n >= k);
+\end{lstlisting}
 \begin{itemize}
   \item $n$ - The number of items.
   \item $k$ - The number of items to choose.
+  \item Returns the binomial coefficient for $n$ and $k$.
   \item There is a restriction that $n\geq{}k$
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.integration\_real}
 This is a generic package with a real type parameter, \datatype{F}.
 
@@ -295,8 +312,10 @@ This package contains routines to perform numerical integration of a function wi
 
 \subsection{Trapezoid Rule}
 This estimates the value of the integral using the composite trapezoid rule.
-
-\function{trapezoid(test : test\_func; lower, upper : f'Base; steps : Positive) return f'Base}
+\begin{lstlisting}
+function trapezoid(test : test_func; lower, upper : f'Base; steps : Positive)
+         return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $test$ - The function to integrate.  It must match the datatype for \datatype{test\_func}.
   \item $lower$ - The lower bounds of the integration.
@@ -306,8 +325,10 @@ This estimates the value of the integral using the composite trapezoid rule.
 
 \subsection{Simpson's Rule}
 This estimates the value of the integral using the composite Simpson's rule.
-
-\function{simpson(test : test\_func; lower, upper : f'Base; steps : Positive) return f'Base}
+\begin{lstlisting}
+function simpson(test : test_func; lower, upper : f'Base; steps : Positive)
+         return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $test$ - The function to integrate.  It must match the datatype for \datatype{test\_func}.
   \item $lower$ - The lower bounds of the integration.
@@ -317,8 +338,11 @@ This estimates the value of the integral using the composite Simpson's rule.
 
 \subsection{Adaptive Simpson's}
 This estimates the value of the integral using an adaptive version of Simpson's rule.  The interval is divided into two and each side is evaluated using the composite Simpson's with 1 and 2 steps.  The difference between the two evaluations is used as an error estimate.  If the error is two big, the interval is divided again and the function recurses until either the recursion limit is reached or the error is within limits.
-
-\function{adapt\_simpson(test : test\_func; lower, upper : f'Base; tol : in out f'Base;  levels : Natural) return f'Base}
+\begin{lstlisting}
+function adapt_simpson(test : test_func; lower, upper : f'Base;
+                       tol : in out f'Base;
+                       levels : Natural) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $test$ - The function to integrate.  It must match the datatype for \datatype{test\_func}.
   \item $lower$ - The lower bounds of the integration.
@@ -327,6 +351,7 @@ This estimates the value of the integral using an adaptive version of Simpson's 
   \item $levels$ - The allowed recursion depth.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.interpolation}
 This is a generic package with a real type parameter, \datatype{F}.  It uses Lagrange polynomials to interpolate a value given a set of points.  The following data types are defined:
 \begin{itemize}
@@ -335,7 +360,9 @@ This is a generic package with a real type parameter, \datatype{F}.  It uses Lag
 \end{itemize}
 Interpolation is most accurate within the range of the provided data points.  Outside of that range, it becomes extrapolation and may become increasingly inaccurate.  While higher order methods tend to be more accurate, there is also a potential for oscillations.  It is important to understand your data - if the data is linear or nearly so, using a 5th order method is probably a mistake.
 
-\function{lag2(p0, p1 : point; x : f'Base) return f'Base}
+\begin{lstlisting}
+function lag2(p0, p1 : point; x : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item Interpolation with two points is linear interpolation.  The data is approximated as $y = ax+b$.
   \item $p0$ - The first known point.
@@ -343,7 +370,9 @@ Interpolation is most accurate within the range of the provided data points.  Ou
   \item $x$ - The location to interpolate.
 \end{itemize}
 
-\function{lag3(p0, p1, p2 : point; x : f'Base) return f'Base}
+\begin{lstlisting}
+function lag3(p0, p1, p2 : point; x : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item Interpolation with three points is quadratic interpolation.  The data is approximated as $y = ax^2+bx+c$.
   \item $p0$ - The first known point.
@@ -352,7 +381,9 @@ Interpolation is most accurate within the range of the provided data points.  Ou
   \item $x$ - The location to interpolate.
 \end{itemize}
 
-\function{lag4(p0, p1, p2, p3 : point; x : f'Base) return f'Base}
+\begin{lstlisting}
+function lag4(p0, p1, p2, p3 : point; x : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item Interpolation with four points is cubic interpolation.  The data is approximated as $y = ax^3+bx^2+cx+d$.
   \item $p0$ - The first known point.
@@ -362,7 +393,9 @@ Interpolation is most accurate within the range of the provided data points.  Ou
   \item $x$ - The location to interpolate.
 \end{itemize}
 
-\function{lag5(p0, p1, p2, p3, p4 : point; x : f'Base) return f'Base}
+\begin{lstlisting}
+function lag5(p0, p1, p2, p3, p4 : point; x : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item Interpolation with five points is quartic interpolation.  The data is approximated as $y = ax^4+bx^3+cx^2+dx+e$.
   \item $p0$ - The first known point.
@@ -373,6 +406,7 @@ Interpolation is most accurate within the range of the provided data points.  Ou
   \item $x$ - The location to interpolate.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.ode}
 This is a generic package with a real type parameter, \datatype{F}.  It contains methods for numerically solving differential equations.
 
@@ -393,7 +427,10 @@ The goal is to solve an equations:
 \subsection{Historical}
 Euler's method is mostly of historic interest.  It may be used if the function is expensive to evaluate and accuracy isn't very important.  It most case however, there are better methods.
 
-\function{euler(tf : test\_func; start, initial, step : f'Base) return f'Base}
+\begin{lstlisting}
+function euler(tf : test_func; start, initial, step : f'Base)
+         return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $tf$ - The differential equation to solve.
   \item $start$ - The starting independent value for the step ($a$).
@@ -404,7 +441,10 @@ Euler's method is mostly of historic interest.  It may be used if the function i
 \subsection{Runge-Kutta Methods}
 The 4th order Runge-Kutta method is the workhorse differential equation solver.
 
-\function{rk4(tf : test\_func; start, initial, step : f'Base) return f'Base}
+\begin{lstlisting}
+function rk4(tf : test_func; start, initial, step : f'Base)
+         return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $tf$ - The differential equation to solve.
   \item $start$ - The starting independent value for the step ($a$).
@@ -414,7 +454,10 @@ The 4th order Runge-Kutta method is the workhorse differential equation solver.
 
 By combining a specific 4th order with specific 5th order Runge-Kutta method, one can produce an error estimate.  This is the Runge-Kutta-Fehlber method.  The error estimate can be used to adjust the step size, if needed to improve accuracy.
 
-\function{rkf(tf : test\_func; start, initial, step : f'Base; tol : out f'Base) return f'Base}
+\begin{lstlisting}
+function rkf(tf : test_func; start, initial, step : f'Base;
+         tol : out f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $tf$ - The differential equation to solve.
   \item $start$ - The starting independent value for the step ($a$).
@@ -428,7 +471,10 @@ The multistep methods depends on the values at multiple previous positions rathe
 
 Fourth order Adams-Bashforth method.  This is a four step explicit method.
 
-\function{ab4(tf : test\_func; start, step : f'Base; i0, i1, i2, i3 : f'Base) return f'Base}
+\begin{lstlisting}
+function ab4(tf : test_func; start, step : f'Base; i0, i1, i2, i3 : f'Base)
+         return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $tf$ - The differential equation to solve.
   \item $start$ - The starting independent value for the step ($a$).
@@ -441,7 +487,10 @@ Fourth order Adams-Bashforth method.  This is a four step explicit method.
 
 Fourth order Adams-Moulton method.  This is a three step implicit method.
 
-\function{am4(tf : test\_func; start, step : f'Base; i0, i1, i2, i3 : f'Base) return f'Base}
+\begin{lstlisting}
+function am4(tf : test_func; start, step : f'Base; i0, i1, i2, i3 : f'Base)
+         return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $tf$ - The differential equation to solve.
   \item $start$ - The starting independent value for the step ($a$).
@@ -454,7 +503,10 @@ Fourth order Adams-Moulton method.  This is a three step implicit method.
 
 Fourth order Adams-Bashforth/Adams-Moutlton method.  This uses the Adams-Bashforth method to predict the final value and then uses the Adams-Moulton method to refine that value as a corrector method.
 
-\function{abam4(tf : test\_func; start, step : f'Base; i0, i1, i2, i3 : f'Base) return f'Base}
+\begin{lstlisting}
+function abam4(tf : test_func; start, step : f'Base; i0, i1, i2, i3 : f'Base)
+         return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $tf$ - The differential equation to solve.
   \item $start$ - The starting independent value for the step ($a$).
@@ -483,7 +535,11 @@ with $a\leq t\leq b$, and initial conditions:
 
 To solve higher order differential equations, they need to be transformed into a system of first order equations.
 
-\function{function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base) return params}
+\begin{lstlisting}
+function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base)
+         return params
+      with pre => (tf'First = initial'First) and (tf'Last = initial'Last);
+\end{lstlisting}
 \begin{itemize}
   \item $tf$ - An array containing the system of differential equations to solve ($f_1 ... f_n$).
   \item $start$ - The starting independent value for the step ($a$).
@@ -493,6 +549,7 @@ To solve higher order differential equations, they need to be transformed into a
   \item The returned array has the same bounds as $tf$ and $initial$.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.polynomial\_complex}
 This is a generic package with a complex package parameter, \datatype{cmplx}.  This parameter has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.
 
@@ -501,11 +558,16 @@ The package defines the datatype \datatype{poly} as \datatype{array (Natural ran
 \subsection{Basic Operations}
 The basic binary operations on polynomials, addition (`+'), subtraction (`-'), and multiplication (`*') are implemented and assigned to the operators.  Unary negation (`-') is implemented and assigned to the `-' operator.  Multiplication of a polynomial by a scalar is implemented and assigned to the `*' operator for both scalar first and scalar last.
 
-Division is based on the \function{poludiv()} implementation of synthetic division in \cite{NR-C}.  It divides two polynomials and returns a remainder and quotient.
+Division is based on the \function{polydiv()} implementation of synthetic division in \cite{NR-C}.  It divides two polynomials and returns a remainder and quotient.
 \begin{align*}
   \frac{u}{v} = q, r
 \end{align*}
-\function{divide(u, v : poly; q : out poly; r : out poly)}
+\begin{lstlisting}
+procedure divide(u, v : poly; q : out poly; r : out poly)
+      with pre => (q'Last >= (u'Last - v'Last)) and
+                  (r'Last >= (v'Last - 1)) and
+                  (u'Last >= v'Last);
+\end{lstlisting}
 \begin{itemize}
   \item $u$ - The numerator for division.
   \item $v$ - The denominator for division.
@@ -517,8 +579,9 @@ Division is based on the \function{poludiv()} implementation of synthetic divisi
 \subsection{Other Operations}
 
 Evaluate a polynomial at a specific value of the independent variable.
-
-\function{evaluate(p : poly; x : cmplx.Complex) return cmplx.Complex}
+\begin{lstlisting}
+function evaluate(p : poly; x : cmplx.Complex) return cmplx.Complex;
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to evaluate.
   \item $x$ - The independent variable.
@@ -526,16 +589,19 @@ Evaluate a polynomial at a specific value of the independent variable.
 \end{itemize}
 
 Eliminate any leading coefficients with a zero value.  For example $0x^3+x^2+3x+4$ gets trimmed to $x^2+3x+4$.
-
-\function{trim(p : poly) return poly}
+\begin{lstlisting}
+function trim(p : poly) return poly
+      with post => (trim'Result'Last <= p'Last);
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to trim.
   \item Returns the trimmed polynomial of order equal to or less than the original polynomial.
 \end{itemize}
 
 Determine the order of a polynomial.  That is the maximum index with a non-zero value.
-
-\function{order(p : poly) return Natural}
+\begin{lstlisting}
+function order(p : poly) return Natural;
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to determine the order of.
   \item Returns the order of the polynomial.
@@ -544,7 +610,9 @@ Determine the order of a polynomial.  That is the maximum index with a non-zero 
 \subsection{Utility}
 For development or debugging purposes a simple print polynomial procedure is provided.
 
-\function{print(p : poly; fore, aft, exp : Natural)}
+\begin{lstlisting}
+procedure print(p : poly; fore, aft, exp : Natural);
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to print.
   \item fore, aft, and exp - values passed in for floating point formatting.
@@ -557,7 +625,10 @@ Integrals and derivatives of polynomials are fairly easy to generate.  So, funct
   \int ax^n dx = a\frac{x^{n+1}}{n+1}+C
 \end{align*}
 The resulting polynomial for integration has order one greater than the original polynomial.
-
+\begin{lstlisting}
+function integrate(p : poly; c : cmplx.Complex) return poly
+      with post => (integrate'Result'Last = (p'Last + 1));
+\end{lstlisting}
 \function{integrate(p : poly; c : cmplx.Complex) return poly}
 \begin{itemize}
   \item $p$ - The polynomial to integrate.
@@ -569,13 +640,17 @@ The resulting polynomial for integration has order one greater than the original
   \frac{d}{dx}x^n = n x^{n-1}
 \end{align*}
 The resulting polynomial for differentiation has order one less than the original polynomial.
-
-\function{derivative(p : poly) return poly}
+\begin{lstlisting}
+function derivative(p : poly) return poly
+      with post => (((derivative'Result'Last = (p'Last - 1)) and (p'Last > 0)) or
+                    ((derivative'Result'Last = 0) and (p'Last = 0)));
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to differentiate.
   \item Returns the derivative of the original polynomial.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.polynomial\_real}
 This is a generic package with a real type parameter, \datatype{F}.
 
@@ -588,7 +663,12 @@ Division is based on the \function{poludiv()} implementation of synthetic divisi
 \begin{align*}
   \frac{u}{v} = q, r
 \end{align*}
-\function{divide(u, v : poly; q : out poly; r : out poly)}
+\begin{lstlisting}
+procedure divide(u, v : poly; q : out poly; r : out poly)
+      with pre => (q'Last >= (u'Last - v'Last)) and
+                  (r'Last >= (v'Last - 1)) and
+                  (u'Last >= v'Last);
+\end{lstlisting}
 \begin{itemize}
   \item $u$ - The numerator for division.
   \item $v$ - The denominator for division.
@@ -600,8 +680,9 @@ Division is based on the \function{poludiv()} implementation of synthetic divisi
 \subsection{Other Operations}
 
 Evaluate a polynomial at a specific value of the independent variable.
-
-\function{evaluate(p : poly; x : f'Base) return f'Base}
+\begin{lstlisting}
+function evaluate(p : poly; x : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to evaluate.
   \item $x$ - The independent variable.
@@ -609,16 +690,19 @@ Evaluate a polynomial at a specific value of the independent variable.
 \end{itemize}
 
 Eliminate any leading coefficients with a zero value.  For example $0x^3+x^2+3x+4$ gets trimmed to $x^2+3x+4$.
-
-\function{trim(p : poly) return poly}
+\begin{lstlisting}
+function trim(p : poly) return poly
+      with post => (trim'Result'Last <= p'Last);
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to trim.
   \item Returns the trimmed polynomial of order equal to or less than the original polynomial.
 \end{itemize}
 
 Determine the order of a polynomial.  That is the maximum index with a non-zero value.
-
-\function{order(p : poly) return Natural}
+\begin{lstlisting}
+function order(p : poly) return Natural;
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to determine the order of.
   \item Returns the order of the polynomial.
@@ -626,8 +710,9 @@ Determine the order of a polynomial.  That is the maximum index with a non-zero 
 
 \subsection{Utility}
 For development or debugging purposes a simple print polynomial procedure is provided.
-
-\function{print(p : poly; fore, aft, exp : Natural)}
+\begin{lstlisting}
+procedure print(p : poly; fore, aft, exp : Natural);
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to print.
   \item fore, aft, and exp - values passed in for floating point formatting.
@@ -640,8 +725,10 @@ Integrals and derivatives of polynomials are fairly easy to generate.  So, funct
   \int ax^n dx = a\frac{x^{n+1}}{n+1}+C
 \end{align*}
 The resulting polynomial for integration has order one greater than the original polynomial.
-
-\function{integrate(p : poly; c : f'Base) return poly}
+\begin{lstlisting}
+function integrate(p : poly; c : f'Base) return poly
+      with post => (integrate'Result'Last = (p'Last + 1));
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to integrate.
   \item $c$ - The constant term.
@@ -652,13 +739,17 @@ The resulting polynomial for integration has order one greater than the original
   \frac{d}{dx}x^n = n x^{n-1}
 \end{align*}
 The resulting polynomial for differentiation has order one less than the original polynomial.
-
-\function{derivative(p : poly) return poly}
+\begin{lstlisting}
+function derivative(p : poly) return poly
+      with post => (((derivative'Result'Last = (p'Last - 1)) and (p'Last > 0)) or
+                    ((derivative'Result'Last = 0) and (p'Last = 0)));
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The polynomial to differentiate.
   \item Returns the derivative of the original polynomial.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.quaternion}
 This is a generic package with a real type parameter, \datatype{F}.
 
@@ -679,21 +770,24 @@ The basic binary operations on polynomials, addition (`+'), subtraction (`-'), m
 \subsection{Other Operations}
 
 Compute the magnitude of a quaternion (similar to absolute value) using $|q| = \sqrt{a^2+b^2+c^2+d^2}$.  Note that overflow is possible if any of $a$, $b$, $c$, $d$ are greater than the square root of the maximum value of \datatype{F'Base}.
-
-\function{magnitude(self : in quaternion) return f'Base}
+\begin{lstlisting}
+function magnitude(self : in quaternion) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The quaternion to have its magnitude returned.
   \item Returns the magnitude of $self$.
 \end{itemize}
 
 Scale a quaternion to have a magnitude of 1 (a unit vector).  Since the magnitude is computed to be used as a scale factor, the same comments about overflow apply here.
-
-\function{normalize(self : in quaternion) return quaternion}
+\begin{lstlisting}
+function normalize(self : in quaternion) return quaternion;
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The quaternion to be scaled.
   \item Returns a unit quaternion with the same direction as $self$.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.random}
 This is not a generic package.
 
@@ -708,18 +802,21 @@ The linear congruent generator is based on the formula:
 \begin{align*}
   R_{n+1} = (aR_n + c) \mod modulus
 \end{align*}
-where $R_0$ is the starting point or seed of the generator.  This generator is fairly fast and has minimal state information.  With a proper choice of parameters, if can produce decent results.  With an improper choice of parameters, the results are not very random.
+where $R_0$ is the starting point or seed of the generator.  This generator is fairly fast and has minimal state information.  With a proper choice of parameters, it can produce decent results.  With an improper choice of parameters, the results are not very random.
 
 Initialize the \datatype{LCG} object to some default values.
-
-\function{init(self : in out LCG)}
+\begin{lstlisting}
+overriding
+procedure init(self : in out LCG);
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The LCG object to initialize.
 \end{itemize}
 
 Initialize the \datatype{LCG} object with specified parameters.  Since the linear-congruent generator is commonly used, parameters can be chosen to emulate the sequence from many other systems.
-
-\function{init(self : in out LCG; seed, modulus, a, c : uint32)}
+\begin{lstlisting}
+procedure init(self : in out LCG; seed, modulus, a, c : uint32);
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The LCG object to initialize.
   \item $seed$ - The initial value for the generator.
@@ -728,26 +825,30 @@ Initialize the \datatype{LCG} object with specified parameters.  Since the linea
   \item $c$ - The $c$ coefficient in the generator formula.
 \end{itemize}
 
-The initial, ($seed$) value can be sent in a generator without changing the other values.
-
-
-\function{setSeed(self : in out LCG; seed : uint32)}
+The initial, ($seed$) value can be set in a generator without changing the other values.
+\begin{lstlisting}
+procedure setSeed(self : in out LCG; seed : uint32);
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The LCG object to adjust.
   \item $seed$ - The new seed value.
 \end{itemize}
 
 Return the next random number in raw format as a \datatype{uint32}.
-
-\function{getNext(self : in out LCG) return uint32}
+\begin{lstlisting}
+overriding
+function getNext(self : in out LCG) return uint32;
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The LCG object to get the next random number from.
   \item Returns the next \datatype{uint32} in the sequence.
 \end{itemize}
 
 Return the next random number as a floating point in the range 0.0 to 1.0.  This can then be cast to the desired real number type.
-
-\function{getNextF(self : in out LCG) return double}
+\begin{lstlisting}
+overriding
+function getNextF(self : in out LCG) return double;
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The LCG object to get the next random number from.
   \item Returns the next real number in the sequence.
@@ -757,36 +858,44 @@ Return the next random number as a floating point in the range 0.0 to 1.0.  This
 The mersenne twister generator is based on algorithms in \cite{MT19937}.  It provides a datatype \datatype{MT} which defines an object containing the parameters and state for the generator.  This allows for multiple random number streams with the same or different parameters.  While this generator is fairly fast, it requires about 624 \datatype{uint32} values of state information, thus considerably more memory than \datatype{LCG}.
 
 Initialize the \datatype{MT} object to some default values.
-
-\function{init(self : in out MT)}
+\begin{lstlisting}
+overriding
+procedure init(self : in out MT);
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The MT object to initialize.
 \end{itemize}
 
 Initialize the \datatype{MT} object with specified seed.
-
-\function{init(self : in out MT; seed : uint32)}
+\begin{lstlisting}
+procedure init(self : in out MT; seed : uint32);
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The LCG object to initialize.
   \item $seed$ - The initial value for the generator.
 \end{itemize}
 
 Return the next random number in raw format as a \datatype{uint32}.
-
-\function{getNext(self : in out MT) return uint32}
+\begin{lstlisting}
+overriding
+function getNext(self : in out MT) return uint32;
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The MT object to get the next random number from.
   \item Returns the next \datatype{uint32} in the sequence.
 \end{itemize}
 
 Return the next random number as a floating point in the range 0.0 to 1.0.  This can then be cast to the desired real number type.
-
-\function{getNextF(self : in out MT) return double}
+\begin{lstlisting}
+overriding
+function getNextF(self : in out MT) return double;
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The MT object to get the next random number from.
   \item Returns the next real number in the sequence.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.regression}
 This is a generic package with a real type parameter, \datatype{F}.  It defines the following datatypes:
 \begin{itemize}
@@ -805,13 +914,15 @@ This is a generic package with a real type parameter, \datatype{F}.  It defines 
 
 \subsection{Simple Linear Regression}
 Given a set of ($x$, $y$) points where $x$ is assumed to have no error, and the errors on $y$ are assumed to have a mean of zero, normal distribution, and constant variance, find the line, $y=ax+b+\epsilon$, where $\epsilon$ is the error, that best fits the data.
-
-\function{simple\_linear(d : data\_array) return simple\_linreg\_result}
+\begin{lstlisting}
+function simple_linear(d : data_array) return simple_linreg_result;
+\end{lstlisting}
 \begin{itemize}
   \item $d$ - An array of the data points to analyze.
   \item Returns a record of type \datatype{simple\_linreg\_result} containing the parameters for the line as well as estimates of how good the fit is.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.roots\_complex}
 This is a generic package with a complex package parameter, \datatype{cmplx}.  This has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.  It contains methods for finding roots of equations with complex variables.
 
@@ -822,8 +933,10 @@ It defines the following datatypes:
 \end{itemize}
 
 Solve for (possibly) complex roots using Mueller's method.  Mueller's method starts with three initial approximations to the root and solves the parabola through these three points to produce the next approximation.
-
-\function{mueller(test : test\_func; x0, x2 : in out cmplx.complex; limit : in out Positive; err : out errors) return cmplx.complex}
+\begin{lstlisting}
+function mueller(test : test_func; x0, x2 : in out cmplx.complex;
+         limit : in out Positive; err : out errors) return cmplx.complex;
+\end{lstlisting}
 \begin{itemize}
   \item $test$ - The function to find a root of.
   \item $x0$ and $x2$ - Starting points for the root finding
@@ -832,6 +945,7 @@ Solve for (possibly) complex roots using Mueller's method.  Mueller's method sta
   \item Returns an estimate of a root of the function.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.roots\_real}
 This is a generic package with a real type parameter, \datatype{F}.  It contains methods for finding roots of equations with complex variables.
 
@@ -845,8 +959,10 @@ It defines the following datatypes:
 If there is an odd number of roots between the lower and upper limits, the bisection algorithm will always converge.  Each iteration simply halves the interval between the limits, keeping a root between them.  The result is the midpoint of the final interval after the specified number of iterations.
 
 The lower and upper values are updated during the iterations to provide an interval containing the root.
-
-\function{bisection(test : test\_func; lower, upper : in out f'Base; limit : Positive; err : out errors) return f'Base}
+\begin{lstlisting}
+function bisection(test : test_func; lower, upper : in out f'Base;
+         limit : Positive; err : out errors) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $test$ - The function to find a root of.
   \item $lower$ - The lower bound of the interval for the root.
@@ -863,8 +979,10 @@ Depending on the function, this can converge to a root much faster than the bise
 The lower and upper values are updated during the iterations to provide an interval containing the root.  If the root is exact, the lower and upper values are equal to the returned value.
 
 This method will fail if during the process, the function values at the upper and lower bounds are ever equal.  This will cause a divide by zero error.
-
-\function seacant(test : test\_func; lower, upper : in out f'Base; limit : Positive; err : out errors) return f'Base;
+\begin{lstlisting}
+function seacant(test : test_func; lower, upper : in out f'Base;
+         limit : Positive; err : out errors) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $test$ - The function to find a root of.
   \item $lower$ - The lower bound of the interval for the root.
@@ -884,8 +1002,10 @@ In this implementation, the user provides two points and the third is generated 
 Note that for this algorithm, the x0 and x2 values are not necessarily meaningful as upper and lower bounds for the root, except that they are both set equal to the return value if the root is exact.
 
 Note that the success may be sensitive to the choice of x0 and x2.  If you know that a root exists and get a no\_solution error, try different values.
-
-\function{mueller(test : test\_func; x0, x2 : in out f'Base; limit : in out Positive; err : out errors) return f'Base}
+\begin{lstlisting}
+function mueller(test : test_func; x0, x2 : in out f'Base;
+         limit : in out Positive; err : out errors) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $test$ - The function to find a root of.
   \item $x0$ and $x2$ - Starting points for the root finding
@@ -894,6 +1014,7 @@ Note that the success may be sensitive to the choice of x0 and x2.  If you know 
   \item Returns an estimate of a root of the function.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.statistics}
 This is a generic package with a real type parameter, \datatype{F}.  It contains a number of statistics related routines.  It defines the datatype \datatype{data\_array} as \datatype{array (Integer range <>) of F'Base}.
 
@@ -904,16 +1025,18 @@ Compute the mean of a set of values.  For $n$ values, computes:
 \begin{align*}
   m = \frac{1}{n}\sum_{i=1}^n d_i
 \end{align*}
-
-\function{mean(d : data\_array) return F'Base}
+\begin{lstlisting}
+function mean(d : data_array) return F'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $d$ - The array containing the data.
   \item Returns the mean value of the data.
 \end{itemize}
 
 Compute the limits of a set of data.
-
-\function{limits(d : data\_array; min : out F'Base; max : out F'Base)}
+\begin{lstlisting}
+procedure limits(d : data_array; min : out F'Base; max : out F'Base);
+\end{lstlisting}
 \begin{itemize}
   \item $d$ - The array containing the data.
   \item $min$ - Output as the minimum value in the array.
@@ -922,8 +1045,9 @@ Compute the limits of a set of data.
 \end{itemize}
 
 Compute the variance of a set of data.  Since computing the variance also requires computing the mean, this procedure returns both values.
-
-\function{variance(d : data\_array; var : out F'Base; mean : out F'Base)}
+\begin{lstlisting}
+procedure variance(d : data_array; var : out F'Base; mean : out F'Base);
+\end{lstlisting}
 \begin{itemize}
   \item $d$ - The array containing the data.
   \item $var$ - Output as the variance of the data in the array.
@@ -936,16 +1060,18 @@ Note on naming conventions for probability distributions.  For continuous distri
 
 \subsubsection{Normal Distribution}
 Compute the standard normal distribution where the PDF is given by $x = e^{-p^2}$.
-
-\function{normal\_pdf(p : F'Base) return F'Base}
+\begin{lstlisting}
+function normal_pdf(p : F'Base) return F'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The value.
   \item Returns the probability density at point $p$.
 \end{itemize}
 
 Compute the normal distribution with a specified mean and standard deviation ($\sigma$).
-
-\function{normal\_pdf(p, mean, sigma : F'Base) return F'Base}
+\begin{lstlisting}
+function normal_pdf(p, mean, sigma : F'Base) return F'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $p$ - The value.
   \item $mean$ - The mean of the distribution.
@@ -957,8 +1083,9 @@ Compute the normal cumulative distribution for the standard normal function.  Th
 \begin{align*}
   p = \int^b_a e^{-x^2} dx
 \end{align*}
-
-\function{normal\_cdf(a, b : F'Base; steps : Positive) return F'Base}
+\begin{lstlisting}
+function normal_cdf(a, b : F'Base; steps : Positive) return F'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $a$ - Starting point for integration.
   \item $b$ - Ending point for integration.
@@ -971,7 +1098,9 @@ Compute the $\chi^2$ distribution where the PDF is given by:
 \begin{align*}
   p = \frac{1}{2^{\frac{k}{2}}\Gamma(\frac{k}{2})}x^{\frac{k}{2}-1}e^{-\frac{x}{2}}
 \end{align*}
-\function{chi2\_pdf(x : f'Base; k : Positive) return f'Base}
+\begin{lstlisting}
+function chi2_pdf(x : f'Base; k : Positive) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $x$ - The value.
   \item $k$ - The number of degrees of freedom.  Must be greater than zero.
@@ -979,8 +1108,9 @@ Compute the $\chi^2$ distribution where the PDF is given by:
 \end{itemize}
 
 Compute the cumulative $\chi^2$ between $a$ and $b$.
-
-\function{chi2\_cdf(a, b : F'Base; k, steps : Positive) return F'Base}
+\begin{lstlisting}
+function chi2_cdf(a, b : F'Base; k, steps : Positive) return F'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $a$ - Starting point for integration.
   \item $b$ - Ending point for integration.
@@ -993,7 +1123,9 @@ Compute the student's t distribution where the PDF is given by:
 \begin{align*}
   p = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{\pi\nu}\Gamma(\frac{\nu}{2})}(1+\frac{t^2}{\nu})^{-\frac{\nu+1}{2}}
 \end{align*}
-\function{studentT\_pdf(t : f'Base; nu : Positive) return f'Base}
+\begin{lstlisting}
+function studentT_pdf(t : f'Base; nu : Positive) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $t$ - The value.
   \item $nu$ - Shape parameter ($\nu$).
@@ -1001,8 +1133,9 @@ Compute the student's t distribution where the PDF is given by:
 \end{itemize}
 
 Compute the cumulative student t between $a$ and $b$.
-
-\function{studentT\_cdf(a, b : F'Base; nu, steps : Positive) return F'Base}
+\begin{lstlisting}
+function studentT_cdf(a, b : F'Base; nu, steps : Positive) return F'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $a$ - Starting point for integration.
   \item $b$ - Ending point for integration.
@@ -1012,8 +1145,9 @@ Compute the cumulative student t between $a$ and $b$.
 
 \subsubsection{Exponential Distribution}
 Compute the exponential distribution where the PDF is given by $\lambda e^{-\lambda x}$.
-
-\function{exp\_pdf(x, lambda : f'Base) return f'Base}
+\begin{lstlisting}
+function exp_pdf(x, lambda : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $x$ - The value.
   \item $lambda$ - The shape parameter ($\lambda$)
@@ -1021,8 +1155,9 @@ Compute the exponential distribution where the PDF is given by $\lambda e^{-\lam
 \end{itemize}
 
 Compute the cumulative exponential between $0$ and $x$.  This is given by $1-e^{-\lambda x}$
-
-\function{exp\_cdf(x, lambda : f'Base) return f'Base}
+\begin{lstlisting}
+function exp_cdf(x, lambda : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $x$ - The value.
   \item $lambda$ - The shape parameter ($\lambda$)
@@ -1034,20 +1169,21 @@ Since the Poisson Distribution is a discrete distribution rather than a cumulati
 \begin{align*}
   p(k) = \frac{\lambda^k e^{-\lambda}}{k!}
 \end{align*}
-\function{poisson\_pmf(k : Natural; lambda : Positive) return f'Base}
+\begin{lstlisting}
+function poisson_pmf(k : Natural; lambda : Positive) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $k$ - The value.
   \item $lambda$ - The shape parameter ($\lambda$)
   \item Returns the probability of $k$.
 \end{itemize}
 
-
 \subsection{Statistical Tests}
-
 \subsubsection{Student's T Tests}
 Use the one sample t test to compare the mean of a sample to a specified mean.  Given the sample mean, $\bar{x}$, the sample standard deviation, $s$, and the sample size, $n$, compute the student's t statistic for the difference between $\bar{x}$ and the specified mean, $\mu_0$.
-
-\function{studentT\_one(x\_bar, mu0, s, n : f'Base) return f'Base}
+\begin{lstlisting}
+function studentT_one(x_bar, mu0, s, n : f'Base) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $x_bar$ - The sample mean ($\bar{x}$).
   \item $mu0$ - The specified mean ($\mu_0$).
@@ -1056,6 +1192,7 @@ Use the one sample t test to compare the mean of a sample to a specified mean.  
   \item Returns the t statistic for the difference between the $\bar{x}$ and $\mu_0$.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.vector}
 This is a generic package with a real type parameter, \datatype{F}.  It contains some vector related routines.  It defines the datatype \datatype{vect} as \datatype{array (integer range <>) of f'Base}
 
@@ -1069,21 +1206,24 @@ Multiplication (`*') of a vector by a scaler is defined and assigned to the oper
 \subsection{Other Operations}
 
 Compute the magnitude of a vector by taking the square root of the sum of the squares of the elements.  Note that overflow is possible if any of the elements are greater than the square root of the maximum value of \datatype{F'Base}.
-
-\function{magnitude(self : in vect) return f'Base}
+\begin{lstlisting}
+function magnitude(self : in vect) return f'Base;
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The vector to take the magnitude of.
   \item Returns the magnitude of the vector.
 \end{itemize}
 
 Scale the elements in a vector so that the vector has a magnitude of one.  The same overflow warning for the \function{magnitude} function also apply here.
-
-\function{normalize(self : in vect) return vect}
+\begin{lstlisting}
+function normalize(self : in vect) return vect;
+\end{lstlisting}
 \begin{itemize}
   \item $self$ - The vector to normalize.
   \item Returns the normalized vector.
 \end{itemize}
 
+%========================================================
 \clearpage
 \addcontentsline{toc}{chapter}{Bibleography}
 \nocite{NA3rd}
