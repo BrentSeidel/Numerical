@@ -1,17 +1,20 @@
 \documentclass[10pt, openany]{book}
-
+%
+%  Packages to use
+%
 \usepackage{fancyhdr}
-\usepackage{imakeidx}
-
-\usepackage{amsmath}
-\usepackage{amsfonts}
-
-\usepackage{geometry}
-\geometry{letterpaper}
-
 \usepackage{fancyvrb}
 \usepackage{fancybox}
-
+%
+\usepackage{lastpage}
+\usepackage{imakeidx}
+%
+\usepackage{amsmath}
+\usepackage{amsfonts}
+%
+\usepackage{geometry}
+\geometry{letterpaper}
+%
 \usepackage{url}
 \usepackage{multicol}
 %
@@ -39,15 +42,36 @@
 \newcommand{\keyword}[1]{\texttt{#1}}
 \newcommand{\datatype}[1]{\texttt{#1}}
 \newcommand{\uvec}[1]{\textnormal{\bfseries{#1}}}
+\newcommand{\docname}{Users's Manual for \\ Basic Numerical Analysis Routines}
 %
 % Front Matter
 %
-\title{Basic Numerical Analysis Routines}
+\title{\docname}
 \author{Brent Seidel \\ Phoenix, AZ}
 \date{ \today }
 %========================================================
 %%% BEGIN DOCUMENT
 \begin{document}
+%
+%  Header's and Footers
+%
+\fancypagestyle{plain}{
+  \fancyhead[L]{}%
+  \fancyhead[R]{}%
+  \fancyfoot[C]{Page \thepage\ of \pageref{LastPage}}%
+  \fancyfoot[L]{Ada Programming}
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0.4pt}%
+}
+\fancypagestyle{myfancy}{
+  \fancyhead[L]{\docname}%
+  \fancyhead[R]{\leftmark}
+  \fancyfoot[C]{Page \thepage\ of \pageref{LastPage}}%
+  \fancyfoot[L]{Ada Programming}
+  \renewcommand{\headrulewidth}{0.4pt}%
+  \renewcommand{\footrulewidth}{0.4pt}%
+}
+\pagestyle{myfancy}
 %
 % Produce the front matter
 %
