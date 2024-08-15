@@ -20,6 +20,7 @@ begin
       Ada.Text_IO.Put_Line("  9 - Statistics");
       Ada.Text_IO.Put_Line(" 10 - Random numbers");
       Ada.Text_IO.Put_Line(" 11 - Regression");
+      Ada.Text_IO.Put_Line(" 12 - Plot");
       Ada.Text_IO.Put("Selection: ");
       Ada.Integer_Text_IO.Get(selection, 0);
       --
@@ -30,7 +31,7 @@ begin
       begin
          null;  --  Nothing to do here.
       end;
-      exit when (selection > 0) and (selection < 12);
+      exit when (selection > 0) and (selection < 13);
    end loop;
    if selection = 1 then
       test_cases.test_derive;
@@ -54,5 +55,7 @@ begin
       test_cases.test_random;
    elsif selection = 11 then
       test_cases.test_regression;
+   elsif selection = 12 then
+      test_cases.test_plot;
    end if;
 end;

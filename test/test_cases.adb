@@ -1,3 +1,4 @@
+with plot;
 package body test_cases is
 
    function derive_f1(x : real) return real is
@@ -783,6 +784,14 @@ package body test_cases is
       Ada.Text_IO.New_Line;
    end;
 --  ----------------------------------------------------------------------------
+   procedure test_plot is
+      pl : plot.plot_record;
+   begin
+      pl.start_plot("test-plot.svg", 0.0, 10.0, 0.0, 10.0);
+      pl.frame(10, 10, False, False);
+      pl.draw("red", True, ((1.0,1.0), (2.0,1.0), (3.0,2.0), (9.0,5.0)));
+      pl.end_plot;
+   end;
 --  ----------------------------------------------------------------------------
 --  ----------------------------------------------------------------------------
    procedure cmplx_put(n : cmplx.Complex; fore, aft, exp : Natural) is
