@@ -786,10 +786,21 @@ package body test_cases is
 --  ----------------------------------------------------------------------------
    procedure test_plot is
       pl : plot.plot_record;
+      p1 : plot.point_list(0 .. 20);
+      p2 : plot.point_list(0 .. 20);
    begin
-      pl.start_plot("test-plot.svg", 0.0, 10.0, 0.0, 10.0);
+      for x in 0 .. 20 loop
+         p1(x).x := Float(x) - 10.0;
+         p1(x).y := 5.0*elem.sin(Float(x)/3.0);
+         p2(x).x := 5.0*elem.sin(Float(x));
+         p2(x).y := 5.0*elem.cos(Float(x));
+      end loop;
+      pl.start_plot("test-plot.svg", -10.0, 10.0, -10.0, 10.0);
       pl.frame(10, 10, False, False);
-      pl.draw("red", True, ((1.0,1.0), (2.0,1.0), (3.0,2.0), (9.0,5.0)));
+      pl.label("x-Axis", "y-Axis");
+      pl.title("The Title of the Plot");
+      pl.draw("red", True, p1);
+      pl.draw("green", False, p2);
       pl.end_plot;
    end;
 --  ----------------------------------------------------------------------------

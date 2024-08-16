@@ -24,6 +24,14 @@ package plot is
    procedure frame(self : in out plot_record; xTicks, yTicks : Natural;
                   xLines , yLines : Boolean);
    --
+   --  Set Axis label
+   --
+   procedure label(self : in out plot_record; xLabel, yLabel : String);
+   --
+   --  Set title
+   --
+   procedure title(self : in out plot_record; title : String);
+   --
    --  Plot a set of points
    --
    procedure draw(self : in out plot_record; color : String; line : Boolean;
@@ -47,6 +55,8 @@ private
    --
    height : constant Float := 1000.0;
    width  : constant Float := 1000.0;
+   xStart : constant Float := -10.0;
+   yStart : constant Float := -10.0;
    tick_size : constant Integer := 10;
 end plot;
 
