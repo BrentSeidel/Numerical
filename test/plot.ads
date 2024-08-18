@@ -37,6 +37,10 @@ package plot is
    procedure draw(self : in out plot_record; color : String; line : Boolean;
                   points : point_list);
    --
+   --  Plot a single point
+   --
+   procedure draw_point(self : in out plot_record; color : String; p : point);
+   --
    --  Close the plot
    --
    procedure end_plot(self : in out plot_record);
@@ -51,12 +55,17 @@ private
       ymax  : Float;
    end record;
    --
-   --  Display size for scaling
+   --  Plot size for scaling
    --
-   height : constant Float := 1000.0;
-   width  : constant Float := 1000.0;
-   xStart : constant Float := -10.0;
-   yStart : constant Float := -10.0;
+   xSize : constant Float := 1000.0;
+   ySize  : constant Float := 1000.0;
+   xStart : constant Float := 100.0;
+   yStart : constant Float := 100.0;
+   borderTop : constant Float := 20.0;
+   borderBot : constant Float := 20.0;
+   borderLeft  : constant Float := 20.0;
+   borderRight : constant Float := 10.0;
+   --
    tick_size : constant Integer := 10;
 end plot;
 

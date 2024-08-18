@@ -723,6 +723,7 @@ package body test_cases is
 --  ----------------------------------------------------------------------------
 
    procedure test_stats is
+      pl  : plot.plot_record;
       val : real;
       dof : Positive := 20;
    begin
@@ -731,6 +732,10 @@ package body test_cases is
       Ada.Text_IO.Put_Line("Probability Distributions");
       Ada.Text_IO.Put_Line("               Normal                     Chi^2                     Student's T           Poisson             Exponential");
       Ada.Text_IO.Put_Line("   X     PDF           CDF           PDF           CDF           PDF           CDF           PMF           PDF           CDF");
+      pl.start_plot("stat-plot.svg", 0.0, 20.0, 0.0, 1.0);
+      pl.frame(10, 10, False, False);
+      pl.label("x-axis", "Probability density");
+      pl.title("Probability densities");
       for i in 0 .. 20 loop
          val := real(i)*1.0;
          float_io.Put(val, 2, 2, 0);
@@ -753,8 +758,18 @@ package body test_cases is
          Ada.Text_IO.Put("  ");
          float_io.Put(stat.poisson_pmf(Natural(i), dof), 1, 6, 3);
          Ada.Text_IO.New_Line;
+         pl.draw_point("red", (val, stat.normal_pdf(val)));
+         pl.draw_point("red", (val, stat.normal_cdf(0.0, val, 20)));
+         pl.draw_point("blue", (val, stat.chi2_pdf(val, dof)));
+         pl.draw_point("blue", (val, stat.chi2_cdf(0.0, val, dof, 20)));
+         pl.draw_point("green", (val, stat.studentT_pdf(val, dof)));
+         pl.draw_point("green", (val, stat.studentT_cdf(0.0, val, dof, 20)));
+         pl.draw_point("cyan", (val, stat.exp_pdf(val, 1.0)));
+         pl.draw_point("cyan", (val, stat.exp_cdf(val, 1.0)));
+         pl.draw_point("black", (val, stat.poisson_pmf(Natural(i), dof)));
       end loop;
       Ada.Text_IO.New_Line;
+      pl.end_plot;
    end test_stats;
 --  ----------------------------------------------------------------------------
    procedure test_regression is
