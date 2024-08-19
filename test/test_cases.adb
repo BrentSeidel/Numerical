@@ -762,7 +762,7 @@ package body test_cases is
          p.y := stat.normal_pdf(val);
          pl.draw_glyph(p, BBS.Numerical.plot.glyph_plus, "red");
          p.y := stat.normal_cdf(0.0, val, 20);
-         pl.draw_glyph(p, BBS.Numerical.plot.glyph_cross, "red");
+         pl.draw_glyph(p, BBS.Numerical.plot.glyph_X, "red");
          p.y := stat.chi2_pdf(val, dof);
          pl.draw_glyph(p, BBS.Numerical.plot.glyph_box, "blue");
          p.y := stat.chi2_cdf(0.0, val, dof, 20);
@@ -825,7 +825,7 @@ package body test_cases is
       pl.frame(10, 10, False, False);
       pl.label("x-Axis", "y-Axis");
       pl.title("The Title of the Plot");
-      pl.draw_line("red", p1);
+      pl.draw_line(p1, "red");
       pl.draw_glyph(p1, BBS.Numerical.plot.glyph_diamond, "red");
       pl.draw_point(p2, 2, "green");
       pl.end_plot;

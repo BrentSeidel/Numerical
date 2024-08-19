@@ -9,7 +9,8 @@ package BBS.Numerical.plot_svg_linear is
    --
    --  Open the named file and start the plot
    --
-   procedure start_plot(self : in out linear_svg_plot_record; name : string; xmin, xmax, ymin, ymax : float);
+   procedure start_plot(self : in out linear_svg_plot_record; name : string;
+                        xmin, xmax, ymin, ymax : float);
    --
    --  Draw the plot frame
    --
@@ -30,26 +31,32 @@ package BBS.Numerical.plot_svg_linear is
    --  Plot lines
    --
    overriding
-   procedure draw_line(self : in out linear_svg_plot_record; color : String; points : BBS.Numerical.plot.point_list);
+   procedure draw_line(self : in out linear_svg_plot_record;
+                     points : BBS.Numerical.plot.point_list; color : String);
    --
    --  Plot point(s)
    --
    overriding
-   procedure draw_point(self : in out linear_svg_plot_record; p : BBS.Numerical.plot.point; size : Positive; color : String);
+   procedure draw_point(self : in out linear_svg_plot_record;
+                        p : BBS.Numerical.plot.point; size : Positive; color : String);
    overriding
-   procedure draw_point(self : in out linear_svg_plot_record; points : BBS.Numerical.plot.point_list; size : Positive; color : String);
+   procedure draw_point(self : in out linear_svg_plot_record;
+                        points : BBS.Numerical.plot.point_list; size : Positive; color : String);
    --
    --  Draw text at a point
    --
    overriding
-   procedure draw_text(self : in out linear_svg_plot_record; p : BBS.Numerical.plot.point; color, text : String);
+   procedure draw_text(self : in out linear_svg_plot_record;
+                        p : BBS.Numerical.plot.point; color, text : String);
    --
    --  Draw a glyph at a point
    --
    overriding
-   procedure draw_glyph(self : in out linear_svg_plot_record; p : BBS.Numerical.plot.point; g : BBS.Numerical.plot.glyph; color : String);
+   procedure draw_glyph(self : in out linear_svg_plot_record;
+                        p : BBS.Numerical.plot.point; g : BBS.Numerical.plot.glyph; color : String);
    overriding
-   procedure draw_glyph(self : in out linear_svg_plot_record; points : BBS.Numerical.plot.point_list; g : BBS.Numerical.plot.glyph; color : String);
+   procedure draw_glyph(self : in out linear_svg_plot_record;
+                        points : BBS.Numerical.plot.point_list; g : BBS.Numerical.plot.glyph; color : String);
    --
    --  Close the plot
    --

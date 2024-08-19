@@ -4,7 +4,8 @@ package body BBS.Numerical.plot_svg_linear is
    --
    --  Open the named file and start the plot
    --
-   procedure start_plot(self : in out linear_svg_plot_record; name : string; xmin, xmax, ymin, ymax : float) is
+   procedure start_plot(self : in out linear_svg_plot_record; name : string;
+                        xmin, xmax, ymin, ymax : float) is
    begin
       Ada.Text_IO.Create(self.io, Ada.Text_IO.Out_File, name);
       self.xmin := xmin;
@@ -202,7 +203,8 @@ package body BBS.Numerical.plot_svg_linear is
    --
    --  Plot lines
    --
-   procedure draw_line(self : in out linear_svg_plot_record; color : String; points : BBS.Numerical.plot.point_list) is
+   procedure draw_line(self : in out linear_svg_plot_record;
+                     points : BBS.Numerical.plot.point_list; color : String) is
    begin
       if not self.valid then
          return;
@@ -219,7 +221,9 @@ package body BBS.Numerical.plot_svg_linear is
    --
    --  Plot point(s)
    --
-   procedure draw_point(self : in out linear_svg_plot_record; p : BBS.Numerical.plot.point; size : Positive; color : String) is
+   procedure draw_point(self : in out linear_svg_plot_record;
+                        p : BBS.Numerical.plot.point; size : Positive;
+                        color : String) is
    begin
       if not self.valid then
          return;
@@ -233,7 +237,9 @@ package body BBS.Numerical.plot_svg_linear is
       Ada.Text_IO.Put_Line(self.io, """ fill=""" & color & """ />");
    end;
    --
-   procedure draw_point(self : in out linear_svg_plot_record; points : BBS.Numerical.plot.point_list; size : Positive; color : String) is
+   procedure draw_point(self : in out linear_svg_plot_record;
+                        points : BBS.Numerical.plot.point_list; size : Positive;
+                        color : String) is
    begin
       if not self.valid then
          return;
@@ -251,7 +257,8 @@ package body BBS.Numerical.plot_svg_linear is
    --
    --  Draw text at a point
    --
-   procedure draw_text(self : in out linear_svg_plot_record; p : BBS.Numerical.plot.point; color, text : String) is
+   procedure draw_text(self : in out linear_svg_plot_record;
+                        p : BBS.Numerical.plot.point; color, text : String) is
    begin
       Ada.Text_IO.Put(self.io, "<text x=""");
       Ada.Integer_Text_IO.Put(self.io, Integer(self.xTranslate(p.x)));
@@ -262,7 +269,8 @@ package body BBS.Numerical.plot_svg_linear is
    --
    --  Glyph helper functions
    --
-   procedure draw_glyph_plus(self : in out linear_svg_plot_record; xPos, yPos, size : Integer) is
+   procedure draw_glyph_plus(self : in out linear_svg_plot_record;
+                              xPos, yPos, size : Integer) is
    begin
       Ada.Text_IO.Put(self.io, "  <line x1=""");
       Ada.Integer_Text_IO.Put(self.io, xPos - size, 0);
@@ -284,7 +292,8 @@ package body BBS.Numerical.plot_svg_linear is
       Ada.Text_IO.Put_Line(self.io, """ />");
    end;
    --
-   procedure draw_glyph_cross(self : in out linear_svg_plot_record; xPos, yPos, size : Integer) is
+   procedure draw_glyph_X(self : in out linear_svg_plot_record;
+                              xPos, yPos, size : Integer) is
    begin
       Ada.Text_IO.Put(self.io, "  <line x1=""");
       Ada.Integer_Text_IO.Put(self.io, xPos - size, 0);
@@ -306,7 +315,8 @@ package body BBS.Numerical.plot_svg_linear is
       Ada.Text_IO.Put_Line(self.io, """ />");
    end;
    --
-   procedure draw_glyph_box(self : in out linear_svg_plot_record; xPos, yPos, size : Integer) is
+   procedure draw_glyph_box(self : in out linear_svg_plot_record;
+                           xPos, yPos, size : Integer) is
    begin
       Ada.Text_IO.Put(self.io, "  <polyline points=""");
       Ada.Integer_Text_IO.Put(self.io, xPos + size, 0);
@@ -331,7 +341,8 @@ package body BBS.Numerical.plot_svg_linear is
       Ada.Text_IO.Put(self.io, """ fill=""none"" />");
    end;
    --
-   procedure draw_glyph_diamond(self : in out linear_svg_plot_record; xPos, yPos, size : Integer) is
+   procedure draw_glyph_diamond(self : in out linear_svg_plot_record;
+                              xPos, yPos, size : Integer) is
    begin
       Ada.Text_IO.Put(self.io, "  <polyline points=""");
       Ada.Integer_Text_IO.Put(self.io, xPos, 0);
@@ -358,7 +369,9 @@ package body BBS.Numerical.plot_svg_linear is
    --
    --  Draw a glyph at a point
    --
-   procedure draw_glyph(self : in out linear_svg_plot_record; p : BBS.Numerical.plot.point; g : BBS.Numerical.plot.glyph; color : String) is
+   procedure draw_glyph(self : in out linear_svg_plot_record;
+                        p : BBS.Numerical.plot.point;
+                        g : BBS.Numerical.plot.glyph; color : String) is
       xPos : constant Integer := Integer(self.xTranslate(p.x));
       yPos : constant Integer := Integer(self.yTranslate(p.y));
       size : constant Integer := 10;
@@ -367,8 +380,8 @@ package body BBS.Numerical.plot_svg_linear is
       case g is
          when BBS.Numerical.plot.glyph_plus =>
             self.draw_glyph_plus(xPos, yPos, size);
-         when BBS.Numerical.plot.glyph_cross =>
-            self.draw_glyph_cross(xPos, yPos, size);
+         when BBS.Numerical.plot.glyph_X =>
+            self.draw_glyph_X(xPos, yPos, size);
          when BBS.Numerical.plot.glyph_box =>
             self.draw_glyph_box(xPos, yPos, size);
          when BBS.Numerical.plot.glyph_diamond =>
@@ -377,7 +390,9 @@ package body BBS.Numerical.plot_svg_linear is
       Ada.Text_IO.Put_Line(self.io, "</g>");
    end;
    --
-   procedure draw_glyph(self : in out linear_svg_plot_record; points : BBS.Numerical.plot.point_list; g : BBS.Numerical.plot.glyph; color : String) is
+   procedure draw_glyph(self : in out linear_svg_plot_record;
+                        points : BBS.Numerical.plot.point_list;
+                        g : BBS.Numerical.plot.glyph; color : String) is
       xPos : Integer;
       yPos : Integer;
       size : constant Integer := 10;
@@ -389,8 +404,8 @@ package body BBS.Numerical.plot_svg_linear is
          case g is
             when BBS.Numerical.plot.glyph_plus =>
                self.draw_glyph_plus(xPos, yPos, size);
-            when BBS.Numerical.plot.glyph_cross =>
-               self.draw_glyph_cross(xPos, yPos, size);
+            when BBS.Numerical.plot.glyph_X =>
+               self.draw_glyph_X(xPos, yPos, size);
             when BBS.Numerical.plot.glyph_box =>
                self.draw_glyph_box(xPos, yPos, size);
             when BBS.Numerical.plot.glyph_diamond =>

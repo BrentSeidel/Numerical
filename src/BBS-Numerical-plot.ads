@@ -19,7 +19,7 @@ package BBS.Numerical.Plot is
    --
    --  Known glyphs to plot
    --
-   type glyph is (glyph_plus, glyph_cross, glyph_box, glyph_diamond);
+   type glyph is (glyph_plus, glyph_X, glyph_box, glyph_diamond);
    --
    --  Draw the plot frame
    --
@@ -36,8 +36,8 @@ package BBS.Numerical.Plot is
    --
    --  Plot lines
    --
-   procedure draw_line(self : in out plot_record; color : String;
-                        points : point_list);
+   procedure draw_line(self : in out plot_record; points : point_list;
+                        color : String);
    --
    --  Plot point(s)
    --
@@ -62,4 +62,5 @@ private
       valid : Boolean := False;
    end record;
 
+   Unimplemented : exception;
 end BBS.Numerical.Plot;
