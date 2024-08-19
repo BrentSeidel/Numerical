@@ -1,10 +1,10 @@
 with Ada.Integer_Text_IO;
 with Ada.Float_Text_IO;
-package body plot is
+package body BBS.Numerical.plot_svg_linear is
    --
    --  Open the named file and start the plot
    --
-   procedure start_plot(self : in out plot_record; name : string; xmin, xmax, ymin, ymax : float) is
+   procedure start_plot(self : in out linear_svg_plot_record; name : string; xmin, xmax, ymin, ymax : float) is
    begin
       Ada.Text_IO.Create(self.io, Ada.Text_IO.Out_File, name);
       self.xmin := xmin;
@@ -26,7 +26,7 @@ package body plot is
    --
    --  Draw the plot frame.
    --
-   procedure frame(self : in out plot_record; xTicks, yTicks : Natural;
+   procedure frame(self : in out linear_svg_plot_record; xTicks, yTicks : Natural;
                   xLines , yLines : Boolean) is
       xPos : Integer;
       yPos : Integer;
@@ -150,7 +150,7 @@ package body plot is
    --
    --  Set Axis label
    --
-   procedure label(self : in out plot_record; xLabel, yLabel : String) is
+   procedure label(self : in out linear_svg_plot_record; xLabel, yLabel : String) is
    xPos : constant Integer := Integer(xStart) - 25;
    yPos : constant Integer := Integer(yStart + ySize) - 50;
    begin
@@ -158,7 +158,7 @@ package body plot is
          return;
       end if;
       Ada.Text_IO.Put(self.io, "<text x=""");
-      Ada.Integer_Text_IO.Put(self.io, Integer(xStart) + 50);
+      Ada.Integer_Text_IO.Put(self.io, Integer(xStart) + 50, 0);
       Ada.Text_IO.Put(self.io, """ y=""");
       Ada.Integer_Text_IO.Put(self.io, Integer(yStart + ySize) + 25, 0);
       Ada.Text_IO.Put(self.io, """ stroke=""black"" font-size=""12pt"">");
@@ -176,7 +176,7 @@ package body plot is
    --
    --  Set title
    --
-   procedure title(self : in out plot_record; title : String) is
+   procedure title(self : in out linear_svg_plot_record; title : String) is
    begin
       if not self.valid then
          return;
@@ -188,75 +188,221 @@ package body plot is
       Ada.Text_IO.Put_Line(self.io, """ stroke=""black"" font-size=""14pt"">" & title & "</text>");
    end;
    --
-   --  Plot a set of points
+   --  Plotting helper functions
    --
-   function xTranslate(self : plot_record; x : Float) return Float is
+   function xTranslate(self : linear_svg_plot_record; x : Float) return Float is
    begin
       return xStart + (x - self.xMin)*xSize/(self.xMax - self.xMin);
    end;
-   function yTranslate(self : plot_record; y : Float) return Float is
+   --
+   function yTranslate(self : linear_svg_plot_record; y : Float) return Float is
    begin
       return yStart +  ySize - (y - self.yMin)*ySize/(self.yMax - self.yMin);
    end;
-   procedure draw(self : in out plot_record; color : String; line : Boolean;
-                  points : point_list) is
-      p : point;
-      xLast : Float;
-      yLast : Float;
-      xNext : Float;
-      yNext : Float;
+   --
+   --  Plot lines
+   --
+   procedure draw_line(self : in out linear_svg_plot_record; color : String; points : BBS.Numerical.plot.point_list) is
    begin
       if not self.valid then
          return;
       end if;
-      if line then
-         p := points(points'First);
-         xLast := self.xTranslate(p.x);
-         yLast := self.yTranslate(p.y);
-         Ada.Text_IO.Put_Line(self.io, "<g stroke=""" & color & """ stroke-width=""1"">");
-         for x in points'First + 1 .. points'Last loop
-            p := points(x);
-            xNext := self.xTranslate(p.x);
-            yNext := self.yTranslate( p.y);
-            Ada.Text_IO.Put(self.io, "  <line x1=""");
-            Ada.Integer_Text_IO.Put(self.io, Integer(xLast), 0);
-            Ada.Text_IO.Put(self.io, """ y1=""");
-            Ada.Integer_Text_IO.Put(self.io, Integer(yLast), 0);
-            Ada.Text_IO.Put(self.io, """ x2=""");
-            Ada.Integer_Text_IO.Put(self.io, Integer(xNext), 0);
-            Ada.Text_IO.Put(self.io, """ y2=""");
-            Ada.Integer_Text_IO.Put(self.io, Integer(yNext), 0);
-            Ada.Text_IO.Put_Line(self.io, """ />");
-            xLast := xNext;
-            yLast := yNext;
-         end loop;
-      else
-         Ada.Text_IO.Put_Line(self.io, "<g fill=""" & color & """>");
-         for p of points loop
-            Ada.Text_IO.Put(self.io, "  <circle cx=""");
-            Ada.Float_Text_IO.Put(self.io, self.xTranslate(p.x), 0);
-            Ada.Text_IO.Put(self.io, """ cy=""");
-            Ada.Float_Text_IO.Put(self.io, self.yTranslate(p.y), 0);
-            Ada.Text_IO.Put_line(self.io, """ r=""2"" />");
-         end loop;
-      end if;
-      Ada.Text_IO.Put_Line(self.io, "</g>");
+      Ada.Text_IO.Put(self.io, "<polyline points=""");
+      for p of points loop
+         Ada.Integer_Text_IO.Put(self.io, Integer(self.xTranslate(p.x)), 0);
+         Ada.Text_IO.Put(self.io, ",");
+         Ada.Integer_Text_IO.Put(self.io, Integer(self.yTranslate( p.y)), 0);
+         Ada.Text_IO.Put(self.io, " ");
+      end loop;
+      Ada.Text_IO.Put_Line(self.io, """ fill=""none"" stroke=""" & color & """ stroke-width=""1"" />");
    end;
    --
-   --  Plot a single point
+   --  Plot point(s)
    --
-   procedure draw_point(self : in out plot_record; color : String; p : point) is
+   procedure draw_point(self : in out linear_svg_plot_record; p : BBS.Numerical.plot.point; size : Positive; color : String) is
    begin
+      if not self.valid then
+         return;
+      end if;
       Ada.Text_IO.Put(self.io, "<circle cx=""");
       Ada.Float_Text_IO.Put(self.io, self.xTranslate(p.x), 0);
       Ada.Text_IO.Put(self.io, """ cy=""");
       Ada.Float_Text_IO.Put(self.io, self.yTranslate(p.y), 0);
-      Ada.Text_IO.Put_line(self.io, """ r=""2"" fill=""" & color & """ />");
+      Ada.Text_IO.Put(self.io, """ r=""");
+      Ada.Integer_Text_IO.Put(self.io, size, 0);
+      Ada.Text_IO.Put_Line(self.io, """ fill=""" & color & """ />");
+   end;
+   --
+   procedure draw_point(self : in out linear_svg_plot_record; points : BBS.Numerical.plot.point_list; size : Positive; color : String) is
+   begin
+      if not self.valid then
+         return;
+      end if;
+      Ada.Text_IO.Put_Line(self.io, "<g fill=""" & color & """>");
+      for p of points loop
+         Ada.Text_IO.Put(self.io, "  <circle cx=""");
+         Ada.Float_Text_IO.Put(self.io, self.xTranslate(p.x), 0);
+         Ada.Text_IO.Put(self.io, """ cy=""");
+         Ada.Float_Text_IO.Put(self.io, self.yTranslate(p.y), 0);
+         Ada.Text_IO.Put_line(self.io, """ r=""2"" />");
+      end loop;
+      Ada.Text_IO.Put_Line(self.io, "</g>");
+   end;
+   --
+   --  Draw text at a point
+   --
+   procedure draw_text(self : in out linear_svg_plot_record; p : BBS.Numerical.plot.point; color, text : String) is
+   begin
+      Ada.Text_IO.Put(self.io, "<text x=""");
+      Ada.Integer_Text_IO.Put(self.io, Integer(self.xTranslate(p.x)));
+      Ada.Text_IO.Put(self.io, """ y=""");
+      Ada.Integer_Text_IO.Put(self.io, Integer(self.yTranslate(p.y)));
+      Ada.Text_IO.Put_Line(self.io, """ stroke=""" & color & """ font-size=""10pt"">" & text & "</text>");
+   end;
+   --
+   --  Glyph helper functions
+   --
+   procedure draw_glyph_plus(self : in out linear_svg_plot_record; xPos, yPos, size : Integer) is
+   begin
+      Ada.Text_IO.Put(self.io, "  <line x1=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size, 0);
+      Ada.Text_IO.Put(self.io, """ y1=""");
+      Ada.Integer_Text_IO.Put(self.io, yPos, 0);
+      Ada.Text_IO.Put(self.io, """ x2=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size, 0);
+      Ada.Text_IO.Put(self.io, """ y2=""");
+      Ada.Integer_Text_IO.Put(self.io, yPos, 0);
+      Ada.Text_IO.Put_Line(self.io, """ />");
+      Ada.Text_IO.Put(self.io, "  <line x1=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos, 0);
+      Ada.Text_IO.Put(self.io, """ y1=""");
+      Ada.Integer_Text_IO.Put(self.io, yPos - size, 0);
+      Ada.Text_IO.Put(self.io, """ x2=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos, 0);
+      Ada.Text_IO.Put(self.io, """ y2=""");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put_Line(self.io, """ />");
+   end;
+   --
+   procedure draw_glyph_cross(self : in out linear_svg_plot_record; xPos, yPos, size : Integer) is
+   begin
+      Ada.Text_IO.Put(self.io, "  <line x1=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size, 0);
+      Ada.Text_IO.Put(self.io, """ y1=""");
+      Ada.Integer_Text_IO.Put(self.io, yPos - size, 0);
+      Ada.Text_IO.Put(self.io, """ x2=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size, 0);
+      Ada.Text_IO.Put(self.io, """ y2=""");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put_Line(self.io, """ />");
+      Ada.Text_IO.Put(self.io, "  <line x1=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size, 0);
+      Ada.Text_IO.Put(self.io, """ y1=""");
+      Ada.Integer_Text_IO.Put(self.io, yPos - size, 0);
+      Ada.Text_IO.Put(self.io, """ x2=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size, 0);
+      Ada.Text_IO.Put(self.io, """ y2=""");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put_Line(self.io, """ />");
+   end;
+   --
+   procedure draw_glyph_box(self : in out linear_svg_plot_record; xPos, yPos, size : Integer) is
+   begin
+      Ada.Text_IO.Put(self.io, "  <polyline points=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos - size, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos - size, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put(self.io, """ fill=""none"" />");
+   end;
+   --
+   procedure draw_glyph_diamond(self : in out linear_svg_plot_record; xPos, yPos, size : Integer) is
+   begin
+      Ada.Text_IO.Put(self.io, "  <polyline points=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos - size, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put(self.io, """ fill=""none"" />");
+   end;
+   --
+   --  Draw a glyph at a point
+   --
+   procedure draw_glyph(self : in out linear_svg_plot_record; p : BBS.Numerical.plot.point; g : BBS.Numerical.plot.glyph; color : String) is
+      xPos : constant Integer := Integer(self.xTranslate(p.x));
+      yPos : constant Integer := Integer(self.yTranslate(p.y));
+      size : constant Integer := 10;
+   begin
+      Ada.Text_IO.Put_Line(self.io, "<g stroke=""" & color & """ stroke-width=""1"">");
+      case g is
+         when BBS.Numerical.plot.glyph_plus =>
+            self.draw_glyph_plus(xPos, yPos, size);
+         when BBS.Numerical.plot.glyph_cross =>
+            self.draw_glyph_cross(xPos, yPos, size);
+         when BBS.Numerical.plot.glyph_box =>
+            self.draw_glyph_box(xPos, yPos, size);
+         when BBS.Numerical.plot.glyph_diamond =>
+            self.draw_glyph_diamond(xPos, yPos, size);
+      end case;
+      Ada.Text_IO.Put_Line(self.io, "</g>");
+   end;
+   --
+   procedure draw_glyph(self : in out linear_svg_plot_record; points : BBS.Numerical.plot.point_list; g : BBS.Numerical.plot.glyph; color : String) is
+      xPos : Integer;
+      yPos : Integer;
+      size : constant Integer := 10;
+   begin
+      Ada.Text_IO.Put_Line(self.io, "<g stroke=""" & color & """ stroke-width=""1"">");
+      for p of points loop
+         xPos := Integer(self.xTranslate(p.x));
+         yPos := Integer(self.yTranslate(p.y));
+         case g is
+            when BBS.Numerical.plot.glyph_plus =>
+               self.draw_glyph_plus(xPos, yPos, size);
+            when BBS.Numerical.plot.glyph_cross =>
+               self.draw_glyph_cross(xPos, yPos, size);
+            when BBS.Numerical.plot.glyph_box =>
+               self.draw_glyph_box(xPos, yPos, size);
+            when BBS.Numerical.plot.glyph_diamond =>
+               self.draw_glyph_diamond(xPos, yPos, size);
+         end case;
+      end loop;
+      Ada.Text_IO.Put_Line(self.io, "</g>");
    end;
    --
    --  Close the plot
    --
-   procedure end_plot(self : in out plot_record) is
+   procedure end_plot(self : in out linear_svg_plot_record) is
    begin
       if self.valid then
          Ada.Text_IO.Put_Line(self.io, "</svg>");
@@ -264,4 +410,4 @@ package body plot is
       end if;
       self.valid := False;
    end;
-end plot;
+end BBS.Numerical.plot_svg_linear;

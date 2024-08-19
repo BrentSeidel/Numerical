@@ -1,4 +1,4 @@
-with plot;
+with BBS.Numerical.plot;
 package body test_cases is
 
    function derive_f1(x : real) return real is
@@ -348,7 +348,6 @@ package body test_cases is
       u   : cmplx.Complex;
       err : croot.errors;
       iter : Positive;
-
 
    begin
       Ada.Text_IO.Put_Line("Testing some basic complex polynomial routines.");
@@ -723,7 +722,8 @@ package body test_cases is
 --  ----------------------------------------------------------------------------
 
    procedure test_stats is
-      pl  : plot.plot_record;
+      pl  : BBS.Numerical.plot_svg_linear.linear_svg_plot_record;
+      p   : BBS.Numerical.plot.point;
       val : real;
       dof : Positive := 20;
    begin
@@ -758,16 +758,27 @@ package body test_cases is
          Ada.Text_IO.Put("  ");
          float_io.Put(stat.poisson_pmf(Natural(i), dof), 1, 6, 3);
          Ada.Text_IO.New_Line;
-         pl.draw_point("red", (val, stat.normal_pdf(val)));
-         pl.draw_point("red", (val, stat.normal_cdf(0.0, val, 20)));
-         pl.draw_point("blue", (val, stat.chi2_pdf(val, dof)));
-         pl.draw_point("blue", (val, stat.chi2_cdf(0.0, val, dof, 20)));
-         pl.draw_point("green", (val, stat.studentT_pdf(val, dof)));
-         pl.draw_point("green", (val, stat.studentT_cdf(0.0, val, dof, 20)));
-         pl.draw_point("cyan", (val, stat.exp_pdf(val, 1.0)));
-         pl.draw_point("cyan", (val, stat.exp_cdf(val, 1.0)));
-         pl.draw_point("black", (val, stat.poisson_pmf(Natural(i), dof)));
+         p.x := val;
+         p.y := stat.normal_pdf(val);
+         pl.draw_glyph(p, BBS.Numerical.plot.glyph_plus, "red");
+         p.y := stat.normal_cdf(0.0, val, 20);
+         pl.draw_glyph(p, BBS.Numerical.plot.glyph_cross, "red");
+         p.y := stat.chi2_pdf(val, dof);
+         pl.draw_glyph(p, BBS.Numerical.plot.glyph_box, "blue");
+         p.y := stat.chi2_cdf(0.0, val, dof, 20);
+         pl.draw_glyph(p, BBS.Numerical.plot.glyph_diamond, "blue");
+         p.y := stat.studentT_pdf(val, dof);
+         pl.draw_point(p, 2, "green");
+         p.y := stat.studentT_cdf(0.0, val, dof, 20);
+         pl.draw_point(p, 3, "green");
+         p.y := stat.exp_pdf(val, 1.0);
+         pl.draw_point(p, 2, "cyan");
+         p.y := stat.exp_cdf(val, 1.0);
+         pl.draw_point(p, 3, "cyan");
+         p.y := stat.poisson_pmf(Natural(i), dof);
+         pl.draw_point(p, 2, "black");
       end loop;
+      pl.draw_text((2.0, 0.8), "black", "Exponential CDF");
       Ada.Text_IO.New_Line;
       pl.end_plot;
    end test_stats;
@@ -800,9 +811,9 @@ package body test_cases is
    end;
 --  ----------------------------------------------------------------------------
    procedure test_plot is
-      pl : plot.plot_record;
-      p1 : plot.point_list(0 .. 20);
-      p2 : plot.point_list(0 .. 20);
+      pl : BBS.Numerical.plot_svg_linear.linear_svg_plot_record;
+      p1 : BBS.Numerical.plot.point_list(0 .. 20);
+      p2 : BBS.Numerical.plot.point_list(0 .. 20);
    begin
       for x in 0 .. 20 loop
          p1(x).x := Float(x) - 10.0;
@@ -814,8 +825,9 @@ package body test_cases is
       pl.frame(10, 10, False, False);
       pl.label("x-Axis", "y-Axis");
       pl.title("The Title of the Plot");
-      pl.draw("red", True, p1);
-      pl.draw("green", False, p2);
+      pl.draw_line("red", p1);
+      pl.draw_glyph(p1, BBS.Numerical.plot.glyph_diamond, "red");
+      pl.draw_point(p2, 2, "green");
       pl.end_plot;
    end;
 --  ----------------------------------------------------------------------------
