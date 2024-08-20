@@ -315,6 +315,13 @@ package body BBS.Numerical.plot_svg_linear is
       Ada.Text_IO.Put_Line(self.io, """ />");
    end;
    --
+   procedure draw_glyph_asterisk(self : in out linear_svg_plot_record;
+                              xPos, yPos, size : Integer) is
+   begin
+      self.draw_glyph_plus(xPos, yPos, size);
+      self.draw_glyph_X(xPos, yPos, size);
+   end;
+   --
    procedure draw_glyph_box(self : in out linear_svg_plot_record;
                            xPos, yPos, size : Integer) is
    begin
@@ -367,6 +374,48 @@ package body BBS.Numerical.plot_svg_linear is
       Ada.Text_IO.Put(self.io, """ fill=""none"" />");
    end;
    --
+   procedure draw_glyph_octagon(self : in out linear_svg_plot_record;
+                              xPos, yPos, size : Integer) is
+   begin
+      Ada.Text_IO.Put(self.io, "  <polyline points=""");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size/2, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size/2, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size/2, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos - size/2, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos + size/2, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos - size, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size/2, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos - size, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos - size/2, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size/2, 0);
+      Ada.Text_IO.Put(self.io, " ");
+      Ada.Integer_Text_IO.Put(self.io, xPos - size/2, 0);
+      Ada.Text_IO.Put(self.io, ",");
+      Ada.Integer_Text_IO.Put(self.io, yPos + size, 0);
+      Ada.Text_IO.Put(self.io, """ fill=""none"" />");
+   end;
+   --
    --  Draw a glyph at a point
    --
    procedure draw_glyph(self : in out linear_svg_plot_record;
@@ -382,10 +431,14 @@ package body BBS.Numerical.plot_svg_linear is
             self.draw_glyph_plus(xPos, yPos, size);
          when BBS.Numerical.plot.glyph_X =>
             self.draw_glyph_X(xPos, yPos, size);
+         when BBS.Numerical.plot.glyph_asterisk =>
+            self.draw_glyph_asterisk(xPos, yPos, size);
          when BBS.Numerical.plot.glyph_box =>
             self.draw_glyph_box(xPos, yPos, size);
          when BBS.Numerical.plot.glyph_diamond =>
             self.draw_glyph_diamond(xPos, yPos, size);
+         when BBS.Numerical.plot.glyph_octagon =>
+            self.draw_glyph_octagon(xPos, yPos, size);
       end case;
       Ada.Text_IO.Put_Line(self.io, "</g>");
    end;
@@ -406,10 +459,14 @@ package body BBS.Numerical.plot_svg_linear is
                self.draw_glyph_plus(xPos, yPos, size);
             when BBS.Numerical.plot.glyph_X =>
                self.draw_glyph_X(xPos, yPos, size);
+            when BBS.Numerical.plot.glyph_asterisk =>
+               self.draw_glyph_asterisk(xPos, yPos, size);
             when BBS.Numerical.plot.glyph_box =>
                self.draw_glyph_box(xPos, yPos, size);
             when BBS.Numerical.plot.glyph_diamond =>
                self.draw_glyph_diamond(xPos, yPos, size);
+            when BBS.Numerical.plot.glyph_octagon =>
+            self.draw_glyph_octagon(xPos, yPos, size);
          end case;
       end loop;
       Ada.Text_IO.Put_Line(self.io, "</g>");

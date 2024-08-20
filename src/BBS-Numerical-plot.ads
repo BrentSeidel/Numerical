@@ -19,7 +19,8 @@ package BBS.Numerical.Plot is
    --
    --  Known glyphs to plot
    --
-   type glyph is (glyph_plus, glyph_X, glyph_box, glyph_diamond);
+   type glyph is (glyph_plus, glyph_X, glyph_asterisk, glyph_box, glyph_diamond,
+                  glyph_octagon);
    --
    --  Draw the plot frame
    --

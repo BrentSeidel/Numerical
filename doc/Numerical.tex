@@ -569,7 +569,7 @@ function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base)
 This package defines some data types, a base class, and an interface for plotting graphs.  The type of graph and the medium are to be handled by sub-classes.
 
 \subsection{Datatypes}
-There are three datatype for use by the end user and two for subclass implementors.  The \datatype{point} datatype is a record consisting of $x$ and $y$ components as \datatype{Float}.  The \datatype{point\_list} datatype is an unconstrained array of \datatype{point} records.  The last user datatype is \datatype{glyph}.  This is an enumeration of the various glyphs that can be drawn to plot points.  The current glyphs are \datatype{glyph\_plus}, \datatype{glyph\_X}, \datatype{glyph\_box}, and \datatype{glyph\_diamond}.  More glyphs may be added.
+There are three datatype for use by the end user and two for subclass implementors.  The \datatype{point} datatype is a record consisting of $x$ and $y$ components as \datatype{Float}.  The \datatype{point\_list} datatype is an unconstrained array of \datatype{point} records.  The last user datatype is \datatype{glyph}.  This is an enumeration of the various glyphs that can be drawn to plot points.  The current glyphs are \datatype{glyph\_plus}, \datatype{glyph\_X}, \datatype{glyph\_asterisk}, \datatype{glyph\_box}, \datatype{glyph\_diamond}, and \datatype{glyph\_octagon}.  More glyphs may be added.
 
 The two datatype for subclass implementors are \datatype{plot\_record} and \datatype{plot}, which is an access type for \datatype{plot\_record}.
 
