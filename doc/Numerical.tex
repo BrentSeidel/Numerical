@@ -118,6 +118,12 @@ This is a generic package with a real type parameter.  It contains functions to 
 \section{BBS.Numerical.polynomial\_complex}
 This is a generic package with a complex type parameter (from \package{Ada.Numerics.Generic\_Complex\_Types}.  It contains functions for polynomials.
 
+\section{BBS.Numerical.plot}
+This package defines the base class and interface for plotting.  You should not use the procedures from this package.
+
+\section{BBS.Numerical.plot\_svg\_linear}
+This package defines the class and procedures for plotting a linear-linear graph to a SVG file.
+
 \section{BBS.Numerical.polynomial\_real}
 This is a generic package with a real type parameter.  It contains functions for polynomials.
 
@@ -556,6 +562,138 @@ function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base)
   \item $step$ - The step size.
   \item There is a restriction that the array bounds for $tf$ and $initial$ must be the same.
   \item The returned array has the same bounds as $tf$ and $initial$.
+\end{itemize}
+
+%--------------------------------------------------------------------------------------------------
+\section{BBS.Numerical.plot}
+This package defines some data types, a base class, and an interface for plotting graphs.  The type of graph and the medium are to be handled by sub-classes.
+
+\subsection{Datatypes}
+There are three datatype for use by the end user and two for subclass implementors.  The \datatype{point} datatype is a record consisting of $x$ and $y$ components as \datatype{Float}.  The \datatype{point\_list} datatype is an unconstrained array of \datatype{point} records.  The last user datatype is \datatype{glyph}.  This is an enumeration of the various glyphs that can be drawn to plot points.  The current glyphs are \datatype{glyph\_plus}, \datatype{glyph\_X}, \datatype{glyph\_box}, and \datatype{glyph\_diamond}.  More glyphs may be added.
+
+The two datatype for subclass implementors are \datatype{plot\_record} and \datatype{plot}, which is an access type for \datatype{plot\_record}.
+
+\subsection{Common Interface}
+A common interface is defined that all plotting implementations should support.  In addition, each plotting implementation will likely have some specific routines for initializing and terminating the plot.
+
+The common routines are:
+\begin{lstlisting}
+procedure frame(self : in out plot_record; xTicks, yTicks : Natural;
+                xLines , yLines : Boolean);
+\end{lstlisting}
+This draws the basic frame of a plot.  The parameters are:
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $xTicks$ - The number of ticks to be drawn on the X-axis (or number of cycles for a log plot).
+  \item $yTicks$ - The number of ticks to be drawn on the Y-axis (or number of cycles for a log plot).
+  \item $xLines$ - Should be lines for the X-axis be draw as ticks or all the way across the plot?
+  \item $yLines$ - Should be lines for the Y-axis be draw as ticks or all the way across the plot?
+\end{itemize}
+\begin{lstlisting}
+procedure label(self : in out plot_record; xLabel, yLabel : String);
+\end{lstlisting}
+Draw the axis labels on the plot.
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $xLabel$ - The label for the X-axis.
+  \item $yLabel$ - The label for the Y-axis
+\end{itemize}
+\begin{lstlisting}
+ procedure title(self : in out plot_record; title : String);
+\end{lstlisting}
+Draw the title on the plot.
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $title$ - The title to add to the plot.
+\end{itemize}
+\begin{lstlisting}
+procedure draw_line(self : in out plot_record; points : point_list;
+                    color : String);
+\end{lstlisting}
+Draw a line on the plot through a list of points.
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $points$ - An array of points to plot.
+  \item $color$ - A string representing the color of the line.
+\end{itemize}
+\begin{lstlisting}
+procedure draw_point(self : in out plot_record; p : point;
+                     size : Positive; color : String);
+\end{lstlisting}
+Draw a single point on the plot as a circle.
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $p$ - The point to plot.
+  \item $size$ - The radius of the circle to draw.
+  \item $color$ - A string representing the color of the circle.
+\end{itemize}
+\begin{lstlisting}
+procedure draw_point(self : in out plot_record; points : point_list;
+                     size : Positive; color : String);
+\end{lstlisting}
+Draw a set of points on a plot as circles.
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $points$ - An array of points to plot.
+  \item $size$ - The radius of the circles to draw.
+  \item $color$ - A string representing the color of the circles.
+\end{itemize}
+\begin{lstlisting}
+procedure draw_text(self : in out plot_record; p : point;
+                    color, text : String);
+\end{lstlisting}
+Draw some text at a specified point on the plot.
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $p$ - The location to draw the text.
+  \item $color$ - A string representing the color of the text.
+  \item $text$ - The text to draw.
+\end{itemize}
+\begin{lstlisting}
+procedure draw_glyph(self : in out plot_record; p : point; g : glyph;
+                     color : String);
+\end{lstlisting}
+Draw a single glyph at a specified point on the plot.
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $p$ - The location of the glyph.
+  \item $g$ - The glyph to draw.
+  \item $color$ - A string representing the color of the glyph.
+\end{itemize}
+\begin{lstlisting}
+procedure draw_glyph(self : in out plot_record; points : point_list;
+                     g : glyph; color : String);
+\end{lstlisting}
+Draw a set of glyphs at a specified points on the plot.
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $points$ - An array of points for the glyph locations.
+  \item $g$ - The glyph to draw.
+  \item $color$ - A string representing the color of the glyph.
+\end{itemize}
+
+%--------------------------------------------------------------------------------------------------
+\section{BBS.Numerical.plot\_svg\_linear}
+This package contains specific routines for drawing a plot with linear axis to a SVG format file.  In addition to the routines defined in \package{BBS.Numerical.plot}, it defines two additional routines.  For using the common interface, use a \datatype{BBS.Numerical.linear\_svg\_plot\_record} instead of the basic \datatype{BBS.Numerical.plot\_record}.
+\begin{lstlisting}
+procedure start_plot(self : in out linear_svg_plot_record; name : string;
+                     xmin, xmax, ymin, ymax : float);
+\end{lstlisting}
+Starts a plot.  It opens the output file for the SVG plot and sets the plot's bounds.
+\begin{itemize}
+  \item $self$ - The plot being started.
+  \item $name$ - The name of the file to open.
+  \item $xmin$ - The smallest $X$ value on the plot.
+  \item $xmax$ - The largest $X$ value on the plot.
+  \item $ymin$ - The smallest $Y$ value on the plot.
+  \item $ymax$ - The largest $Y$ value on the plot.
+\end{itemize}
+\begin{lstlisting}
+procedure end_plot(self : in out linear_svg_plot_record);
+\end{lstlisting}
+This ends the plot and closes the plot file.  If the plot has not been started, the nothing happens.
+\begin{itemize}
+  \item $self$ - The plot being closed.
 \end{itemize}
 
 %--------------------------------------------------------------------------------------------------
