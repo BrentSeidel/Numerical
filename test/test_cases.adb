@@ -831,6 +831,28 @@ package body test_cases is
       pl.end_plot;
    end;
 --  ----------------------------------------------------------------------------
+   procedure test_filter is
+      pl : BBS.Numerical.plot_svg_linear.linear_svg_plot_record;
+      p1 : BBS.Numerical.plot.point_list(0 .. 100);
+      p2 : BBS.Numerical.plot.point_list(0 .. 100);
+      f1 : filter.average(2);
+   begin
+      for x in 0 .. 100 loop
+         p1(x).x := Float(x);
+         p1(x).y := elem.sin(Float(x)/10.1) + elem.cos(Float(x)*2.1);
+         p2(x).x := Float(x);
+         p2(x).y := f1.filter(p1(x).y);
+      end loop;
+      pl.start_plot("filter-plot.svg", 0.0, 100.0, -2.0, 2.0);
+      pl.frame(10, 10, False, False);
+      pl.label("Time", "Data");
+      pl.Title("Data filtering");
+      pl.draw_glyph(p1, BBS.Numerical.plot.glyph_X, "red");
+      pl.draw_line(p1, "red");
+      pl.draw_glyph(p2, BBS.Numerical.plot.glyph_plus, "blue");
+      pl.draw_line(p2, "blue");
+      pl.end_plot;
+   end;
 --  ----------------------------------------------------------------------------
    procedure cmplx_put(n : cmplx.Complex; fore, aft, exp : Natural) is
    begin

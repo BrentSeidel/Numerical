@@ -6,6 +6,7 @@ with Ada.Integer_Text_IO;
 with BBS;
 with BBS.Numerical;
 with BBS.Numerical.derivative;
+with BBS.Numerical.filter;
 with BBS.Numerical.functions;
 with BBS.Numerical.integration_real;
 with BBS.Numerical.interpolation;
@@ -28,6 +29,7 @@ package test_cases is
    use type cmplx.Complex;
    --
    package derive is new BBS.Numerical.derivative(real);
+   package filter is new BBS.Numerical.filter(real);
    package funct is new BBS.Numerical.functions(real);
    package integ is new BBS.Numerical.integration_real(real);
    package interp is new BBS.Numerical.interpolation(real);
@@ -42,6 +44,7 @@ package test_cases is
    package stat is new BBS.Numerical.Statistics(real);
 
    procedure test_derive;
+   procedure test_filter;
    procedure test_func;
    procedure test_integ;
    procedure test_interp;
