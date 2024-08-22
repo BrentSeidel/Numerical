@@ -30,13 +30,13 @@ package body BBS.Numerical.Plot is
    --  Plot point(s)
    --
    procedure draw_point(self : in out plot_record; p : point;
-                        size : Positive; color : String) is
+                        size : Float; color : String) is
    begin
       raise Unimplemented with "*** Do not use base class draw_point for plotting ***";
    end;
    --
    procedure draw_point(self : in out plot_record; points : point_list;
-                        size : Positive; color : String) is
+                        size : Float; color : String) is
    begin
       raise Unimplemented with "*** Do not use base class draw_point for plotting ***";
    end;

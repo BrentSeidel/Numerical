@@ -19,6 +19,7 @@ with BBS.Numerical.roots_complex;
 with BBS.Numerical.roots_real;
 with BBS.Numerical.Statistics;
 with BBS.Numerical.plot_svg_linear;
+with BBS.Numerical.plot_latex_linear;
 package test_cases is
    subtype real is Float;
    --

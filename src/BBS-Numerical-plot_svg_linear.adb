@@ -222,7 +222,7 @@ package body BBS.Numerical.plot_svg_linear is
    --  Plot point(s)
    --
    procedure draw_point(self : in out linear_svg_plot_record;
-                        p : BBS.Numerical.plot.point; size : Positive;
+                        p : BBS.Numerical.plot.point; size : Float;
                         color : String) is
    begin
       if not self.valid then
@@ -233,12 +233,12 @@ package body BBS.Numerical.plot_svg_linear is
       Ada.Text_IO.Put(self.io, """ cy=""");
       Ada.Float_Text_IO.Put(self.io, self.yTranslate(p.y), 0);
       Ada.Text_IO.Put(self.io, """ r=""");
-      Ada.Integer_Text_IO.Put(self.io, size, 0);
+      Ada.Integer_Text_IO.Put(self.io, Integer(size), 0);
       Ada.Text_IO.Put_Line(self.io, """ fill=""" & color & """ />");
    end;
    --
    procedure draw_point(self : in out linear_svg_plot_record;
-                        points : BBS.Numerical.plot.point_list; size : Positive;
+                        points : BBS.Numerical.plot.point_list; size : Float;
                         color : String) is
    begin
       if not self.valid then
@@ -250,7 +250,9 @@ package body BBS.Numerical.plot_svg_linear is
          Ada.Float_Text_IO.Put(self.io, self.xTranslate(p.x), 0);
          Ada.Text_IO.Put(self.io, """ cy=""");
          Ada.Float_Text_IO.Put(self.io, self.yTranslate(p.y), 0);
-         Ada.Text_IO.Put_line(self.io, """ r=""2"" />");
+         Ada.Text_IO.Put_line(self.io, """ r="" />");
+         Ada.Integer_Text_IO.Put(self.io, Integer(size), 0);
+         Ada.Text_IO.Put_Line(self.io, " />");
       end loop;
       Ada.Text_IO.Put_Line(self.io, "</g>");
    end;

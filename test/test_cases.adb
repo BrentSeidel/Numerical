@@ -722,7 +722,7 @@ package body test_cases is
 --  ----------------------------------------------------------------------------
 
    procedure test_stats is
-      pl  : BBS.Numerical.plot_svg_linear.linear_svg_plot_record;
+      pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       p   : BBS.Numerical.plot.point;
       val : real;
       dof : Positive := 20;
@@ -732,7 +732,7 @@ package body test_cases is
       Ada.Text_IO.Put_Line("Probability Distributions");
       Ada.Text_IO.Put_Line("               Normal                     Chi^2                     Student's T           Poisson             Exponential");
       Ada.Text_IO.Put_Line("   X     PDF           CDF           PDF           CDF           PDF           CDF           PMF           PDF           CDF");
-      pl.start_plot("stat-plot.svg", 0.0, 20.0, 0.0, 1.0);
+      pl.start_plot("stat-plot.tex", 0.0, 20.0, 0.0, 1.0);
       pl.frame(10, 10, False, False);
       pl.label("x-axis", "Probability density");
       pl.title("Probability densities");
@@ -772,11 +772,11 @@ package body test_cases is
          p.y := stat.studentT_cdf(0.0, val, dof, 20);
          pl.draw_glyph(p, BBS.Numerical.plot.glyph_octagon, "green");
          p.y := stat.exp_pdf(val, 1.0);
-         pl.draw_point(p, 2, "cyan");
+         pl.draw_point(p, 0.05, "cyan");
          p.y := stat.exp_cdf(val, 1.0);
-         pl.draw_point(p, 3, "cyan");
+         pl.draw_point(p, 0.1, "cyan");
          p.y := stat.poisson_pmf(Natural(i), dof);
-         pl.draw_point(p, 2, "black");
+         pl.draw_point(p, 0.05, "black");
       end loop;
       pl.draw_text((2.0, 0.8), "black", "Exponential CDF");
       Ada.Text_IO.New_Line;
@@ -811,7 +811,7 @@ package body test_cases is
    end;
 --  ----------------------------------------------------------------------------
    procedure test_plot is
-      pl : BBS.Numerical.plot_svg_linear.linear_svg_plot_record;
+      pl : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       p1 : BBS.Numerical.plot.point_list(0 .. 20);
       p2 : BBS.Numerical.plot.point_list(0 .. 20);
    begin
@@ -821,13 +821,13 @@ package body test_cases is
          p2(x).x := 5.0*elem.sin(Float(x));
          p2(x).y := 5.0*elem.cos(Float(x));
       end loop;
-      pl.start_plot("test-plot.svg", -10.0, 10.0, -10.0, 10.0);
+      pl.start_plot("test-plot.tex", -10.0, 10.0, -10.0, 10.0);
       pl.frame(10, 10, False, False);
       pl.label("x-Axis", "y-Axis");
       pl.title("The Title of the Plot");
       pl.draw_line(p1, "red");
       pl.draw_glyph(p1, BBS.Numerical.plot.glyph_diamond, "red");
-      pl.draw_point(p2, 2, "green");
+      pl.draw_point(p2, 0.1, "green");
       pl.end_plot;
    end;
 --  ----------------------------------------------------------------------------

@@ -20,6 +20,7 @@
 \usepackage{multicol}
 \usepackage{xcolor}
 %
+\usepackage{tikz}
 \usepackage[pdf]{pstricks}
 \usepackage{graphicx}
 \DeclareGraphicsExtensions{.pdf}
@@ -573,6 +574,8 @@ There are three datatype for use by the end user and two for subclass implemento
 
 The two datatype for subclass implementors are \datatype{plot\_record} and \datatype{plot}, which is an access type for \datatype{plot\_record}.
 
+Note that due to differences in implementations, graphs will not be identical between implementations, though they should convey the same information.  The main differences are expected to be in fonts and sizes.
+
 \subsection{Common Interface}
 A common interface is defined that all plotting implementations should support.  In addition, each plotting implementation will likely have some specific routines for initializing and terminating the plot.
 
@@ -618,7 +621,7 @@ Draw a line on the plot through a list of points.
 \end{itemize}
 \begin{lstlisting}
 procedure draw_point(self : in out plot_record; p : point;
-                     size : Positive; color : String);
+                     size : Float; color : String);
 \end{lstlisting}
 Draw a single point on the plot as a circle.
 \begin{itemize}
@@ -629,7 +632,7 @@ Draw a single point on the plot as a circle.
 \end{itemize}
 \begin{lstlisting}
 procedure draw_point(self : in out plot_record; points : point_list;
-                     size : Positive; color : String);
+                     size : Float; color : String);
 \end{lstlisting}
 Draw a set of points on a plot as circles.
 \begin{itemize}
@@ -682,7 +685,7 @@ procedure start_plot(self : in out linear_svg_plot_record; name : string;
 Starts a plot.  It opens the output file for the SVG plot and sets the plot's bounds.
 \begin{itemize}
   \item $self$ - The plot being started.
-  \item $name$ - The name of the file to open.
+  \item $name$ - The name of the file to open.  Note that this should have a \cli{svg} extension.
   \item $xmin$ - The smallest $X$ value on the plot.
   \item $xmax$ - The largest $X$ value on the plot.
   \item $ymin$ - The smallest $Y$ value on the plot.
@@ -696,6 +699,48 @@ This ends the plot and closes the plot file.  If the plot has not been started, 
   \item $self$ - The plot being closed.
 \end{itemize}
 
+%--------------------------------------------------------------------------------------------------
+\section{BBS.Numerical.plot\_latex\_linear}
+This package contains specific routines for drawing a plot with linear axis using the \package{tikz} \LaTeX package.  The plot can be included in a \LaTeX document.  See below for examples.  In addition to the routines defined in \package{BBS.Numerical.plot}, it defines two additional routines.  For using the common interface, use a \datatype{BBS.Numerical.linear\_latex\_plot\_record} instead of the basic \datatype{BBS.Numerical.plot\_record}.
+
+\begin{lstlisting}
+procedure start_plot(self : in out linear_latex_plot_record; name : string;
+                     xmin, xmax, ymin, ymax : float);
+\end{lstlisting}
+Starts a plot.  It opens the output file for the SVG plot and sets the plot's bounds.
+\begin{itemize}
+  \item $self$ - The plot being started.
+  \item $name$ - The name of the file to open.  Note that this should have a \cli{tex} extension.
+  \item $xmin$ - The smallest $X$ value on the plot.
+  \item $xmax$ - The largest $X$ value on the plot.
+  \item $ymin$ - The smallest $Y$ value on the plot.
+  \item $ymax$ - The largest $Y$ value on the plot.
+\end{itemize}
+\begin{lstlisting}
+procedure end_plot(self : in out linear_latex_plot_record);
+\end{lstlisting}
+This ends the plot and closes the plot file.  If the plot has not been started, the nothing happens.
+\begin{itemize}
+  \item $self$ - The plot being closed.
+\end{itemize}
+
+\begin{figure}
+  \include{test-plot}
+  \caption{A Sample Figure}
+\end{figure}
+
+To include a plot, add something like the following to your \LaTeX document:
+\begin{lstlisting}
+\begin{figure}
+  \include{test-plot}
+  \caption{A Sample Figure}
+\end{figure}
+\end{lstlisting}
+
+\begin{figure}
+  \include{stat-plot}
+  \caption{Probability Density Functions}
+\end{figure}
 %--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.polynomial\_complex}
 This is a generic package with a complex package parameter, \datatype{cmplx}.  This parameter has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.

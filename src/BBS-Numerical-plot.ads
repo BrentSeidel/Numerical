@@ -43,9 +43,9 @@ package BBS.Numerical.Plot is
    --  Plot point(s)
    --
    procedure draw_point(self : in out plot_record; p : point;
-                        size : Positive; color : String);
+                        size : Float; color : String);
    procedure draw_point(self : in out plot_record; points : point_list;
-                        size : Positive; color : String);
+                        size : Float; color : String);
    --
    --  Draw text at a point
    --
