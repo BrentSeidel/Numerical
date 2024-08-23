@@ -1,6 +1,19 @@
 with Ada.Float_Text_IO;
 package body BBS.Numerical.plot_latex_linear is
    --
+   --  Plotting helper functions.  Translate x and y graph units into physical
+   --  units for plotting.
+   --
+   function xTranslate(self : linear_latex_plot_record; x : Float) return Float is
+   begin
+      return xStart + (x - self.xMin)*xSize/(self.xMax - self.xMin);
+   end;
+   --
+   function yTranslate(self : linear_latex_plot_record; y : Float) return Float is
+   begin
+      return yStart + (y - self.yMin)*ySize/(self.yMax - self.yMin);
+   end;
+   --
    --  Open the named file and start the plot
    --
    procedure start_plot(self : in out linear_latex_plot_record; name : string;
@@ -68,7 +81,7 @@ package body BBS.Numerical.plot_latex_linear is
             Ada.Text_IO.Put(self.io, Float'Image(yPos) & ") -- (" & Float'Image(xStart + xSize));
             Ada.Text_IO.Put_Line(self.io, "," & Float'Image(yPos) & ");");
          end if;
-         Ada.Text_IO.Put(self.io, "\node [rotate=-90] at (" & Float'Image(xStart - 0.5) & ",");
+         Ada.Text_IO.Put(self.io, "\node [rotate=90] at (" & Float'Image(xStart - 0.5) & ",");
          Ada.Text_IO.Put(self.io, Float'Image(yPos) & ") {");
          Ada.Float_Text_IO.Put(self.io, self.yMin + float(y)*(self.yMax - self.yMin)/float(yTicks), 2, 2, 0);
          Ada.Text_IO.Put_Line(self.io, "};");
@@ -86,7 +99,7 @@ package body BBS.Numerical.plot_latex_linear is
       end if;
       Ada.Text_IO.Put(self.io, "\node at (" & Float'Image(xStart + xSize/2.0) & ",");
       Ada.Text_IO.Put_Line(self.io, Float'Image(yStart - 1.0) & ") {" & xLabel & "};");
-      Ada.Text_IO.Put(self.io, "\node [rotate=-90] at (" & Float'Image(xPos) & ",");
+      Ada.Text_IO.Put(self.io, "\node [rotate=90] at (" & Float'Image(xPos) & ",");
       Ada.Text_IO.Put_Line(self.io, Float'Image(yPos) & ") {" & yLabel & "};");
    end;
    --
@@ -99,18 +112,6 @@ package body BBS.Numerical.plot_latex_linear is
       end if;
       Ada.Text_IO.Put(self.io, "\node at (" & Float'Image(xStart + xSize/2.0) & ",");
       Ada.Text_IO.Put_Line(self.io, Float'Image(yStart + ySize + 0.5) & ") {" & title & "};");
-   end;
-   --
-   --  Plotting helper functions
-   --
-   function xTranslate(self : linear_latex_plot_record; x : Float) return Float is
-   begin
-      return xStart + (x - self.xMin)*xSize/(self.xMax - self.xMin);
-   end;
-   --
-   function yTranslate(self : linear_latex_plot_record; y : Float) return Float is
-   begin
-      return yStart + (y - self.yMin)*ySize/(self.yMax - self.yMin);
    end;
    --
    --  Plot lines

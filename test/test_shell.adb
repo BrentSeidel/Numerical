@@ -17,11 +17,10 @@ begin
       Ada.Text_IO.Put_Line("  6 - Complex polynomials");
       Ada.Text_IO.Put_Line("  7 - Real polynomials");
       Ada.Text_IO.Put_Line("  8 - Root finding");
-      Ada.Text_IO.Put_Line("  9 - Statistics");
+      Ada.Text_IO.Put_Line("  9 - Statistics (and plot)");
       Ada.Text_IO.Put_Line(" 10 - Random numbers");
       Ada.Text_IO.Put_Line(" 11 - Regression");
-      Ada.Text_IO.Put_Line(" 12 - Plot");
-      Ada.Text_IO.Put_Line(" 13 - Filtering");
+      Ada.Text_IO.Put_Line(" 12 - Filtering (and plot)");
       Ada.Text_IO.Put("Selection: ");
       Ada.Integer_Text_IO.Get(selection, 0);
       --
@@ -57,8 +56,6 @@ begin
    elsif selection = 11 then
       test_cases.test_regression;
    elsif selection = 12 then
-      test_cases.test_plot;
-   elsif selection = 13 then
       test_cases.test_filter;
    end if;
 end;

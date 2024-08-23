@@ -723,6 +723,7 @@ package body test_cases is
 
    procedure test_stats is
       pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
+      ps  : BBS.Numerical.plot_svg_linear.linear_svg_plot_record;
       p   : BBS.Numerical.plot.point;
       val : real;
       dof : Positive := 20;
@@ -736,6 +737,10 @@ package body test_cases is
       pl.frame(10, 10, False, False);
       pl.label("x-axis", "Probability density");
       pl.title("Probability densities");
+      ps.start_plot("stat-plot.svg", 0.0, 20.0, 0.0, 1.0);
+      ps.frame(10, 10, False, False);
+      ps.label("x-axis", "Probability density");
+      ps.title("Probability densities");
       for i in 0 .. 20 loop
          val := real(i)*1.0;
          float_io.Put(val, 2, 2, 0);
@@ -761,26 +766,80 @@ package body test_cases is
          p.x := val;
          p.y := stat.normal_pdf(val);
          pl.draw_glyph(p, BBS.Numerical.plot.glyph_plus, "red");
+         ps.draw_glyph(p, BBS.Numerical.plot.glyph_plus, "red");
          p.y := stat.normal_cdf(0.0, val, 20);
          pl.draw_glyph(p, BBS.Numerical.plot.glyph_diamond, "red");
+         ps.draw_glyph(p, BBS.Numerical.plot.glyph_diamond, "red");
          p.y := stat.chi2_pdf(val, dof);
          pl.draw_glyph(p, BBS.Numerical.plot.glyph_X, "blue");
+         ps.draw_glyph(p, BBS.Numerical.plot.glyph_X, "blue");
          p.y := stat.chi2_cdf(0.0, val, dof, 20);
          pl.draw_glyph(p, BBS.Numerical.plot.glyph_box, "blue");
+         ps.draw_glyph(p, BBS.Numerical.plot.glyph_box, "blue");
          p.y := stat.studentT_pdf(val, dof);
          pl.draw_glyph(p, BBS.Numerical.plot.glyph_asterisk, "green");
+         ps.draw_glyph(p, BBS.Numerical.plot.glyph_asterisk, "green");
          p.y := stat.studentT_cdf(0.0, val, dof, 20);
          pl.draw_glyph(p, BBS.Numerical.plot.glyph_octagon, "green");
+         ps.draw_glyph(p, BBS.Numerical.plot.glyph_octagon, "green");
          p.y := stat.exp_pdf(val, 1.0);
          pl.draw_point(p, 0.05, "cyan");
+         ps.draw_point(p, 1.0, "cyan");
          p.y := stat.exp_cdf(val, 1.0);
          pl.draw_point(p, 0.1, "cyan");
+         ps.draw_point(p, 2.0, "cyan");
          p.y := stat.poisson_pmf(Natural(i), dof);
          pl.draw_point(p, 0.05, "black");
+         ps.draw_point(p, 1.0, "black");
       end loop;
-      pl.draw_text((2.0, 0.8), "black", "Exponential CDF");
-      Ada.Text_IO.New_Line;
+      p := (4.0, 0.9);
+      pl.draw_glyph(p, BBS.Numerical.plot.glyph_plus, "red");
+      pl.draw_text((4.5, 0.9), "black", "Normal PDF");
+      ps.draw_glyph(p, BBS.Numerical.plot.glyph_plus, "red");
+      ps.draw_text((4.5, 0.9), "black", "Normal PDF");
+      p := (4.0, 0.8);
+      pl.draw_glyph(p, BBS.Numerical.plot.glyph_diamond, "red");
+      pl.draw_text((4.5, 0.8), "black", "Normal CDF");
+      ps.draw_glyph(p, BBS.Numerical.plot.glyph_diamond, "red");
+      ps.draw_text((4.5, 0.8), "black", "Normal CDF");
+      p := (4.0, 0.7);
+      pl.draw_glyph(p, BBS.Numerical.plot.glyph_X, "blue");
+      pl.draw_text((4.5, 0.7), "black", "$\chi^2$ PDF");
+      ps.draw_glyph(p, BBS.Numerical.plot.glyph_X, "blue");
+      ps.draw_text((4.5, 0.7), "black", "$\chi^2$ PDF");
+      p := (4.0, 0.6);
+      pl.draw_glyph(p, BBS.Numerical.plot.glyph_box, "blue");
+      pl.draw_text((4.5, 0.6), "black", "$\chi^2$ CDF");
+      ps.draw_glyph(p, BBS.Numerical.plot.glyph_box, "blue");
+      ps.draw_text((4.5, 0.6), "black", "$\chi^2$ CDF");
+      p := (10.0, 0.9);
+      pl.draw_glyph(p, BBS.Numerical.plot.glyph_asterisk, "green");
+      pl.draw_text((10.5, 0.9), "black", "Student's T PDF");
+      ps.draw_glyph(p, BBS.Numerical.plot.glyph_asterisk, "green");
+      ps.draw_text((10.5, 0.9), "black", "Student's T PDF");
+      p := (10.0, 0.8);
+      pl.draw_glyph(p, BBS.Numerical.plot.glyph_octagon, "green");
+      pl.draw_text((10.5, 0.8), "black", "Student's T CDF");
+      ps.draw_glyph(p, BBS.Numerical.plot.glyph_octagon, "green");
+      ps.draw_text((10.5, 0.8), "black", "Student's T CDF");
+      p := (10.0, 0.7);
+      pl.draw_point(p, 0.05, "cyan");
+      pl.draw_text((10.5, 0.7), "black", "Exponential PDF");
+      ps.draw_point(p, 1.0, "cyan");
+      ps.draw_text((10.5, 0.7), "black", "Exponential PDF");
+      p := (10.0, 0.6);
+      pl.draw_point(p, 0.1, "cyan");
+      pl.draw_text((10.5, 0.6), "black", "Exponential CDF");
+      ps.draw_point(p, 2.0, "cyan");
+      ps.draw_text((10.5, 0.6), "black", "Exponential CDF");
+      p := (4.0, 0.4);
+      pl.draw_point(p, 0.05, "black");
+      pl.draw_text((4.5, 0.4), "black", "Poisson PMF");
+      ps.draw_point(p, 1.0, "black");
+      ps.draw_text((4.5, 0.4), "black", "Poisson PMF");
       pl.end_plot;
+      ps.end_plot;
+      Ada.Text_IO.New_Line;
    end test_stats;
 --  ----------------------------------------------------------------------------
    procedure test_regression is
@@ -832,10 +891,12 @@ package body test_cases is
    end;
 --  ----------------------------------------------------------------------------
    procedure test_filter is
-      pl : BBS.Numerical.plot_svg_linear.linear_svg_plot_record;
+      pl : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
+      ps : BBS.Numerical.plot_svg_linear.linear_svg_plot_record;
       p1 : BBS.Numerical.plot.point_list(0 .. 100);
       p2 : BBS.Numerical.plot.point_list(0 .. 100);
       f1 : filter.average(2);
+      pt : BBS.Numerical.plot.point;
    begin
       for x in 0 .. 100 loop
          p1(x).x := Float(x);
@@ -843,15 +904,41 @@ package body test_cases is
          p2(x).x := Float(x);
          p2(x).y := f1.filter(p1(x).y);
       end loop;
-      pl.start_plot("filter-plot.svg", 0.0, 100.0, -2.0, 2.0);
+      pl.start_plot("filter-plot.tex", 0.0, 100.0, -2.0, 2.0);
       pl.frame(10, 10, False, False);
       pl.label("Time", "Data");
-      pl.Title("Data filtering");
+      pl.Title("Data Filtering with an Averaging Filter");
       pl.draw_glyph(p1, BBS.Numerical.plot.glyph_X, "red");
       pl.draw_line(p1, "red");
       pl.draw_glyph(p2, BBS.Numerical.plot.glyph_plus, "blue");
       pl.draw_line(p2, "blue");
+      pt := (x => 5.0, y => -0.8);
+      pl.draw_glyph(pt, BBS.Numerical.plot.glyph_x, "red");
+      pt := (x => 5.6, y => -0.8);
+      pl.draw_text(pt, "black", "Original Data");
+      pt := (x => 5.0, y => -1.0);
+      pl.draw_glyph(pt, BBS.Numerical.plot.glyph_plus, "blue");
+      pt := (x => 5.6, y => -1.0);
+      pl.draw_text(pt, "black", "Filtered Data");
       pl.end_plot;
+      --
+      ps.start_plot("filter-plot.svg", 0.0, 100.0, -2.0, 2.0);
+      ps.frame(10, 10, False, False);
+      ps.label("Time", "Data");
+      ps.Title("Data Filtering with an Averaging Filter");
+      ps.draw_glyph(p1, BBS.Numerical.plot.glyph_X, "red");
+      ps.draw_line(p1, "red");
+      ps.draw_glyph(p2, BBS.Numerical.plot.glyph_plus, "blue");
+      ps.draw_line(p2, "blue");
+      pt := (x => 5.0, y => -0.8);
+      ps.draw_glyph(pt, BBS.Numerical.plot.glyph_x, "red");
+      pt := (x => 5.6, y => -0.8);
+      ps.draw_text(pt, "black", "Original Data");
+      pt := (x => 5.0, y => -1.0);
+      ps.draw_glyph(pt, BBS.Numerical.plot.glyph_plus, "blue");
+      pt := (x => 5.6, y => -1.0);
+      ps.draw_text(pt, "black", "Filtered Data");
+      ps.end_plot;
    end;
 --  ----------------------------------------------------------------------------
    procedure cmplx_put(n : cmplx.Complex; fore, aft, exp : Natural) is

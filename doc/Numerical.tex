@@ -122,6 +122,9 @@ This is a generic package with a complex type parameter (from \package{Ada.Numer
 \section{BBS.Numerical.plot}
 This package defines the base class and interface for plotting.  You should not use the procedures from this package.
 
+\section{BBS.Numerical.plot\_latex\_linear}
+This package defines the class and procedures for plotting a linear-linear graph to a TEX (\LaTeX) file.
+
 \section{BBS.Numerical.plot\_svg\_linear}
 This package defines the class and procedures for plotting a linear-linear graph to a SVG file.
 
@@ -676,30 +679,6 @@ Draw a set of glyphs at a specified points on the plot.
 \end{itemize}
 
 %--------------------------------------------------------------------------------------------------
-\section{BBS.Numerical.plot\_svg\_linear}
-This package contains specific routines for drawing a plot with linear axis to a SVG format file.  In addition to the routines defined in \package{BBS.Numerical.plot}, it defines two additional routines.  For using the common interface, use a \datatype{BBS.Numerical.linear\_svg\_plot\_record} instead of the basic \datatype{BBS.Numerical.plot\_record}.
-\begin{lstlisting}
-procedure start_plot(self : in out linear_svg_plot_record; name : string;
-                     xmin, xmax, ymin, ymax : float);
-\end{lstlisting}
-Starts a plot.  It opens the output file for the SVG plot and sets the plot's bounds.
-\begin{itemize}
-  \item $self$ - The plot being started.
-  \item $name$ - The name of the file to open.  Note that this should have a \cli{svg} extension.
-  \item $xmin$ - The smallest $X$ value on the plot.
-  \item $xmax$ - The largest $X$ value on the plot.
-  \item $ymin$ - The smallest $Y$ value on the plot.
-  \item $ymax$ - The largest $Y$ value on the plot.
-\end{itemize}
-\begin{lstlisting}
-procedure end_plot(self : in out linear_svg_plot_record);
-\end{lstlisting}
-This ends the plot and closes the plot file.  If the plot has not been started, the nothing happens.
-\begin{itemize}
-  \item $self$ - The plot being closed.
-\end{itemize}
-
-%--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.plot\_latex\_linear}
 This package contains specific routines for drawing a plot with linear axis using the \package{tikz} \LaTeX package.  The plot can be included in a \LaTeX document.  See below for examples.  In addition to the routines defined in \package{BBS.Numerical.plot}, it defines two additional routines.  For using the common interface, use a \datatype{BBS.Numerical.linear\_latex\_plot\_record} instead of the basic \datatype{BBS.Numerical.plot\_record}.
 
@@ -724,12 +703,11 @@ This ends the plot and closes the plot file.  If the plot has not been started, 
   \item $self$ - The plot being closed.
 \end{itemize}
 
-\begin{figure}
-  \include{test-plot}
-  \caption{A Sample Figure}
-\end{figure}
-
-To include a plot, add something like the following to your \LaTeX document:
+To include a plot, first add include the \package{tikz} package.
+\begin{lstlisting}
+\usepackage{tikz}
+\end{lstlisting}
+Then add something like the following to your \LaTeX document where you want the figure to appear:
 \begin{lstlisting}
 \begin{figure}
   \include{test-plot}
@@ -737,10 +715,71 @@ To include a plot, add something like the following to your \LaTeX document:
 \end{figure}
 \end{lstlisting}
 
+Some example figures are shown in Figures \ref{tex:Ave} and \ref{tex:Prob}.
+
+\begin{figure}
+  \include{filter-plot}
+  \caption{Example Averaging Filter}
+  \label{tex:Ave}
+\end{figure}
+
 \begin{figure}
   \include{stat-plot}
   \caption{Probability Density Functions}
+  \label{tex:Prob}
 \end{figure}
+
+%--------------------------------------------------------------------------------------------------
+\section{BBS.Numerical.plot\_svg\_linear}
+This package contains specific routines for drawing a plot with linear axis to a SVG format file.  In addition to the routines defined in \package{BBS.Numerical.plot}, it defines two additional routines.  For using the common interface, use a \datatype{BBS.Numerical.linear\_svg\_plot\_record} instead of the basic \datatype{BBS.Numerical.plot\_record}.
+\begin{lstlisting}
+procedure start_plot(self : in out linear_svg_plot_record; name : string;
+                     xmin, xmax, ymin, ymax : float);
+\end{lstlisting}
+Starts a plot.  It opens the output file for the SVG plot and sets the plot's bounds.
+\begin{itemize}
+  \item $self$ - The plot being started.
+  \item $name$ - The name of the file to open.  Note that this should have a \cli{svg} extension.
+  \item $xmin$ - The smallest $X$ value on the plot.
+  \item $xmax$ - The largest $X$ value on the plot.
+  \item $ymin$ - The smallest $Y$ value on the plot.
+  \item $ymax$ - The largest $Y$ value on the plot.
+\end{itemize}
+\begin{lstlisting}
+procedure end_plot(self : in out linear_svg_plot_record);
+\end{lstlisting}
+This ends the plot and closes the plot file.  If the plot has not been started, the nothing happens.
+\begin{itemize}
+  \item $self$ - The plot being closed.
+\end{itemize}
+
+To include an SVG plot in a \LaTeX document, it first needs to be converted to a PDF.  InkScape, or similar programs can be used to do this.  Then it can be included using the \package{graphix} package in \LaTeX.
+\begin{lstlisting}
+\usepackage{graphicx}
+\end{lstlisting}
+Then add something like the following where you want the figure to appear (note the scale factor in the \cli{includegraphics} line:
+\begin{lstlisting}
+\begin{figure}
+  \includegraphics[scale=0.6]{filter-plot.pdf}
+  \caption{Example Averaging Filter}
+  \label{svg:Ave}
+\end{figure}
+\end{lstlisting}
+
+Some example figures are shown in Figures \ref{svg:Ave} and \ref{svg:Prob}.
+
+\begin{figure}
+  \includegraphics[scale=0.6]{filter-plot.pdf}
+  \caption{Example Averaging Filter}
+  \label{svg:Ave}
+\end{figure}
+
+\begin{figure}
+  \includegraphics[scale=0.6]{stat-plot.pdf}
+  \caption{Probability Density Functions}
+  \label{svg:Prob}
+\end{figure}
+
 %--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.polynomial\_complex}
 This is a generic package with a complex package parameter, \datatype{cmplx}.  This parameter has datatypes \datatype{cmplx.Complex} and \datatype{cmplx.Real}.

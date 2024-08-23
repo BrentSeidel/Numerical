@@ -74,9 +74,9 @@ private
          ymax  : Float;
       end record;
    --
-   --  Plot size for scaling
+   --  Plot size for scaling.  Adjust these as needed for your documents.
    --
-   xSize  : constant Float := 10.0;
+   xSize  : constant Float := 14.0;
    ySize  : constant Float := 10.0;
    xStart : constant Float := 1.0;
    yStart : constant Float := 1.0;
@@ -85,6 +85,6 @@ private
    borderLeft  : constant Float := 2.0;
    borderRight : constant Float := 1.0;
    --
-   tick_size : constant Float := 0.5;
+   tick_size : constant Float := 0.2;
    glyph_size : constant Float := 0.2;
 end BBS.Numerical.plot_latex_linear;
