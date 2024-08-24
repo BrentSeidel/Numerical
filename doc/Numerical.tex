@@ -680,7 +680,7 @@ Draw a set of glyphs at a specified points on the plot.
 
 %--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.plot\_latex\_linear}
-This package contains specific routines for drawing a plot with linear axis using the \package{tikz} \LaTeX package.  The plot can be included in a \LaTeX document.  See below for examples.  In addition to the routines defined in \package{BBS.Numerical.plot}, it defines two additional routines.  For using the common interface, use a \datatype{BBS.Numerical.linear\_latex\_plot\_record} instead of the basic \datatype{BBS.Numerical.plot\_record}.
+This package contains specific routines for drawing a plot with linear axis using the \package{tikz} \LaTeX package.  The plot can be included in a \LaTeX document.  See below for examples.  In addition to the routines defined in \package{BBS.Numerical.plot}, it defines two additional routines.  For using the common interface, use a \datatype{BBS.Numerical.plot\_latex\_linear.linear\_latex\_plot\_record} instead of the basic \datatype{BBS.Numerical.plot.plot\_record}.
 
 \begin{lstlisting}
 procedure start_plot(self : in out linear_latex_plot_record; name : string;
@@ -731,7 +731,7 @@ Some example figures are shown in Figures \ref{tex:Ave} and \ref{tex:Prob}.
 
 %--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.plot\_svg\_linear}
-This package contains specific routines for drawing a plot with linear axis to a SVG format file.  In addition to the routines defined in \package{BBS.Numerical.plot}, it defines two additional routines.  For using the common interface, use a \datatype{BBS.Numerical.linear\_svg\_plot\_record} instead of the basic \datatype{BBS.Numerical.plot\_record}.
+This package contains specific routines for drawing a plot with linear axis to a SVG format file.  In addition to the routines defined in \package{BBS.Numerical.plot}, it defines two additional routines.  For using the common interface, use a \datatype{BBS.Numerical.plot\_svg\_linear.linear\_svg\_plot\_record} instead of the basic \datatype{BBS.Numerical.pllot.plot\_record}.
 \begin{lstlisting}
 procedure start_plot(self : in out linear_svg_plot_record; name : string;
                      xmin, xmax, ymin, ymax : float);
