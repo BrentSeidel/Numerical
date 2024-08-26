@@ -167,6 +167,9 @@ package body BBS.Numerical.plot_latex_linear is
    procedure draw_text(self : in out linear_latex_plot_record;
                         p : BBS.Numerical.plot.point; color, text : String) is
    begin
+      if not self.valid then
+         return;
+      end if;
       Ada.Text_IO.Put(self.io, "\node [right, " & color & "] at (" & Float'Image(self.xTranslate(p.x)) & ",");
       Ada.Text_IO.Put_Line(self.io, Float'Image((self.yTranslate(p.y))) &  ") {" & text & "};");
    end;
@@ -253,6 +256,9 @@ package body BBS.Numerical.plot_latex_linear is
       yPos : constant Float := self.yTranslate(p.y);
       size : constant Float := glyph_size;
    begin
+      if not self.valid then
+         return;
+      end if;
       case g is
          when BBS.Numerical.plot.glyph_plus =>
             self.draw_glyph_plus(xPos, yPos, size, color);
@@ -276,6 +282,9 @@ package body BBS.Numerical.plot_latex_linear is
       yPos : Float;
       size : constant Float := glyph_size;
    begin
+      if not self.valid then
+         return;
+      end if;
       for p of points loop
          xPos := self.xTranslate(p.x);
          yPos := self.yTranslate(p.y);

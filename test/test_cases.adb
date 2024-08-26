@@ -90,9 +90,20 @@ package body test_cases is
       end loop;
    end test_func;
 --  ----------------------------------------------------------------------------
+   --
+   --  The following two variables have to be global so that they can be
+   --  used by the function integ_f1.  They may be eventually moved into
+   --  the private part of the spec, if the need to be used in more places.
+   --
+pt  : BBS.Numerical.plot.point;
+pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
+
    function integ_f1(x : real) return real is
    begin
-      return (100.0/(x*x))*elem.sin(10.0/x);
+      pt.x := x;
+      pt.y := (100.0/(x*x*x))*elem.sin(10.0/((x-0.5)**2));
+      pl.draw_glyph(pt, BBS.Numerical.plot.glyph_X, "blue");
+      return pt.y;
    end;
 
    function integ_f2(t, y : real) return real is
@@ -101,22 +112,36 @@ package body test_cases is
    end;
 
    procedure test_integ is
+      pList : BBS.Numerical.plot.point_list(0 .. 200);
       y   : real;
       tol : real;
    begin
       Ada.Text_IO.Put_Line("Testing numerical integration routines.");
       --
       Ada.Text_IO.Put_Line("Testing integration:");
-      y := integ.trapezoid(integ_f1'Access, 1.0, 3.0, 10);
+      y := integ.trapezoid(integ_f1'Access, 1.0, 3.0, 50);
       Ada.Text_IO.Put("  Trapazoid rule gives ");
       float_io.Put(y, 2, 3, 0);
       Ada.Text_IO.New_Line;
-      y := integ.simpson(integ_f1'Access, 1.0, 3.0, 10);
+      y := integ.simpson(integ_f1'Access, 1.0, 3.0, 50);
       Ada.Text_IO.Put("  Simpson rule gives ");
       float_io.Put(y, 2, 6, 0);
       Ada.Text_IO.New_Line;
-      tol := 1.0e-6;
+      for x in pList'Range loop
+         pList(x).x := 1.0 + Float(x)*(3.0 - 1.0)/200.0;
+         pList(x).y := integ_f1(pList(x).x);
+      end loop;
+      pl.start_plot("integ-plot.tex", 1.0, 3.0, -100.0, 100.0);
+      pl.frame(10, 10, False, False);
+      pl.title("$\int_1^3 \frac{100}{x^3}sin(\frac{10}{(x-0.5)^2}) dx$ Using Adaptive Simpson's Integration");
+      pl.draw_line(pList, "red");
+      pt := (1.7, -40.0);
+      pl.draw_glyph(pt, BBS.Numerical.plot.glyph_X, "blue");
+      pt.x := 1.8;
+      pl.draw_text(pt, "black", "Function evaluations");
+      tol := 1.0e-1;
       y := integ.adapt_simpson(integ_f1'Access, 1.0, 3.0, tol, 8);
+      pl.end_plot;
       Ada.Text_IO.Put("  Adaptive Simpson gives ");
       float_io.Put(y, 2, 6, 0);
       Ada.Text_IO.Put(" with estimated tolerance ");

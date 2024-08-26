@@ -356,7 +356,7 @@ function simpson(test : test_func; lower, upper : f'Base; steps : Positive)
 \end{itemize}
 
 \subsection{Adaptive Simpson's}
-This estimates the value of the integral using an adaptive version of Simpson's rule.  The interval is divided into two and each side is evaluated using the composite Simpson's with 1 and 2 steps.  The difference between the two evaluations is used as an error estimate.  If the error is two big, the interval is divided again and the function recurses until either the recursion limit is reached or the error is within limits.
+This estimates the value of the integral using an adaptive version of Simpson's rule.  The interval is divided into two and each side is evaluated using the composite Simpson's with 1 and 2 steps.  The difference between the two evaluations is used as an error estimate.  If the error is two big, the interval is divided again and the function recurses until either the recursion limit is reached or the error is within limits.  As Figure \ref{tex:AdaptSimp} shows, there are more function evaluations where the curve is changes rapidly and fewer where it isn't.
 \begin{lstlisting}
 function adapt_simpson(test : test_func; lower, upper : f'Base;
                        tol : in out f'Base;
@@ -369,6 +369,13 @@ function adapt_simpson(test : test_func; lower, upper : f'Base;
   \item $tol$ - The desired error limit.  This also returns the estimated error.
   \item $levels$ - The allowed recursion depth.
 \end{itemize}
+
+
+\begin{figure}
+  \include{integ-plot}
+  \caption{Example Adaptive Simpson's Integration}
+  \label{tex:AdaptSimp}
+\end{figure}
 
 %--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.interpolation}
