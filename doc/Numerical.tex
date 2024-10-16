@@ -96,6 +96,8 @@ This document is \copyright 2024 Brent Seidel.  All rights reserved.
 
 Back in the 1980s when I was an undergraduate, I took a numerical analysis course and quite enjoyed it.  Then my first job out of college was working on a numerical analysis library for a small startup that went the way of most startups.  I was recently inspired to dig out my old textbook and try implementing some of the routines.  This collection includes some of those, plus others.
 
+Note that the numerics annex of the Ada specification implements a number of numerical functions.  The basic elementary functions are covered, along with complex numbers, and vectors and matrices of real or complex numbers.  The 2012 Language Reference\cite{LRM2012} has more information.
+
 Note that some packages are for complex numbers and some are for real numbers.  At some point, they may be combined.  Most packages are generic.  The packages are:
 
 \section{BBS.Numerical.complex}
@@ -150,7 +152,7 @@ This is a generic package with a real type parameter.  It contains functions for
 This is a generic package with a real type parameter.  It contains statistics related functions.
 
 \section{BBS.Numerical.vector}
-This is a generic package with a real type parameter.  It contains functions for vectors.
+This is a generic package with a real type parameter.  It contains functions for vectors.  This should probably be considered deprecated in favor of \package{Ada.Numerics.Generic\_Real\_Arrays}.  The Ada package also includes matrices as well as vectors.  There is a companion package, \package{Ada.Numerics.Generic\_Complex\_Arrays} for arrays and vectors of complex numbers.
 
 \section{License}
 This project is licensed using the GNU General Public License V3.0.  Should you wish other licensing terms, contact the author.
@@ -342,6 +344,27 @@ function trapezoid(test : test_func; lower, upper : f'Base; steps : Positive)
   \item $steps$ - The number of steps to use.
 \end{itemize}
 
+\subsection{Adaptive Trapezoid}
+This estimates the value of the integral using an adaptive version of the trapezoid rule.  The interval is divided into two and each side is evaluated using the trapezoid with 1 and 2 steps.  The difference between the two evaluations is used as an error estimate.  If the error is two big, the interval is divided again and the function recurses until either the recursion limit is reached or the error is within limits.  As Figure \ref{tex:AdaptTrap} shows, there are more function evaluations where the curve is changes rapidly and fewer where it isn't.  This will probably be less effective than the adaptive Simpson's unless the function to integrate is piecewise linear.
+\begin{lstlisting}
+function adapt_trap(test : test_func; lower, upper : f'Base;
+                       tol : in out f'Base;
+                       levels : Natural) return f'Base;
+\end{lstlisting}
+\begin{itemize}
+  \item $test$ - The function to integrate.  It must match the datatype for \datatype{test\_func}.
+  \item $lower$ - The lower bounds of the integration.
+  \item $upper$ - The upper bounds of the integration.
+  \item $tol$ - The desired error limit.  This also returns the estimated error.
+  \item $levels$ - The allowed recursion depth.
+\end{itemize}
+
+\begin{figure}
+  \include{tadapt-plot}
+  \caption{Example Adaptive Trapezoid Integration (Value = 0.676798 With Estimated Error = 0.077638)}
+  \label{tex:AdaptTrap}
+\end{figure}
+
 \subsection{Simpson's Rule}
 This estimates the value of the integral using the composite Simpson's rule.
 \begin{lstlisting}
@@ -370,10 +393,9 @@ function adapt_simpson(test : test_func; lower, upper : f'Base;
   \item $levels$ - The allowed recursion depth.
 \end{itemize}
 
-
 \begin{figure}
   \include{integ-plot}
-  \caption{Example Adaptive Simpson's Integration}
+  \caption{Example Adaptive Simpson's Integration (Value = 0.684484 With Estimated Error = 0.02563)}
   \label{tex:AdaptSimp}
 \end{figure}
 

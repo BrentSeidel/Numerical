@@ -262,6 +262,9 @@ package body BBS.Numerical.plot_svg_linear is
    procedure draw_text(self : in out linear_svg_plot_record;
                         p : BBS.Numerical.plot.point; color, text : String) is
    begin
+      if not self.valid then
+         return;
+      end if;
       Ada.Text_IO.Put(self.io, "<text x=""");
       Ada.Integer_Text_IO.Put(self.io, Integer(self.xTranslate(p.x)));
       Ada.Text_IO.Put(self.io, """ y=""");
@@ -427,6 +430,9 @@ package body BBS.Numerical.plot_svg_linear is
       yPos : constant Integer := Integer(self.yTranslate(p.y));
       size : constant Integer := 10;
    begin
+      if not self.valid then
+         return;
+      end if;
       Ada.Text_IO.Put_Line(self.io, "<g stroke=""" & color & """ stroke-width=""1"">");
       case g is
          when BBS.Numerical.plot.glyph_plus =>
@@ -452,6 +458,9 @@ package body BBS.Numerical.plot_svg_linear is
       yPos : Integer;
       size : constant Integer := 10;
    begin
+      if not self.valid then
+         return;
+      end if;
       Ada.Text_IO.Put_Line(self.io, "<g stroke=""" & color & """ stroke-width=""1"">");
       for p of points loop
          xPos := Integer(self.xTranslate(p.x));

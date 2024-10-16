@@ -12,6 +12,13 @@ package BBS.Numerical.integration_real is
    function trapezoid(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base;
    --
    --  Integrate the provided function between the lower and upper limits using
+   --  adaptive trapeziod integration.  A requested tolerance is input and
+   --  returned as an estimated value.
+   --
+   function adapt_trap(test : test_func; lower, upper : f'Base; tol : in out f'Base;
+                          levels : Natural) return f'Base;
+   --
+   --  Integrate the provided function between the lower and upper limits using
    --  the composite Simpson's rule with the specified number of steps.  Note
    --  that since Simpson's rule evaluates the function in the midpoint of a
    --  segment, the effective number of steps is doubled.
