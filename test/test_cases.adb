@@ -106,9 +106,9 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       return pt.y;
    end;
 
-   function integ_f2(t, y : real) return real is
+   function integ_f2(x : real) return real is
    begin
-      return -y + t + 1.0;
+      return x*2.0 + 1.0;
    end;
 
    procedure test_integ is
@@ -117,13 +117,24 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       tol : real;
    begin
       Ada.Text_IO.Put_Line("Testing numerical integration routines.");
+      Ada.Text_IO.Put_Line("Simple formula 2x+1");
       --
-      Ada.Text_IO.Put_Line("Testing integration:");
-      y := integ.trapezoid(integ_f1'Access, 1.0, 3.0, 50);
+      y := integ.midpoint(integ_f2'Access, 1.0, 3.0, 50);
+      Ada.Text_IO.Put("  Midpoint method gives ");
+      float_io.Put(y, 2, 3, 0);
+      Ada.Text_IO.New_Line;
+      --
+      y := integ.trapezoid(integ_f2'Access, 1.0, 3.0, 50);
       Ada.Text_IO.Put("  Trapazoid rule gives ");
       float_io.Put(y, 2, 3, 0);
       Ada.Text_IO.New_Line;
       --
+      y := integ.simpson(integ_f2'Access, 1.0, 3.0, 50);
+      Ada.Text_IO.Put("  Simpson rule gives ");
+      float_io.Put(y, 2, 6, 0);
+      Ada.Text_IO.New_Line;
+      --
+      Ada.Text_IO.Put_Line("More complex formula x^3/100*sin(10/((x-0.5)^2))");
       for x in pList'Range loop
          pList(x).x := 1.0 + Float(x)*(3.0 - 1.0)/200.0;
          pList(x).y := integ_f1(pList(x).x);
@@ -145,11 +156,6 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       float_io.Put(tol, 2, 6, 0);
       Ada.Text_IO.New_Line;
       --
-      y := integ.simpson(integ_f1'Access, 1.0, 3.0, 50);
-      Ada.Text_IO.Put("  Simpson rule gives ");
-      float_io.Put(y, 2, 6, 0);
-      Ada.Text_IO.New_Line;
-      --
       pl.start_plot("integ-plot.tex", 1.0, 3.0, -100.0, 100.0);
       pl.frame(10, 10, False, False);
       pl.title("$\int_1^3 \frac{100}{x^3}sin(\frac{10}{(x-0.5)^2}) dx$ Using Adaptive Simpson's Integration");
@@ -161,7 +167,7 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       tol := 1.0e-1;
       y := integ.adapt_simpson(integ_f1'Access, 1.0, 3.0, tol, 8);
       pl.end_plot;
-      Ada.Text_IO.Put("  Adaptive Simpson gives ");
+      Ada.Text_IO.Put("  Adaptive Simpson's gives ");
       float_io.Put(y, 2, 6, 0);
       Ada.Text_IO.Put(" with estimated tolerance ");
       float_io.Put(tol, 2, 6, 0);

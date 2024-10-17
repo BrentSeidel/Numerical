@@ -3,6 +3,23 @@ package body BBS.Numerical.integration_real is
    package float_io is new Ada.Text_IO.Float_IO(f'Base);
    --
    --  Integrate the provided function between the lower and upper limits using
+   --  the composite midpoint method with the specified number of steps.
+   --
+   function midpoint(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base is
+      step_size   : constant f'Base := (upper - lower)/f(steps);
+      accumulator : f'Base := 0.0;
+      value       : f'Base;
+      base        : f'Base := lower + step_size/2.0;
+   begin
+      for i in 0 .. steps - 1 loop
+         base := base + step_size;
+         value := test(base);
+         accumulator := accumulator + value*step_size;
+      end loop;
+      return accumulator;
+   end;
+   --
+   --  Integrate the provided function between the lower and upper limits using
    --  the composite trapezoid method with the specified number of steps.
    --
    function trapezoid(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base is
@@ -33,7 +50,7 @@ package body BBS.Numerical.integration_real is
       function interval(t : test_func; lower, upper : f'Base; tol : in out f'Base;
                         t_l, t_u, full : f'Base; levels : Natural) return f'Base is
          mid  : constant f'Base := (upper + lower)/2.0;
-         t_m : constant f'Base := test((lower + upper)/2.0);
+         t_m  : constant f'Base := test((lower + upper)/2.0);
          l    : f'Base;
          r    : f'Base;
          tol1 : f'Base := tol/2.0;

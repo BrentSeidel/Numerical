@@ -7,6 +7,11 @@ package BBS.Numerical.integration_real is
    type test_func is access function (x : f'Base) return f'Base;
    --
    --  Integrate the provided function between the lower and upper limits using
+   --  the composite midpoint method with the specified number of steps.
+   --
+   function midpoint(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base;
+   --
+   --  Integrate the provided function between the lower and upper limits using
    --  the composite trapezoid method with the specified number of steps.
    --
    function trapezoid(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base;
