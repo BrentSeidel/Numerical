@@ -282,6 +282,15 @@ function lngamma2n(n : Positive) return f'Base;
   \item Returns the natural log of the value.
 \end{itemize}
 
+Lanczos\cite{Lanczos} came up with an approximation to the $\Gamma$ function that works quite well.  The following routine computes $\Gamma(n)$ for any real $n > 0$.  It is based on a routine from \textit{Numerical Recipes in C}\cite{NR-C}.
+\begin{lstlisting}
+function lngamma(n : Positive) return f'Base;
+\end{lstlisting}
+\begin{itemize}
+  \item $n$ - A positive integer representing twice the value for computing $\Gamma$.
+  \item Returns the natural log of the value.
+\end{itemize}
+
 \subsection{Factorial Related}
 The factorial functions are similar to the $\Gamma$ functions.  Since the parameter is not divided by two in this case, overflow will occur for $n>35$.  Thus, as for $\Gamma$, there are two versions.  The first returns the actual value, the second returns the natural log of the value.
 \begin{lstlisting}

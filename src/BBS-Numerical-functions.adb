@@ -58,6 +58,26 @@ package body BBS.Numerical.functions is
       return base;
    end;
    --
+   --  Natural log of Gamma function based on based on Lanczos approximation
+   --  given in Numerical Recipes in C.  This should work for all real numbers
+   --  greater than zero.
+   --
+   function lngamma(n : f'Base) return f'Base is
+      coeff : constant array (0 .. 5) of f'Base := (76.18009172947146, -86.50532032941677,
+         24.01409824083091, -1.231739572450155, 0.1208650973866179e-2,
+         -0.5395239384953e-5);
+      temp : f'Base := n + 5.5;
+      y    : f'Base := n;
+      ser  : f'Base := 1.000000000190015;
+   begin
+      temp := temp - (n+0.5)*elem.Log(temp);
+      for j in 0 .. 5 loop
+         y := y + 1.0;
+         ser := ser + coeff(j)/y;
+      end loop;
+      return -temp + elem.Log(2.506628274631005*ser/n);
+   end;
+   --
    --  Compute the factorial of a number.  This will probably overflow Float at
    --  around n = 35.
    --

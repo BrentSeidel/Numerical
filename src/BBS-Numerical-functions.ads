@@ -26,6 +26,13 @@ package BBS.Numerical.functions is
    --
    function lngamma2n(n : Positive) return f'Base;
    --
+   --  Natural log of Gamma function based on based on Lanczos approximation
+   --  given in Numerical Recipes in C.  This should work for all real numbers
+   --  greater than zero.
+   --
+   function lngamma(n : f'Base) return f'Base
+      with pre => (n > 0.0);
+   --
    --  Compute the factorial of a number.  This will probably overflow Float at
    --  around n = 35.
    --

@@ -54,7 +54,8 @@ package body test_cases is
    begin
       Ada.Text_IO.Put_Line("Testing functions.");
       Ada.Text_IO.Put_Line("  Gamma Function");
-      Ada.Text_IO.Put_Line("    N     gamma2n     lngamma2n  exp(lngamma2n)  factorial    lnfact   exp(lnfact)");
+      Ada.Text_IO.Put_Line("    N     gamma2n     lngamma2n  exp(lngamma2n)" &
+               " lngamma  exp(lngamma)   factorial    lnfact   exp(lnfact)");
       for i in 1 .. 100 loop
          Ada.Text_IO.Put("  ");
          float_io.Put(Real(i), 3, 0, 0);
@@ -64,6 +65,10 @@ package body test_cases is
          float_io.Put(funct.lngamma2n(i), 3, 2, 0);
          Ada.Text_IO.Put("  ");
          float_io.Put(elem.exp(funct.lngamma2n(i)), 2, 6, 3);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(funct.lngamma(Real(i)/2.0), 3, 2, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(elem.exp(funct.lngamma(Real(i)/2.0)), 2, 6, 3);
          Ada.Text_IO.Put("  ");
          float_io.Put(funct.factorial(i), 2, 6, 3);
          Ada.Text_IO.Put("  ");
