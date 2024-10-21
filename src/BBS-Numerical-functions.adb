@@ -62,7 +62,18 @@ package body BBS.Numerical.functions is
    --  given in Numerical Recipes in C.  This should work for all real numbers
    --  greater than zero.
    --
+   --  This has been compared with lngamma2n using single precision and
+   --  gives the same results for 2*n from 0 to 100.  So I have confidence
+   --  that the first few digits of the coefficents are correct.  It is
+   --  possible that errors crept in with copying the later digits.
+   --
    function lngamma(n : f'Base) return f'Base is
+      --
+      --  Note that this list of coefficients can't just be truncated to
+      --  use fewer.  They must be recalculated.  The wikipedia page at
+      --  https://en.wikipedia.org/wiki/Lanczos_approximation shows a
+      --  Python example with different numbers of coefficients.
+      --
       coeff : constant array (0 .. 5) of f'Base := (76.18009172947146, -86.50532032941677,
          24.01409824083091, -1.231739572450155, 0.1208650973866179e-2,
          -0.5395239384953e-5);
@@ -78,8 +89,84 @@ package body BBS.Numerical.functions is
       return -temp + elem.Log(2.506628274631005*ser/n);
    end;
    --
-   --  Compute the factorial of a number.  This will probably overflow Float at
-   --  around n = 35.
+   --  Helper functions for incomplete Gamma functions.  This must be
+   --  called with x > 0.0.  This uses the summation series.
+   --
+   function gser(a, x, lng : f'Base) return f'Base is
+      err : constant f'Base := 3.0e-7;
+      sum : f'Base := 1.0/a;
+      del : f'Base := 1.0/a;
+      ap  : f'Base := a;
+   begin
+      for n in 1 .. 100 loop
+         ap  := ap + 1.0;
+         del := del*x/ap;
+         sum := sum + del;
+         if (abs del) < (abs sum)*err then
+            return sum*elem.Exp(-x*a*elem.Log(x)-lng);
+         end if;
+      end loop;
+      return -1.0;
+   end;
+   --
+   --  Helper function for incomplete Gamma functions.  This must be
+   --  called with a > 0.0.  This uses the continued fraction.
+   --
+   function gcf(a, x, lng : f'Base) return f'Base is
+      err : constant f'Base := 3.0e-7;
+      b   : f'Base := x - a + 1.0;
+      c   : f'Base := 1.0/f'Base'Model_Small;
+      d   : f'Base := 1.0/b;
+      h   : f'Base := d;
+      del : f'Base;
+      an  : f'Base;
+   begin
+      for n in 1 .. 100 loop
+         an  := -f'Base(n)*(f'Base(n) - a);
+         b   := b + 2.0;
+         d   := an*d + b;
+         if (abs d) < f'Base'Model_Small then
+            d := f'Base'Model_Small;
+         end if;
+         c := b + an/c;
+         if (abs c) < f'Base'Model_Small then
+            c := f'Base'Model_Small;
+         end if;
+         d   := 1.0/d;
+         del := d*c;
+         h   := h*del;
+         if (abs (del - 1.0)) < err then
+            return elem.exp(-x * a*elem.Log(x) - lng)*h;
+         end if;
+      end loop;
+      return -1.0;
+   end;
+   --
+   --  Regularized incomplete upper Gamma function.
+   --
+   function gammaP(a, x : f'Base) return f'Base is
+      lng  : constant f'Base := lngamma(a);
+   begin
+      if x < a+1.0 then
+         return gser(a, x, lng);
+      else
+         return 1.0 - gcf(a, x, lng);
+      end if;
+   end;
+   --
+   --  Regularized incomplete lower Gamma function.
+   --
+   function gammaQ(a, x : f'Base) return f'Base is
+      lng : constant f'Base := lngamma(a);
+   begin
+      if x < a+1.0 then
+         return 1.0 - gser(a, x, lng);
+      else
+         return gcf(a, x, lng);
+      end if;
+   end;
+   --
+   --  Compute the factorial of a number.  This will overflow Float at n = 35.
    --
    function factorial(n : Natural) return f'Base is
       base : f'Base := 1.0;  --  0! is defined as 1
