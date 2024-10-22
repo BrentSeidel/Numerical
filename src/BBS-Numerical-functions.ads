@@ -36,12 +36,12 @@ package BBS.Numerical.functions is
    --  Regularized incomplete upper Gamma function.
    --
    function gammaP(a, x : f'Base) return f'Base
-      with pre => ((a > 0.0) and (x > 0.0));
+      with pre => ((a > 0.0) and (x >= 0.0));
    --
    --  Regularized incomplete lower Gamma function.
    --
    function gammaQ(a, x : f'Base) return f'Base
-      with pre => ((a > 0.0) and (x > 0.0));
+      with pre => ((a > 0.0) and (x >= 0.0));
    --
    --  Compute the factorial of a number.  This will probably overflow Float at
    --  around n = 35.

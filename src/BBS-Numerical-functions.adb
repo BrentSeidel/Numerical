@@ -103,7 +103,7 @@ package body BBS.Numerical.functions is
          del := del*x/ap;
          sum := sum + del;
          if (abs del) < (abs sum)*err then
-            return sum*elem.Exp(-x*a*elem.Log(x)-lng);
+            return sum*elem.Exp(-x+a*elem.Log(x)-lng);
          end if;
       end loop;
       return -1.0;
@@ -147,6 +147,9 @@ package body BBS.Numerical.functions is
    function gammaP(a, x : f'Base) return f'Base is
       lng  : constant f'Base := lngamma(a);
    begin
+      if x = 0.0 then
+         return 0.0;
+      end if;
       if x < a+1.0 then
          return gser(a, x, lng);
       else
@@ -159,6 +162,9 @@ package body BBS.Numerical.functions is
    function gammaQ(a, x : f'Base) return f'Base is
       lng : constant f'Base := lngamma(a);
    begin
+      if x = 0.0 then
+         return 1.0;
+      end if;
       if x < a+1.0 then
          return 1.0 - gser(a, x, lng);
       else

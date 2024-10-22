@@ -51,6 +51,7 @@ package body test_cases is
    procedure test_func is
       sum : Real;
       val : Real;
+      t   : Real;
    begin
       Ada.Text_IO.Put_Line("Testing functions.");
       Ada.Text_IO.Put_Line("  Gamma Function");
@@ -77,7 +78,32 @@ package body test_cases is
          float_io.Put(elem.exp(funct.lnfact(i)), 2, 6, 3);
          Ada.Text_IO.New_Line;
       end loop;
-      Ada.Text_IO.Put_Line("N choose K");
+      Ada.Text_IO.Put_Line("  Normalized Incomplete Gamma Functions");
+      Ada.Text_IO.Put_Line("    N    P(0.5, N)  P(1.0, N)  P(3.0, N)  P(10.0, N)" &
+                           " Q(0.5, N)  Q(1.0, N)  Q(3.0, N)  Q(10.0, N)");
+      for i in 0 .. 99 loop
+         t := Real(i)/10.0;
+         Ada.Text_IO.Put("  ");
+         float_io.Put(t, 3, 0, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(funct.gammaP(0.5, t), 3, 4, 0);
+         Ada.Text_IO.Put("   ");
+         float_io.Put(funct.gammaP(1.0, t), 3, 4, 0);
+         Ada.Text_IO.Put("   ");
+         float_io.Put(funct.gammaP(3.0, t), 3, 4, 0);
+         Ada.Text_IO.Put("   ");
+         float_io.Put(funct.gammaP(10.0, t), 3, 4, 0);
+         Ada.Text_IO.Put("   ");
+         float_io.Put(funct.gammaQ(0.5, t), 3, 4, 0);
+         Ada.Text_IO.Put("   ");
+         float_io.Put(funct.gammaQ(1.0, t), 3, 4, 0);
+         Ada.Text_IO.Put("   ");
+         float_io.Put(funct.gammaQ(3.0, t), 3, 4, 0);
+         Ada.Text_IO.Put("   ");
+         float_io.Put(funct.gammaQ(10.0, t), 3, 4, 0);
+         Ada.Text_IO.New_Line;
+      end loop;
+      Ada.Text_IO.Put_Line(  "N choose K");
       for n in 0 .. 10 loop
          Ada.Text_IO.put("  ");
          float_io.put(real(n), 2, 0, 0);
