@@ -4,7 +4,7 @@ with Ada.Numerics.Generic_Elementary_Functions;
 package body BBS.Numerical.functions is
    package float_io is new Ada.Text_IO.Float_IO(f'Base);
    package elem is new Ada.Numerics.Generic_Elementary_Functions(f'Base);
-   --
+   --  ------------------------------------------------------------------------
    --  Compute the gamma function of a positive number divided by two.
    --  This is initially used by the chi-squared statistics function, but
    --  may have other applications.  The full gamma function will be
@@ -27,7 +27,7 @@ package body BBS.Numerical.functions is
             base := base*f'Base(i-1);
          end loop;
       else
-         base := elem.sqrt(Ada.Numerics.Pi);
+         base := elem.Sqrt(Ada.Numerics.Pi);
          for i in 1 .. (n/2) loop
             base := base*(f'Base(i)-0.5);
          end loop;
@@ -47,12 +47,12 @@ package body BBS.Numerical.functions is
       if 2*(n/2) = n then
          base := 0.0;
          for i in 2 .. (n/2) loop
-            base := base + elem.log(f'Base(i-1));
+            base := base + elem.Log(f'Base(i-1));
          end loop;
       else
-         base := elem.log(elem.sqrt(Ada.Numerics.Pi));
+         base := elem.log(elem.Sqrt(Ada.Numerics.Pi));
          for i in 1 .. (n/2) loop
-            base := base + elem.log((f'Base(i)-0.5));
+            base := base + elem.Log((f'Base(i)-0.5));
          end loop;
       end if;
       return base;
@@ -82,7 +82,7 @@ package body BBS.Numerical.functions is
       ser  : f'Base := 1.000000000190015;
    begin
       temp := temp - (n+0.5)*elem.Log(temp);
-      for j in 0 .. 5 loop
+      for j in coeff'Range loop
          y := y + 1.0;
          ser := ser + coeff(j)/y;
       end loop;
@@ -136,7 +136,7 @@ package body BBS.Numerical.functions is
          del := d*c;
          h   := h*del;
          if (abs (del - 1.0)) < err then
-            return elem.exp(-x * a*elem.Log(x) - lng)*h;
+            return elem.Exp(-x * a*elem.Log(x) - lng)*h;
          end if;
       end loop;
       return -1.0;
@@ -171,7 +171,23 @@ package body BBS.Numerical.functions is
          return gcf(a, x, lng);
       end if;
    end;
+   --  ------------------------------------------------------------------------
+   --  Compute the beta function.  This uses the relation of the beta
+   --  function to the gamma function, where:
+   --  beta(a, b) = Gamma(a)*Gamma(b)/Gamma(a + b)
    --
+   function beta(a, b : f'Base) return f'Base is
+   begin
+      return elem.Exp(lngamma(a) + lngamma(b) - lngamma(a + b));
+   end;
+   --
+   --  Compute the natural log of the beta function
+   --
+   function lnbeta(a, b : f'Base) return f'Base is
+   begin
+      return lngamma(a) + lngamma(b) - lngamma(a + b);
+   end;
+   --  ------------------------------------------------------------------------
    --  Compute the factorial of a number.  This will overflow Float at n = 35.
    --
    function factorial(n : Natural) return f'Base is
@@ -194,7 +210,7 @@ package body BBS.Numerical.functions is
       end loop;
       return base;
    end;
-   --
+   --  ------------------------------------------------------------------------
    --  Compute the binomial coefficient - n choose k.  Note that the result is
    --  an integer value, but f'Base is used to allow greater range.
    --

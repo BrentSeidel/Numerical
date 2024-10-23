@@ -355,6 +355,35 @@ function lnfact(n : Natural) return f'Base;
   \item Returns the natural log of the factorial value.
 \end{itemize}
 
+\subsection{Beta Functions}
+There is a relation between the Beta function and the Gamma function that makes it fairly easy to compute:
+\begin{displaymath}
+  \beta(A, B) = \frac{\Gamma(A)\Gamma(B)}{\Gamma(A+B)}
+\end{displaymath}
+From this, it is also evident that $\beta(A, B)$ is equal to $\beta(A, b)$.
+
+\begin{lstlisting}
+function beta(a, b : f'Base) return f'Base;
+\end{lstlisting}
+\indexfunc{func-beta}
+Computes the beta function of $a$ and $b$.  Requires $a>0$ and $b>0$.
+\begin{itemize}
+  \item $a$ - The first parameter to the beta function.
+  \item $b$ - The second parameter to the beta function.
+  \item Returns the value of the beta function of $a$ and $b$.
+\end{itemize}
+
+\begin{lstlisting}
+function lnbeta(a, b : f'Base) return f'Base;
+\end{lstlisting}
+\indexfunc{func-lnbeta}
+Computes the natural log of the beta function of $a$ and $b$.  Requires $a>0$ and $b>0$.
+\begin{itemize}
+  \item $a$ - The first parameter to the beta function.
+  \item $b$ - The second parameter to the beta function.
+  \item Returns the natural log of the beta function of $a$ and $b$.
+\end{itemize}
+
 \subsection{Combinatorial Related}
 The one function computes the binomial coefficients (aka N choose K).  By definition, this computes:
 \begin{displaymath}

@@ -6,7 +6,7 @@
 generic
   type F is digits <>;
 package BBS.Numerical.functions is
-   --
+   --  ------------------------------------------------------------------------
    --  Compute the gamma function of a positive number divided by two.
    --  This is initially used by the chi-squared statistics function, but
    --  may have other applications.  The full gamma function will be
@@ -42,7 +42,7 @@ package BBS.Numerical.functions is
    --
    function gammaQ(a, x : f'Base) return f'Base
       with pre => ((a > 0.0) and (x >= 0.0));
-   --
+   --  ------------------------------------------------------------------------
    --  Compute the factorial of a number.  This will probably overflow Float at
    --  around n = 35.
    --
@@ -52,7 +52,17 @@ package BBS.Numerical.functions is
    --  values of n before overflowing.
    --
    function lnfact(n : Natural) return f'Base;
+   --  ------------------------------------------------------------------------
+   --  Compute the beta function
    --
+   function beta(a, b : f'Base) return f'Base
+      with pre => (a > 0.0) and (b > 0.0);
+   --
+   --  Compute the natural log of the beta function
+   --
+   function lnbeta(a, b : f'Base) return f'Base
+      with pre => (a > 0.0) and (b > 0.0);
+   --  ------------------------------------------------------------------------
    --  Compute the binomial coefficient - n choose k.  Note that the result is
    --  an integer value, but f'Base is used to allow greater range.
    --

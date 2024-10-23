@@ -103,7 +103,19 @@ package body test_cases is
          float_io.Put(funct.gammaQ(10.0, t), 3, 4, 0);
          Ada.Text_IO.New_Line;
       end loop;
-      Ada.Text_IO.Put_Line(  "N choose K");
+      Ada.Text_IO.Put_Line("  Beta Function");
+      Ada.Text_IO.Put_Line("    N     B(N, N)  ln(B(N,N))");
+      for i in 1 .. 100 loop
+         t := Real(i)/10.0;
+         Ada.Text_IO.Put("  ");
+         float_io.Put(t, 3, 0, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(funct.beta(t, t), 3, 4, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(funct.lnbeta(t, t), 3, 4, 0);
+         Ada.Text_IO.New_Line;
+      end loop;
+      Ada.Text_IO.Put_Line("  N choose K");
       for n in 0 .. 10 loop
          Ada.Text_IO.put("  ");
          float_io.put(real(n), 2, 0, 0);
@@ -115,7 +127,7 @@ package body test_cases is
             float_io.Put(val, 4, 0, 0);
             sum := sum + val;
          end loop;
-         Ada.Text_IO.Put("|  ");
+         Ada.Text_IO.Put("| ");
          float_io.Put(sum, 4, 0, 0);
          Ada.Text_IO.New_Line;
       end loop;
