@@ -80,7 +80,7 @@ package body test_cases is
       end loop;
       Ada.Text_IO.Put_Line("  Normalized Incomplete Gamma Functions");
       Ada.Text_IO.Put_Line("    N    P(0.5, N)  P(1.0, N)  P(3.0, N)  P(10.0, N)" &
-                           " Q(0.5, N)  Q(1.0, N)  Q(3.0, N)  Q(10.0, N)");
+                           " Q(0.5, N)  Q(1.0, N)  Q(3.0, N)  Q(10.0, N)  erf(N)   erfc(N)");
       for i in 0 .. 99 loop
          t := Real(i)/10.0;
          Ada.Text_IO.Put("  ");
@@ -101,6 +101,10 @@ package body test_cases is
          float_io.Put(funct.gammaQ(3.0, t), 3, 4, 0);
          Ada.Text_IO.Put("   ");
          float_io.Put(funct.gammaQ(10.0, t), 3, 4, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(funct.erf(t), 3, 4, 0);
+         Ada.Text_IO.Put(" ");
+         float_io.Put(funct.erfc(t), 3, 4, 0);
          Ada.Text_IO.New_Line;
       end loop;
       Ada.Text_IO.Put_Line("  Beta Function");

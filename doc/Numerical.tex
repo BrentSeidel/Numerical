@@ -335,6 +335,27 @@ Returns the value of the regularized gamma function $Q(a,x)$
   \item Returns the natural log of the value $(a,x)$.
 \end{itemize}
 
+The error functions are based on integrals of the normal curve.  The error function gives the probability that a result, $Y$ falls in the range $[-x,x]$.  The complementary error function gives the probability that $Y$ is outside of the range.  They can be computed using the above regularized incomplete gamma functions.
+\begin{lstlisting}
+function erf(x : f'Base) return f'Base;
+\end{lstlisting}
+\indexfunc{func-erf}
+Returns the value of the error function.
+\begin{itemize}
+  \item $x$ - The parameter.
+  \item Returns the error function for $x$.
+\end{itemize}
+
+\begin{lstlisting}
+function erfc(x : f'Base) return f'Base;
+\end{lstlisting}
+\indexfunc{func-erfc}
+Returns the value of the complementary error function.
+\begin{itemize}
+  \item $x$ - The parameter.
+  \item Returns the complementary error function for $x$.
+\end{itemize}
+
 \subsection{Factorial Related}
 The factorial functions are similar to the $\Gamma$ functions.  Since the parameter is not divided by two in this case, overflow will occur for $n>35$.  Thus, as for $\Gamma$, there are two versions.  The first returns the actual value, the second returns the natural log of the value.
 \begin{lstlisting}

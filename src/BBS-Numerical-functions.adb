@@ -171,6 +171,28 @@ package body BBS.Numerical.functions is
          return gcf(a, x, lng);
       end if;
    end;
+   --
+   --  Error function.  This is computed using gammaP
+   --
+   function erf(x : f'Base) return f'Base is
+   begin
+      if x < 0.0 then
+         return -gammaP(0.5, x*x);
+      else
+         return gammaP(0.5, x*x);
+      end if;
+   end;
+   --
+   --  Complementary error function.  This is computed using gammaQ.
+   --
+   function erfc(x : f'Base) return f'Base is
+   begin
+      if x < 0.0 then
+         return 2.0 - gammaQ(0.5, x*x);
+      else
+         return gammaQ(0.5, x*x);
+      end if;
+   end;
    --  ------------------------------------------------------------------------
    --  Compute the beta function.  This uses the relation of the beta
    --  function to the gamma function, where:

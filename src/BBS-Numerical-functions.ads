@@ -42,6 +42,16 @@ package BBS.Numerical.functions is
    --
    function gammaQ(a, x : f'Base) return f'Base
       with pre => ((a > 0.0) and (x >= 0.0));
+   --
+   --  Error function.  This is computed using gammaP
+   --
+   function erf(x : f'Base) return f'Base
+      with pre => (x >= 0.0);
+   --
+   --  Complementary error function.  This is computed using gammaQ.
+   --
+   function erfc(x : f'Base) return f'Base
+      with pre => (x >= 0.0);
    --  ------------------------------------------------------------------------
    --  Compute the factorial of a number.  This will probably overflow Float at
    --  around n = 35.
@@ -55,13 +65,11 @@ package BBS.Numerical.functions is
    --  ------------------------------------------------------------------------
    --  Compute the beta function
    --
-   function beta(a, b : f'Base) return f'Base
-      with pre => (a > 0.0) and (b > 0.0);
+   function beta(a, b : f'Base) return f'Base;
    --
    --  Compute the natural log of the beta function
    --
-   function lnbeta(a, b : f'Base) return f'Base
-      with pre => (a > 0.0) and (b > 0.0);
+   function lnbeta(a, b : f'Base) return f'Base;
    --  ------------------------------------------------------------------------
    --  Compute the binomial coefficient - n choose k.  Note that the result is
    --  an integer value, but f'Base is used to allow greater range.
