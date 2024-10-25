@@ -45,13 +45,11 @@ package BBS.Numerical.functions is
    --
    --  Error function.  This is computed using gammaP
    --
-   function erf(x : f'Base) return f'Base
-      with pre => (x >= 0.0);
+   function erf(x : f'Base) return f'Base;
    --
    --  Complementary error function.  This is computed using gammaQ.
    --
-   function erfc(x : f'Base) return f'Base
-      with pre => (x >= 0.0);
+   function erfc(x : f'Base) return f'Base;
    --  ------------------------------------------------------------------------
    --  Compute the factorial of a number.  This will probably overflow Float at
    --  around n = 35.

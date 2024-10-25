@@ -455,8 +455,8 @@ function midpoint(test : test_func; lower, upper : f'Base; steps : Positive)
 \subsection{Trapezoid Rule}
 This estimates the value of the integral using the composite trapezoid rule.
 \begin{lstlisting}
-function trapezoid(test : test_func; lower, upper : f'Base; steps : Positive)
-         return f'Base;
+function trapezoid(test : test_func; lower, upper : f'Base;
+         steps : Positive) return f'Base;
 \end{lstlisting}
 \indexfunc{integ-trapezoid}
 \begin{itemize}
@@ -491,8 +491,8 @@ function adapt_trap(test : test_func; lower, upper : f'Base;
 \subsection{Simpson's Rule}
 This estimates the value of the integral using the composite Simpson's rule.
 \begin{lstlisting}
-function simpson(test : test_func; lower, upper : f'Base; steps : Positive)
-         return f'Base;
+function simpson(test : test_func; lower, upper : f'Base;
+         steps : Positive) return f'Base;
 \end{lstlisting}
 \indexfunc{integ-simpson}
 \begin{itemize}
@@ -523,6 +523,20 @@ function adapt_simpson(test : test_func; lower, upper : f'Base;
   \caption{Example Adaptive Simpson's Integration (Value = 0.684484 With Estimated Error = 0.02563)}
   \label{tex:AdaptSimp}
 \end{figure}
+
+\subsection{Romberg's Method}
+This estimates the value of the integral using Romberg's method.  This method evaluates the integral using the trapezoid rule with decreasing step sizes and extrapolates to a zero step size.  For a function where the features are concentrated in one or a few areas, the adaptive methods may be better.  In general, it should be better than trapezoid or Simpson's.
+\begin{lstlisting}
+function romberg(test : test_func; lower, upper : f'Base;
+         steps : Positive) return f'Base;
+\end{lstlisting}
+\indexfunc{integ-romberg}
+\begin{itemize}
+  \item $test$ - The function to integrate.  It must match the datatype for \datatype{test\_func}.
+  \item $lower$ - The lower bounds of the integration.
+  \item $upper$ - The upper bounds of the integration.
+  \item $steps$ - The allowed recursion depth.
+\end{itemize}
 
 %--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.interpolation}

@@ -36,4 +36,10 @@ package BBS.Numerical.integration_real is
    --
    function adapt_simpson(test : test_func; lower, upper : f'Base; tol : in out f'Base;
                           levels : Natural) return f'Base;
+   --
+   --  Integrate the provided function between the lower and upper limits using
+   --  Romberg's method.  This repeatedly uses the trapezoid method and applies
+   --  Richardson extrapolation to arrive at the final answer.
+   --
+   function romberg(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base;
 end;

@@ -167,4 +167,44 @@ package body BBS.Numerical.integration_real is
       return l + r;
    end;
    --
+   --  Integrate the provided function between the lower and upper limits using
+   --  Romberg's method.  This repeatedly uses the trapezoid method and applies
+   --  Richardson extrapolation to arrive at the final answer.
+   --
+   type selection is mod 2;
+   function romberg(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base is
+      buff : array (selection , 0 .. steps - 1) of f'Base := (others => (others => 0.0));
+      sel  : selection := 1;
+      size : f'Base := upper - lower;
+      max  : Positive := 1;
+      acc  : f'Base;
+      n_k  : f'Base;
+   begin
+      buff(0, 0) := (test(lower) + test(upper))*size/2.0;
+
+      for i in 1 .. steps - 1 loop
+         size := size/2.0;
+         acc  := 0.0;
+         for j in 1 .. max loop
+            acc := acc + test(lower + f'Base(2*j-1)*size);
+         end loop;
+         buff(sel, 0) := size*acc + 0.5*buff(sel+1, 0);
+
+         for j in 1 .. i loop
+            n_k := 4.0**j;
+            buff(sel, j) := (n_k*buff(sel, j - 1) - buff(sel + 1, j - 1))/(n_k - 1.0);
+         end loop;
+         --
+         --  For the comparizon, equality with 0.0 can be replaced by an allowable
+         --  tolerance.
+         --
+         if (i > 1) and (abs (buff(sel + 1, i - 1) - buff(sel, i))) = 0.0 then
+            return buff(sel, i);
+         end if;
+         sel := sel + 1;
+         max  := max*2;
+      end loop;
+      return buff(sel + 1, steps - 1);
+   end;
+   --
 end;
