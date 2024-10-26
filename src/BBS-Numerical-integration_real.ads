@@ -41,5 +41,6 @@ package BBS.Numerical.integration_real is
    --  Romberg's method.  This repeatedly uses the trapezoid method and applies
    --  Richardson extrapolation to arrive at the final answer.
    --
-   function romberg(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base;
+   function romberg(test : test_func; lower, upper : f'Base; tol : in out f'Base;
+                    steps : Positive) return f'Base;
 end;

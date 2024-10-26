@@ -172,7 +172,8 @@ package body BBS.Numerical.integration_real is
    --  Richardson extrapolation to arrive at the final answer.
    --
    type selection is mod 2;
-   function romberg(test : test_func; lower, upper : f'Base; steps : Positive) return f'Base is
+   function romberg(test : test_func; lower, upper : f'Base; tol : in out f'Base;
+                    steps : Positive) return f'Base is
       buff : array (selection , 0 .. steps - 1) of f'Base := (others => (others => 0.0));
       sel  : selection := 1;
       size : f'Base := upper - lower;
@@ -198,12 +199,13 @@ package body BBS.Numerical.integration_real is
          --  For the comparizon, equality with 0.0 can be replaced by an allowable
          --  tolerance.
          --
-         if (i > 1) and (abs (buff(sel + 1, i - 1) - buff(sel, i))) = 0.0 then
+         if (i > 1) and (abs(buff(sel + 1, i - 1) - buff(sel, i)) <= tol) then
             return buff(sel, i);
          end if;
          sel := sel + 1;
          max  := max*2;
       end loop;
+      tol := abs(buff(sel + 1, steps - 2) - buff(sel, steps - 1));
       return buff(sel + 1, steps - 1);
    end;
    --

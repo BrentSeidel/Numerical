@@ -181,9 +181,12 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       float_io.Put(y, 2, 6, 0);
       Ada.Text_IO.New_Line;
       --
-      y := integ.romberg(integ_f2'Access, 1.0, 3.0, 5);
+      tol := 0.0;
+      y := integ.romberg(integ_f2'Access, 1.0, 3.0, tol, 5);
       Ada.Text_IO.Put("  Romberg rule gives ");
       float_io.Put(y, 2, 6, 0);
+      Ada.Text_IO.Put(" with estimated tolerance ");
+      float_io.Put(tol, 2, 6, 0);
       Ada.Text_IO.New_Line;
       --
       Ada.Text_IO.Put_Line("More complex formula x^3/100*sin(10/((x-0.5)^2))");
@@ -225,9 +228,12 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       float_io.Put(tol, 2, 6, 0);
       Ada.Text_IO.New_Line;
       --
-      y := integ.romberg(integ_f1'Access, 1.0, 3.0, 10);
+      tol := 1.0e-2;
+      y := integ.romberg(integ_f1'Access, 1.0, 3.0, tol, 10);
       Ada.Text_IO.Put("  Romberg's gives ");
       float_io.Put(y, 2, 6, 0);
+      Ada.Text_IO.Put(" with estimated tolerance ");
+      float_io.Put(tol, 2, 6, 0);
       Ada.Text_IO.New_Line;
    end test_integ;
 --  ----------------------------------------------------------------------------
