@@ -191,6 +191,10 @@ Internal packages used within this library are:
 \chapter{Usage Instructions}
 This is a library of routines intended to be used by some program.  To use these in your program, edit your *\keyword{.gpr} file to include a line to \keyword{with} the path to \keyword{BBS\_Numerical.gpr}.  Then in your Ada code \keyword{with} in the package(s) you need and use the routines.
 
+You should know something about the problem that you are trying to solve rather than just treating these routines as a ``black box''.  In some categories multiple methods are provided.  Read up on the methods and decide which is most appropriate for your particular problem.
+
+Computer arithmetic has two sources of errors that are absent from pure math.  The first source is that calculations are done with finite precision.  This means that operations may produce incorrect results due to underflow, overflow, or insufficient significant digits.  The second source is that only a finite number of steps can be used.  Consider all results to be an approximation to the actual answer.
+
 %========================================================
 \chapter{API Description}
 %--------------------------------------------------------------------------------------------------
