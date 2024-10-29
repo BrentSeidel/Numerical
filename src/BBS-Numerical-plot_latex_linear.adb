@@ -247,18 +247,10 @@ package body BBS.Numerical.plot_latex_linear is
       Ada.Text_IO.Put(self.io, Float'Image(yPos + size) & ");");
    end;
    --
-   --  Draw a glyph at a point
-   --
-   procedure draw_glyph(self : in out linear_latex_plot_record;
-                        p : BBS.Numerical.plot.point;
-                        g : BBS.Numerical.plot.glyph; color : String) is
-      xPos : constant Float := self.xTranslate(p.x);
-      yPos : constant Float := self.yTranslate(p.y);
-      size : constant Float := glyph_size;
+   procedure select_glyph(self : in out linear_latex_plot_record;
+                        g : BBS.Numerical.plot.glyph;
+                        xPos, yPos, size : Float; color : String) is
    begin
-      if not self.valid then
-         return;
-      end if;
       case g is
          when BBS.Numerical.plot.glyph_plus =>
             self.draw_glyph_plus(xPos, yPos, size, color);
@@ -275,11 +267,69 @@ package body BBS.Numerical.plot_latex_linear is
       end case;
    end;
    --
+   procedure draw_err(self : in out linear_latex_plot_record;
+                       xPos, yPos, size, err : Float; color : String) is
+   begin
+      Ada.Text_IO.Put(self.io, "\draw [" & color & "] (" & Float'Image(xPos - size));
+      Ada.Text_IO.Put(self.io, "," & Float'Image(yPos - err) & ") -- (");
+      Ada.Text_IO.Put(self.io, Float'Image(xPos - size) & "," & Float'Image(yPos - err) & ");");
+      Ada.Text_IO.Put(self.io, "\draw [" & color & "] (" & Float'Image(xPos + size));
+      Ada.Text_IO.Put(self.io, "," & Float'Image(yPos + err) & ") -- (");
+      Ada.Text_IO.Put(self.io, Float'Image(xPos + size) & "," & Float'Image(yPos + err) & ");");
+      Ada.Text_IO.Put(self.io, "\draw [" & color & "] (" & Float'Image(xPos - size));
+      Ada.Text_IO.Put(self.io, "," & Float'Image(yPos ) & ") -- (");
+      Ada.Text_IO.Put(self.io, Float'Image(xPos + size) & "," & Float'Image(yPos) & ");");
+   end;
+   --
+   --  Draw a glyph at a point
+   --
+   procedure draw_glyph(self : in out linear_latex_plot_record;
+                        p : BBS.Numerical.plot.point;
+                        g : BBS.Numerical.plot.glyph; color : String) is
+      size : constant Float := glyph_size;
+   begin
+      if not self.valid then
+         return;
+      end if;
+      self.select_glyph(g, self.xTranslate(p.x), self.yTranslate(p.y), size, color);
+   end;
+   --
    procedure draw_glyph(self : in out linear_latex_plot_record;
                         points : BBS.Numerical.plot.point_list;
                         g : BBS.Numerical.plot.glyph; color : String) is
+      size : constant Float := glyph_size;
+   begin
+      if not self.valid then
+         return;
+      end if;
+      for p of points loop
+         self.select_glyph(g, self.xTranslate(p.x), self.yTranslate(p.y), size, color);
+      end loop;
+   end;
+   --
+   --  Draw glyphs with error bars
+   --
+   procedure draw_glyph(self : in out linear_latex_plot_record;
+                        p : BBS.Numerical.plot.point_err;
+                        g : BBS.Numerical.plot.glyph; color : String) is
+      xPos : constant Float := self.xTranslate(p.x);
+      yPos : constant Float := self.yTranslate(p.y);
+      err  : constant Float := p.e*ySize/(self.yMax - self.yMin);
+      size : constant Float := glyph_size;
+   begin
+      if not self.valid then
+         return;
+      end if;
+      self.select_glyph(g, xPos, yPos, size, color);
+      self.draw_err(xPos, yPos, size, err, color);
+   end;
+   --
+   procedure draw_glyph(self : in out linear_latex_plot_record;
+                        points : BBS.Numerical.plot.point_err_list;
+                        g : BBS.Numerical.plot.glyph; color : String) is
       xPos : Float;
       yPos : Float;
+      err  : Float;
       size : constant Float := glyph_size;
    begin
       if not self.valid then
@@ -288,20 +338,9 @@ package body BBS.Numerical.plot_latex_linear is
       for p of points loop
          xPos := self.xTranslate(p.x);
          yPos := self.yTranslate(p.y);
-         case g is
-            when BBS.Numerical.plot.glyph_plus =>
-               self.draw_glyph_plus(xPos, yPos, size, color);
-            when BBS.Numerical.plot.glyph_X =>
-               self.draw_glyph_X(xPos, yPos, size, color);
-            when BBS.Numerical.plot.glyph_asterisk =>
-               self.draw_glyph_asterisk(xPos, yPos, size, color);
-            when BBS.Numerical.plot.glyph_box =>
-               self.draw_glyph_box(xPos, yPos, size, color);
-            when BBS.Numerical.plot.glyph_diamond =>
-               self.draw_glyph_diamond(xPos, yPos, size, color);
-            when BBS.Numerical.plot.glyph_octagon =>
-            self.draw_glyph_octagon(xPos, yPos, size, color);
-         end case;
+         err  := p.e*ySize/(self.yMax - self.yMin);
+         self.select_glyph(g, xPos, yPos, size, color);
+         self.draw_err(xPos, yPos, size, err, color);
       end loop;
    end;
    --

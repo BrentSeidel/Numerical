@@ -62,5 +62,17 @@ package body BBS.Numerical.Plot is
    begin
       raise Unimplemented with "*** Do not use base class draw_glyph for plotting ***";
    end;
-
+   --
+   procedure draw_glyph(self : in out plot_record; p : point_err; g : glyph;
+                        color : String) is
+   begin
+      raise Unimplemented with "*** Do not use base class draw_glyph for plotting ***";
+   end;
+   --
+   procedure draw_glyph(self : in out plot_record; points : point_err_list;
+                        g : glyph; color : String) is
+   begin
+      raise Unimplemented with "*** Do not use base class draw_glyph for plotting ***";
+   end;
+   --
 end BBS.Numerical.Plot;

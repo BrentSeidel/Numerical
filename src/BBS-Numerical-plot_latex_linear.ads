@@ -57,6 +57,12 @@ package BBS.Numerical.plot_latex_linear is
    overriding
    procedure draw_glyph(self : in out linear_latex_plot_record;
                         points : BBS.Numerical.plot.point_list; g : BBS.Numerical.plot.glyph; color : String);
+   overriding
+   procedure draw_glyph(self : in out linear_latex_plot_record;
+                        p : BBS.Numerical.plot.point_err; g : BBS.Numerical.plot.glyph; color : String);
+   overriding
+   procedure draw_glyph(self : in out linear_latex_plot_record;
+                        points : BBS.Numerical.plot.point_err_list; g : BBS.Numerical.plot.glyph; color : String);
    --
    --  Close the plot
    --

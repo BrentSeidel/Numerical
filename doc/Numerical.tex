@@ -761,7 +761,14 @@ function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base)
 This package defines some data types, a base class, and an interface for plotting graphs.  The type of graph and the medium are to be handled by sub-classes.
 
 \subsection{Datatypes}
-There are three datatype for use by the end user and two for subclass implementors.  The \datatype{point} datatype is a record consisting of $x$ and $y$ components as \datatype{Float}.  The \datatype{point\_list} datatype is an unconstrained array of \datatype{point} records.  The last user datatype is \datatype{glyph}.  This is an enumeration of the various glyphs that can be drawn to plot points.  The current glyphs are \datatype{glyph\_plus}, \datatype{glyph\_X}, \datatype{glyph\_asterisk}, \datatype{glyph\_box}, \datatype{glyph\_diamond}, and \datatype{glyph\_octagon}.  More glyphs may be added.
+Multiple datatypes are defined for use by the end user.
+\begin{itemize}
+  \item The \datatype{point} datatype is a record consisting of $x$ and $y$ components as \datatype{Float}.
+  \item The \datatype{point\_err} is similar to \datatype{point}, with the addition of an error field, $e$.
+  \item The \datatype{point\_list} datatype is an unconstrained array of \datatype{point} records.
+  \item The \datatype{point\_err\_list} datatype is an unconstrained array of \datatype{point\_err} records.
+  \item The \datatype{glyph} is an enumeration of the various glyphs that can be drawn to plot points.  The current glyphs are \datatype{glyph\_plus}, \datatype{glyph\_X}, \datatype{glyph\_asterisk}, \datatype{glyph\_box}, \datatype{glyph\_diamond}, and \datatype{glyph\_octagon}.  More glyphs may be added.
+\end{itemize}
 
 The two datatype for subclass implementors are \datatype{plot\_record} and \datatype{plot}, which is an access type for \datatype{plot\_record}.
 
@@ -856,6 +863,7 @@ Draw some text at a specified point on the plot.
   \item $text$ - The text to draw.
 \end{itemize}
 
+The following draw glyphs on the plot.
 \begin{lstlisting}
 procedure draw_glyph(self : in out plot_record; p : point; g : glyph;
                      color : String);
@@ -874,7 +882,34 @@ procedure draw_glyph(self : in out plot_record; points : point_list;
                      g : glyph; color : String);
 \end{lstlisting}
 \indexfunc{plot-draw\_glyph}
-Draw a set of glyphs at a specified points on the plot.
+Draw a set of glyphs at specified points on the plot.
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $points$ - An array of points for the glyph locations.
+  \item $g$ - The glyph to draw.
+  \item $color$ - A string representing the color of the glyph.
+\end{itemize}
+
+The following draw glyphs with error bars on the plot.
+\begin{lstlisting}
+procedure draw_glyph(self : in out plot_record; p : point_err;
+                     g : glyph; color : String);
+\end{lstlisting}
+\indexfunc{plot-draw\_glyph}
+Draw a single glyph with error bars at a specified point on the plot.
+\begin{itemize}
+  \item $self$ - The plot being updated.
+  \item $p$ - The location of the glyph.
+  \item $g$ - The glyph to draw.
+  \item $color$ - A string representing the color of the glyph.
+\end{itemize}
+
+\begin{lstlisting}
+procedure draw_glyph(self : in out plot_record; points : point_err_list;
+                     g : glyph; color : String);
+\end{lstlisting}
+\indexfunc{plot-draw\_glyph}
+Draw a set of glyphs with error bars at specified points on the plot.
 \begin{itemize}
   \item $self$ - The plot being updated.
   \item $points$ - An array of points for the glyph locations.

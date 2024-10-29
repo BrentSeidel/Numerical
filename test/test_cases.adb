@@ -305,7 +305,12 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
 
    function ode_f2(t, y : real) return real is
    begin
-      return -y + t + 1.0;
+      return (-y + t + 1.0);
+   end;
+
+   function ode_f2_exact(t : real) return real is
+   begin
+      return (t + elem.Exp(-t));
    end;
 
    function ode_f1sys(t : real; y : ode.params) return real is
@@ -321,32 +326,50 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
    procedure test_ode is
       type param_array is array(1 .. 2) of real;
       type sys_func is access function (t : real; y : ode.params) return real;
-
-      yr  : real;
+      pl   : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
+      ps   : BBS.Numerical.plot_svg_linear.linear_svg_plot_record;
+      p    : BBS.Numerical.plot.point_err;
+      line : BBS.Numerical.plot.point_list(0 .. 200);
+      yr   : real;
       yrkf : real;
-      ye  : real;
-      ypc : real;
-      t   : real;
-      tol : real;
-      y0  : real;
-      y1  : real;
-      y2  : real;
-      y3  : real;
-      step : real;
+      ye   : real;
+      ypc  : real;
+      t    : real;
+      tol  : real;
+      y0   : real;
+      y1   : real;
+      y2   : real;
+      y3   : real;
+      step : constant real := 0.05;
       ysys : ode.params(1..2);
       rsys : ode.params(1..2);
       func : constant ode.functs(1 .. 2) := (ode_f1sys'Access, ode_f2sys'Access);
    begin
+      for i in 0 .. 200 loop
+         t := real(i)*step*0.1;
+         line(i).x := t;
+         line(i).y := ode_f2_exact(t);
+      end loop;
+      pl.start_plot("ode-plot.tex", 0.0, 1.0, 0.5, 1.5);
+      pl.frame(10, 10, False, False);
+      pl.title("Runge-Kutta-Fehlber");
+      pl.draw_line(line, "red");
+      ps.start_plot("ode-plot.svg", 0.0, 1.0, 0.5, 1.5);
+      ps.frame(10, 10, False, False);
+      ps.title("Runge-Kutta-Fehlber");
+      ps.draw_line(line, "blue");
+      --
       Ada.Text_IO.Put_Line("Testing differential equations.");
-      Ada.Text_IO.Put_Line("   Time    Euler's  4th Order RK    RKF    RKF Tol  Adams-Bashforth-Moulton");
-      yr := 1.0;
-      ye := 1.0;
+      Ada.Text_IO.Put_Line("   Time     Exact     Euler's  4th Order RK    RKF    RKF Tol  Adams-Bashforth-Moulton");
+      yr   := 1.0;
+      ye   := 1.0;
       yrkf := 1.0;
-      y0 := 1.0;
-      t  := 0.0;
-      step := 0.05;
+      y0   := 1.0;
+      t    := 0.0;
       Ada.Text_IO.Put("  ");
       float_io.Put(0.0, 2, 2, 0);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(ode_f2_exact(0.0), 2, 6, 0);
       Ada.Text_IO.Put("  ");
       float_io.Put(ye, 2, 6, 0);
       Ada.Text_IO.Put("  ");
@@ -375,8 +398,15 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
             y3 := ypc;
          end if;
          t := real(i)*step;
+         p.x := t;
+         p.y := yrkf;
+         p.e := tol;
+         pl.draw_glyph(p, BBS.Numerical.plot.glyph_X, "red");
+         ps.draw_glyph(p, BBS.Numerical.plot.glyph_X, "red");
          Ada.Text_IO.Put("  ");
          float_io.Put(t, 2, 2, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(ode_f2_exact(t), 2, 6, 0);
          Ada.Text_IO.Put("  ");
          float_io.Put(ye, 2, 6, 0);
          Ada.Text_IO.Put("  ");
@@ -393,11 +423,12 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
          end if;
          Ada.Text_IO.New_Line;
       end loop;
+      pl.end_plot;
+      ps.end_plot;
       --
       Ada.Text_IO.Put_Line("Testing Differential Equation Systems");
       Ada.Text_IO.Put_Line("   Time   RK4-a      RK4-b");
       ysys := (0.0, 0.0);
-      step := 0.1;
       t := 0.0;
       Ada.Text_IO.Put("  ");
       float_io.Put(0.0, 2, 2, 0);
@@ -406,7 +437,7 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       Ada.Text_IO.Put("  ");
       float_io.Put(ysys(2), 2, 6, 0);
       Ada.Text_IO.New_Line;
-      for i in 1 .. 10 loop
+      for i in 1 .. 20 loop
          rsys := ode.rk4s(func, t, ysys, step);
          ysys := rsys;
          t := real(i)*step;

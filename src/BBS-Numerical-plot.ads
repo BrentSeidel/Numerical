@@ -10,7 +10,16 @@ package BBS.Numerical.Plot is
       y : Float;
    end record;
    --
+   --  Point with tolerance/error
+   --
+   type point_err is record
+      x : Float;
+      y : Float;
+      e : Float;
+   end record;
+   --
    type point_list is array (Integer range <>) of point;
+   type point_err_list is array (Integer range <>) of point_err;
    --
    --  Define a plot data type
    --
@@ -57,6 +66,10 @@ package BBS.Numerical.Plot is
    procedure draw_glyph(self : in out plot_record; p : point; g : glyph;
                         color : String);
    procedure draw_glyph(self : in out plot_record; points : point_list;
+                        g : glyph; color : String);
+   procedure draw_glyph(self : in out plot_record; p : point_err; g : glyph;
+                        color : String);
+   procedure draw_glyph(self : in out plot_record; points : point_err_list;
                         g : glyph; color : String);
 private
    type plot_record is tagged limited record
