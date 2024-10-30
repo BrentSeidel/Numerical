@@ -654,7 +654,7 @@ function rk4(tf : test_func; start, initial, step : f'Base)
   \item $step$ - The step size.
 \end{itemize}
 
-By combining a specific 4th order with specific 5th order Runge-Kutta method, one can produce an error estimate.  This is the Runge-Kutta-Fehlber method.  The error estimate can be used to adjust the step size, if needed to improve accuracy.
+By combining a specific 4th order with specific 5th order Runge-Kutta method, one can produce an error estimate.  This is the Runge-Kutta-Fehlberg method.  The error estimate can be used to adjust the step size, if needed to improve accuracy.
 
 \begin{lstlisting}
 function rkf(tf : test_func; start, initial, step : f'Base;

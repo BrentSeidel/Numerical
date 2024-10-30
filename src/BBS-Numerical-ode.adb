@@ -113,5 +113,25 @@ package body BBS.Numerical.ode is
       end loop;
       return res;
    end;
+   -- --------------------------------------------------------------------------
+   --  In most cases with higher order differential equations, you would solve
+   --  them as a system of first order equations using, for example, the rk4s
+   --  routine above.  For certain second order equations, this method can be
+   --  more efficient.  It was first used in 1791 by Jean Baptiste Delambre, but
+   --  is named after Carl Stormer who used it in 1907.
+   --
+   --  There are two functions.  The first is used to start when you have
+   --  values for y(0) and y'(0).  The next is called to continue iteration
+   --  and requires y(n) and y(n-1).
+   --
+   function stormer_start(tf : func2nd; start, y0, yp0, step : f'Base) return f'Base is
+   begin
+      return y0 + step*yp0 + step*step*tf(start, y0)/2.0;
+   end;
+   --
+   function stormer_next(tf : func2nd; start, y0, ym1, step : f'Base) return f'Base is
+   begin
+      return 2.0*y0 - ym1 + step*step*tf(start, y0);
+   end;
    --
 end BBS.Numerical.ode;

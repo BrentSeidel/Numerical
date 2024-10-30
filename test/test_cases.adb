@@ -298,31 +298,58 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       end loop;
    end;
 --  ----------------------------------------------------------------------------
-   function ode_f1(x : real) return real is
-   begin
-      return (100.0/(x*x))*elem.sin(10.0/x);
-   end;
-
-   function ode_f2(t, y : real) return real is
+   --  First example differential equation
+   --
+   --  dy
+   --  --  = -y + t + 1
+   --  dt
+   function ode_f1(t, y : Real) return Real is
    begin
       return (-y + t + 1.0);
    end;
-
-   function ode_f2_exact(t : real) return real is
+   --
+   --  If y(0) = 1, then y(t) = t + exp(-t)
+   --
+   function ode_f1_exact(t : Real) return Real is
    begin
       return (t + elem.Exp(-t));
    end;
-
-   function ode_f1sys(t : real; y : ode.params) return real is
+   --  Second example differential equation
+   --  dy     y^2
+   --  -- = - ---
+   --  dt     t^2
+   function ode_f2(t, y : Real) return Real is
+   begin
+      return -(y*y)/(t*t);
+   end;
+   --
+   --  If y(0) = C, then y(t) = t/(Ct - 1)
+   --
+   function ode_f2_exact(t : Real) return Real is
+      c : constant Real := 2.0;
+   begin
+      return t/(c*t - 1.0);
+   end;
+   --
+   --  Differential equation system
+   --
+   function ode_f1sys(t : Real; y : ode.params) return Real is
    begin
       return -4.0*y(1) + 3.0*y(2) + 6.0;
    end;
 
-   function ode_f2sys(t : real; y : ode.params) return real is
+   function ode_f2sys(t : Real; y : ode.params) return Real is
    begin
       return -2.4*y(1) + 1.6*y(2) + 3.6;
    end;
-
+   --
+   --  Second order equation
+   --
+   function ode2_f1(t, y : Real) return Real is
+   begin
+      return -9.8;
+   end;
+   --
    procedure test_ode is
       type param_array is array(1 .. 2) of real;
       type sys_func is access function (t : real; y : ode.params) return real;
@@ -330,46 +357,45 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
       ps   : BBS.Numerical.plot_svg_linear.linear_svg_plot_record;
       p    : BBS.Numerical.plot.point_err;
       line : BBS.Numerical.plot.point_list(0 .. 200);
-      yr   : real;
-      yrkf : real;
-      ye   : real;
-      ypc  : real;
-      t    : real;
-      tol  : real;
-      y0   : real;
-      y1   : real;
-      y2   : real;
-      y3   : real;
+      t    : Real;
+      t0   : constant Real := 1.0;  --  Starting time
+      y0   : Real := ode_f2_exact(t0);  --  Initial value
+      yr   : Real := y0;    -- 4th order Runge-Kutta
+      yrkf : Real := y0;    -- Runge-Kutta-Fehlberg
+      ye   : Real := y0;    -- Euler
+      ypc  : Real;          --  Adams-Bashforth-Moulton predictor/corrector
+      tol  : Real;
+      y1   : Real;
+      y2   : Real;
+      y3   : Real;
+      yst0 : Real;
+      yst1 : Real;
       step : constant real := 0.05;
       ysys : ode.params(1..2);
       rsys : ode.params(1..2);
       func : constant ode.functs(1 .. 2) := (ode_f1sys'Access, ode_f2sys'Access);
    begin
       for i in 0 .. 200 loop
-         t := real(i)*step*0.1;
+         t := Real(i)*step*0.1 + t0;
          line(i).x := t;
          line(i).y := ode_f2_exact(t);
       end loop;
-      pl.start_plot("ode-plot.tex", 0.0, 1.0, 0.5, 1.5);
+      pl.start_plot("ode-plot.tex", t0, t0 + 1.0, 0.5, 1.0);
       pl.frame(10, 10, False, False);
-      pl.title("Runge-Kutta-Fehlber");
+      pl.title("Runge-Kutta-Fehlberg");
       pl.draw_line(line, "red");
-      ps.start_plot("ode-plot.svg", 0.0, 1.0, 0.5, 1.5);
+      ps.start_plot("ode-plot.svg", t0, t0 + 1.0, 0.5, 1.0);
       ps.frame(10, 10, False, False);
-      ps.title("Runge-Kutta-Fehlber");
+      ps.title("Runge-Kutta-Fehlberg");
       ps.draw_line(line, "blue");
       --
       Ada.Text_IO.Put_Line("Testing differential equations.");
-      Ada.Text_IO.Put_Line("   Time     Exact     Euler's  4th Order RK    RKF    RKF Tol  Adams-Bashforth-Moulton");
-      yr   := 1.0;
-      ye   := 1.0;
-      yrkf := 1.0;
-      y0   := 1.0;
-      t    := 0.0;
+      Ada.Text_IO.Put_Line("   Time     Exact     Euler's     RK4        RKF        RKF Tol         ABAM");
+      t    := t0;
       Ada.Text_IO.Put("  ");
-      float_io.Put(0.0, 2, 2, 0);
+      float_io.Put(t, 2, 2, 0);
       Ada.Text_IO.Put("  ");
-      float_io.Put(ode_f2_exact(0.0), 2, 6, 0);
+      float_io.Put(ode_f2_exact(t), 2, 6, 0);
       Ada.Text_IO.Put("  ");
       float_io.Put(ye, 2, 6, 0);
       Ada.Text_IO.Put("  ");
@@ -397,12 +423,10 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
             y2 := y3;
             y3 := ypc;
          end if;
-         t := real(i)*step;
+         t := t + step;
          p.x := t;
          p.y := yrkf;
          p.e := tol;
-         pl.draw_glyph(p, BBS.Numerical.plot.glyph_X, "red");
-         ps.draw_glyph(p, BBS.Numerical.plot.glyph_X, "red");
          Ada.Text_IO.Put("  ");
          float_io.Put(t, 2, 2, 0);
          Ada.Text_IO.Put("  ");
@@ -422,6 +446,8 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
             Ada.Text_IO.Put("       ----");
          end if;
          Ada.Text_IO.New_Line;
+         pl.draw_glyph(p, BBS.Numerical.plot.glyph_X, "red");
+         ps.draw_glyph(p, BBS.Numerical.plot.glyph_X, "red");
       end loop;
       pl.end_plot;
       ps.end_plot;
@@ -448,6 +474,40 @@ pl  : BBS.Numerical.plot_latex_linear.linear_latex_plot_record;
          Ada.Text_IO.Put("  ");
          float_io.Put(ysys(2), 2, 6, 0);
          Ada.Text_IO.New_Line;
+      end loop;
+      --
+      Ada.Text_IO.Put_Line("Testing 2nd Order Stormer");
+      Ada.Text_IO.Put_Line("   Time   Position");
+      t := 0.0;
+      yst0 := 0.0;
+      yst1 := 0.0;
+      Ada.Text_IO.Put("  ");
+      float_io.Put(t, 2, 2, 0);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(yst0, 2, 6, 0);
+      Ada.Text_IO.New_Line;
+      t := step;
+      yst0 := ode.stormer_start(ode2_f1'Access, t, yst0, 10.0, step);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(t, 2, 2, 0);
+      Ada.Text_IO.Put("  ");
+      float_io.Put(yst0, 2, 6, 0);
+      Ada.Text_IO.Put("  ");
+      float_io.Put((yst0 - yst1)/step, 2, 6, 0);
+      Ada.Text_IO.New_Line;
+      t := t + step;
+      yst1 := yst0;
+      for i in 2 .. 20 loop
+         yst0 := ode.stormer_next(ode2_f1'Access, t, yst0, yst1, step);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(t, 2, 2, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put(yst0, 2, 6, 0);
+         Ada.Text_IO.Put("  ");
+         float_io.Put((yst0 - yst1)/step, 2, 6, 0);
+         Ada.Text_IO.New_Line;
+         t := t + step;
+         yst1 := yst0;
       end loop;
    end test_ode;
 --  ----------------------------------------------------------------------------
