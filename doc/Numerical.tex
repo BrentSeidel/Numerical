@@ -756,6 +756,39 @@ function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base)
   \item The returned array has the same bounds as $tf$ and $initial$.
 \end{itemize}
 
+\subsection{Specialized Differential Equations}
+There are some solvers that work better for specific forms of differential equations than the general purpose solvers.
+\subsubsection{Second-Order Conservative Differential Equations}
+These are second-order equations that do not contain a first derivative.  These often appear as equations of motion where the path of the object is given by its accelerations.  There is a method for solving these that goes back, possibly, to Newton's Principia.  It is often called St\o rmer's method after Carl St\o rmer who used it in 1907.  It is also called Verlet integration after Loup Verlet who used in the 1960s.  Often implementation named after Verlet include the first derivative (typically speed or velicity) while those called after St\o rmer don't.
+
+Presented here is an implementation of St\o rmer's method.  To start, and initial $y$ and $y'$ (typically position and velocity) are needed.  Continuing to compute $y_{n+1}$ requires $y_n$ and $y_{n-1}$.
+
+\begin{lstlisting}
+function stormer_start(tf : func2nd; start, y0, yp0, step : f'Base)
+   return f'Base;
+\end{lstlisting}
+\indexfunc{ode-stormer\_start}
+\begin{itemize}
+  \item $tf$ - The second degree differential equation to solve.
+  \item $y0$ - The starting independent value ($y_0$).
+  \item $yp0$ - The starting first derivative ($y'_0$).
+  \item $step$ - The step size.
+  \item Returns the value for $y_1$.
+\end{itemize}
+
+\begin{lstlisting}
+function stormer_next(tf : func2nd; start, y0, ym1, step : f'Base)
+   return f'Base;
+\end{lstlisting}
+\indexfunc{ode-stormer\_next}
+\begin{itemize}
+  \item $tf$ - The second degree differential equation to solve.
+  \item $y0$ - The previous independent value ($y_n$).
+  \item $ym1$ - The next pervious independent value ($y_{n-1}$).
+  \item $step$ - The step size.
+  \item Returns the value for $y_{n+1}$.
+\end{itemize}
+
 %--------------------------------------------------------------------------------------------------
 \section{BBS.Numerical.plot}
 This package defines some data types, a base class, and an interface for plotting graphs.  The type of graph and the medium are to be handled by sub-classes.

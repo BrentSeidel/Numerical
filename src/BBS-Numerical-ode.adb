@@ -117,8 +117,7 @@ package body BBS.Numerical.ode is
    --  In most cases with higher order differential equations, you would solve
    --  them as a system of first order equations using, for example, the rk4s
    --  routine above.  For certain second order equations, this method can be
-   --  more efficient.  It was first used in 1791 by Jean Baptiste Delambre, but
-   --  is named after Carl Stormer who used it in 1907.
+   --  more efficient.
    --
    --  There are two functions.  The first is used to start when you have
    --  values for y(0) and y'(0).  The next is called to continue iteration
