@@ -618,12 +618,12 @@ It defines the following datatypes:
    \item \datatype{functs} as \datatype{array (integer range <>) of sys\_func}
 \end{itemize}
 
-The goal is to solve an equations:
+The goal is to solve an equation:
 \begin{displaymath}
   \frac{dy}{dt} = f(t, y)
 \end{displaymath}
- for $a\leq t\leq b$, and $y(a) = \alpha$
- 
+for $a\leq t\leq b$, and $y(a) = \alpha$
+
 \subsection{Historical}
 Euler's method is mostly of historic interest.  It may be used if the function is expensive to evaluate and accuracy isn't very important.  It most case however, there are better methods.
 
@@ -740,6 +740,8 @@ with $a\leq t\leq b$, and initial conditions:
 \end{align*}
 
 To solve higher order differential equations, they need to be transformed into a system of first order equations.
+
+The possibility of a ``stiff'' set of differential equations arises when there is more than one first order differential equation.  The result is that numerical solutions are very sensitive to the step size.  If the results are oscillating wildly when you expect a smooth solution, this may be the problem.  You may try a smaller step size and see if that helps.  It may be that the step size required for stability is much smaller than expected.  The increased calculations from the smaller step size will increase the effect of round off errors.
 
 \begin{lstlisting}
 function rk4s(tf : functs; start : f'Base; initial : params; step : f'Base)
