@@ -26,21 +26,36 @@ the implemented algorithms are:
 * 4/5th order Runge-Kutta-Fehlberg
 * 4th order Adams-Bashforth/Adams-Moulton
 * 4th order Runge-Kutta for systems of differential equations
+* Stormer/Verlet method for conservative 2nd order differential equations
+
+## Filtering
+This provides an averaging filter to help smooth data.  More routines may
+be added later.
 
 ##  Functions
 These are special functions not included with Ada's elementary functions
 that are useful or needed by other routines here.
 * gamma2n - Divides the positive integer argument by two and computes the gamma function.  Used to support chi^2.
 * lngamma2n - Natural log of gamma2n.  Allows larger values of n without overflow.
+* lngamma - Natural log of gamma.  This allows positive real arguments
+* gammaP - Regularized incomplete upper Gamma function.
+* gammaQ - Regularized incomplete lower Gamma function.
+* erf - Error function.  This is computed using gammaP
+* erfc - Complementary error function.  This is computed using gammaQ.
+* beta - The beta function
+* lnbeta - The natural log of the beta function
 * factorial - Computes the factorial of n.
-* lnfact - Computes the natual log of the factorial of n allowing larger values of n without overflow.
+* lnfact - Computes the natural log of the factorial of n allowing larger values of n without overflow.
 * nChoosek - Computes binomial coefficent based on n and k.
 
 ##  Integration
 Implemented algorithms are:
+* Midpoint method
 * Composite trapezoid
+* Adaptive trapezoid
 * Composite Simpson's
 * Adaptive Simpson's
+* Romberg's method
 
 ## Interpolation
 These methods construct a polynomial that passes through the provided points.
@@ -63,7 +78,11 @@ you can.
 * 3 point methods
 * 5 point methods
 
-##  Polynomials
+## Plotting
+Routines are now available for drawing linear scaled plots.  The output
+is a file in either SVG or LaTeX (with tikz) format.
+
+##  Polynomials (real and complex)
 A polynomial is implemented as an array with the lower index value set to 0.  The index represents
 the exponent for the independant variable and the array value at that index is the coefficient.
 
