@@ -33,7 +33,7 @@ that are useful or needed by other routines here.
 * gamma2n - Divides the positive integer argument by two and computes the gamma function.  Used to support chi^2.
 * lngamma2n - Natural log of gamma2n.  Allows larger values of n without overflow.
 * factorial - Computes the factorial of n.
-* lnfact - Computes the natual log of the factorial of n allowing larger values of n without overflow.
+* lnfact - Computes the natural log of the factorial of n allowing larger values of n without overflow.
 * nChoosek - Computes binomial coefficent based on n and k.
 
 ##  Integration
